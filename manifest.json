@@ -1,0 +1,38 @@
+{
+  "name": "BiteWise - AI Calorie Tracker",
+  "short_name": "BiteWise",
+  "description": "AI-powered food calorie tracker for any cuisine worldwide. Snap it. Describe it. Track it.",
+  "start_url": "./bitewise.html",
+  "display": "standalone",
+  "background_color": "#0D0D0D",
+  "theme_color": "#FF6B35",
+  "orientation": "portrait",
+  "scope": "./",
+  "lang": "en",
+  "categories": ["health", "fitness", "food"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "BiteWise Today Screen"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
