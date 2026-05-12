@@ -1,0 +1,2677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<title>BiteWise</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
+<style>
+:root{
+  --br:#FF6B35;--brd:#D94F1A;--brl:#FFF0EB;--brm:#FFB899;
+  --dk:#0D0D0D;--dk2:#1A1A1A;
+  --gy:#8A8A8A;--gy4:#F8F8F8;
+  --cd:#FFFFFF;--bo:#E8E8E8;--bo2:#D0D0D0;
+  --tx:#0D0D0D;--tx2:#555;--tx3:#999;
+  --gn:#22C55E;--gnl:#DCFCE7;--gnd:#15803D;
+  --re:#EF4444;--am:#F59E0B;
+  --ra:16px;--rs:10px;--rx:7px;
+  --fn:'Outfit',sans-serif;--fh:'Space Grotesk',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#111;font-family:var(--fn);color:var(--tx);font-size:15px}
+input,select,button,textarea{font-family:var(--fn)}
+.app{display:flex;flex-direction:column;height:100%;max-width:430px;margin:0 auto;background:var(--cd);overflow:hidden;box-shadow:0 0 80px rgba(0,0,0,.6)}
+.sc{display:none;flex-direction:column;flex:1;overflow:hidden}
+.sc.on{display:flex}
+
+/* ── SPLASH ── */
+.sp-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.25);transition:all .4s}
+.sp-dot.active{width:22px;border-radius:3px;background:#FF6B35}
+.sp-ft{text-align:center;font-size:12px;color:#555;padding-top:4px}
+.sp-ft span{color:var(--br);cursor:pointer}
+
+/* ── AUTH ── */
+.ah{background:var(--dk);padding:26px 22px 22px;display:flex;align-items:center;gap:13px;flex-shrink:0}
+.a-bk{background:none;border:none;color:#fff;cursor:pointer;font-size:22px;padding:2px;display:flex}
+.ah-ttl{font-family:var(--fh);font-size:19px;font-weight:700;color:#fff}
+.ah-sub{font-size:12px;color:var(--gy);margin-top:2px}
+.ab{padding:22px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;background:var(--cd)}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:12px;font-weight:600;color:var(--tx2);letter-spacing:.02em}
+.fld input,.fld select{width:100%;padding:12px 14px;border:1.5px solid var(--bo);border-radius:var(--rs);font-size:14px;color:var(--tx);background:var(--gy4);outline:none;transition:border-color .15s}
+.fld input:focus,.fld select:focus{border-color:var(--br);background:var(--cd)}
+.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pw-w{position:relative}
+.pw-w input{padding-right:44px}
+.pw-e{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--tx3);font-size:18px;display:flex;align-items:center}
+.btn-pr{width:100%;padding:13px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
+.btn-pr:hover{background:var(--brd)}
+.btn-br{width:100%;padding:14px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
+.btn-br:hover{background:var(--brd)}
+.btn-dk{width:100%;padding:13px;background:transparent;color:#fff;border:1.5px solid #333;border-radius:var(--rs);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
+.btn-dk:hover{background:#222}
+.btn-gg{width:100%;padding:12px;background:var(--cd);color:var(--tx);border:1.5px solid var(--bo);border-radius:var(--rs);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .15s}
+.btn-gg:hover{background:var(--gy4)}
+.btn-gh{width:100%;padding:11px;background:transparent;color:var(--tx2);border:1.5px solid var(--bo);border-radius:var(--rs);font-size:13px;cursor:pointer}
+.btn-dn{width:100%;padding:11px;background:#FEF2F2;color:#B91C1C;border:1.5px solid #FECACA;border-radius:var(--rs);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.gi{width:20px;height:20px;flex-shrink:0}
+.dv{display:flex;align-items:center;gap:10px}
+.dv-l{flex:1;height:1px;background:var(--bo)}
+.dv-t{font-size:12px;color:var(--tx3)}
+.lr{text-align:center;font-size:13px;color:var(--tx2)}
+.lnk{color:var(--br);cursor:pointer;font-weight:600}
+.al{border-radius:var(--rx);padding:10px 13px;font-size:12px;display:none;align-items:center;gap:8px;line-height:1.5}
+.al.on{display:flex}
+.al i{font-size:16px;flex-shrink:0}
+.al-e{background:#FEF2F2;color:#B91C1C;border:1px solid #FECACA}
+.al-ok{background:var(--gnl);color:var(--gnd);border:1px solid #BBF7D0}
+.otp-boxes{display:flex;gap:9px;justify-content:center}
+.otp-box{width:46px;height:56px;border:2px solid var(--bo);border-radius:var(--rs);font-size:22px;font-weight:700;text-align:center;color:var(--tx);background:var(--gy4);outline:none;transition:border-color .15s;font-family:var(--fh)}
+.otp-box:focus{border-color:var(--br);background:#fff}
+.otp-em{background:var(--brl);border-radius:var(--rx);padding:9px 14px;font-size:13px;color:var(--brd);font-weight:600;text-align:center;border:1px solid var(--brm)}
+.otp-pre{background:var(--gy4);border-radius:var(--ra);padding:13px;border:1px solid var(--bo)}
+.otp-cd{background:var(--br);border-radius:var(--rs);padding:10px;font-size:22px;font-weight:700;color:#fff;text-align:center;letter-spacing:8px;margin:9px 0;font-family:var(--fh)}
+.g-card{background:var(--gy4);border-radius:var(--ra);padding:20px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;border:1px solid var(--bo)}
+.g-av{width:60px;height:60px;border-radius:50%;background:#E8F0FE;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#1967D2;font-family:var(--fh)}
+.g-nm{font-size:16px;font-weight:700;color:var(--tx)}
+.g-em{font-size:13px;color:var(--tx2)}
+.g-tg{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--gnl);color:var(--gnd);font-weight:600;display:flex;align-items:center;gap:4px}
+
+/* ── ONBOARDING ── */
+.oh{background:var(--dk);padding:18px 22px 16px;flex-shrink:0}
+.o-lr{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.o-li{width:30px;height:30px;background:var(--br);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.o-li i{font-size:16px;color:#fff}
+.o-ln{font-family:var(--fh);font-size:16px;font-weight:700;color:#fff}
+.o-sl{font-size:11px;color:var(--gy);margin-bottom:5px;letter-spacing:.04em}
+.o-pg{display:flex;gap:4px}
+.o-pd{flex:1;height:3px;border-radius:2px;background:#333;transition:background .3s}
+.o-pd.dn{background:var(--br)}
+.ob{padding:20px 22px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:13px}
+.o-tt{font-family:var(--fh);font-size:18px;font-weight:700;color:var(--tx)}
+.o-st{font-size:13px;color:var(--tx2);line-height:1.5;margin-top:-6px}
+.of{padding:14px 22px;border-top:1px solid var(--bo);background:var(--cd);display:flex;flex-direction:column;gap:7px}
+.btn-nx{width:100%;padding:13px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;transition:background .15s}
+.btn-nx:hover{background:var(--brd)}
+.btn-bk{font-size:12px;color:var(--tx3);text-align:center;cursor:pointer}
+.sx-gd{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sx-cd{border:2px solid var(--bo);border-radius:var(--ra);padding:16px 10px;text-align:center;cursor:pointer;transition:all .15s;background:var(--gy4)}
+.sx-cd.on{border-color:var(--br);background:var(--brl)}
+.sx-cd i{font-size:28px;color:var(--tx3);display:block;margin-bottom:6px}
+.sx-cd.on i{color:var(--br)}
+.sx-cd span{font-size:13px;font-weight:600}
+.a-ls,.g-ls{display:flex;flex-direction:column;gap:7px}
+.a-it,.g-it{border:2px solid var(--bo);border-radius:var(--rs);padding:11px 14px;cursor:pointer;transition:all .15s;background:var(--gy4)}
+.a-it.on,.g-it.on{border-color:var(--br);background:var(--brl)}
+.a-nm,.g-nm2{font-size:13px;font-weight:600;color:var(--tx)}
+.a-ds,.g-sb{font-size:11px;color:var(--tx2);margin-top:2px}
+.g-it{display:flex;align-items:center;gap:12px}
+.g-it i{font-size:22px;color:var(--tx3)}
+.g-it.on i{color:var(--br)}
+.g-it.on .g-nm2{color:var(--brd)}
+.rh{background:var(--dk);border-radius:var(--ra);padding:20px;text-align:center;position:relative;overflow:hidden}
+.rh::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,53,.2) 0%,transparent 70%)}
+.rl{font-size:11px;color:var(--gy);letter-spacing:.06em;font-weight:600}
+.rn{font-family:var(--fh);font-size:44px;font-weight:700;color:#fff;line-height:1}
+.ru{font-size:12px;color:var(--gy);margin-top:2px}
+.rt{display:inline-block;margin-top:9px;font-size:11px;padding:4px 12px;border-radius:20px;background:rgba(255,107,53,.2);color:var(--brm);font-weight:600}
+.rc-gd{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rc{background:var(--gy4);border-radius:var(--rs);padding:10px 6px;text-align:center;border:1px solid var(--bo)}
+.rc-v{font-size:14px;font-weight:700;color:var(--tx);font-family:var(--fh)}
+.rc-l{font-size:10px;color:var(--tx3);margin-top:2px;font-weight:500}
+.bmi-w{background:var(--gy4);border-radius:var(--rs);padding:12px 14px;border:1px solid var(--bo)}
+.bmi-r{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.bmi-t{font-size:12px;font-weight:600;color:var(--tx2)}
+.bmi-v{font-size:14px;font-weight:700}
+.bmi-tr{height:9px;border-radius:5px;position:relative;overflow:hidden;background:linear-gradient(to right,#60A5FA 0%,#34D399 28%,#FBBF24 55%,#F97316 75%,#EF4444 100%)}
+.bmi-mk{position:absolute;top:-2px;width:13px;height:13px;border-radius:50%;background:#fff;border:2px solid var(--dk);transform:translateX(-50%);transition:left .5s}
+.bmi-cs{display:flex;justify-content:space-between;margin-top:4px}
+.bmi-c{font-size:9px;color:var(--tx3);font-weight:500}
+.st-bt{width:100%;padding:14px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s;font-family:var(--fh)}
+.st-bt:hover{background:var(--brd)}
+
+/* ── APP HEADER ── */
+.ap-hd{background:var(--dk);padding:12px 16px;flex-shrink:0}
+.ap-hr{display:flex;justify-content:space-between;align-items:center}
+.ap-dt{font-size:10px;color:var(--gy);margin-top:1px}
+.rm-bx{text-align:right}
+.rm-lb{font-size:9px;color:var(--gy);letter-spacing:.04em}
+.rm-vl{font-size:14px;font-weight:700;color:#fff;font-family:var(--fh)}
+.st-rw{display:flex;align-items:center;gap:11px;padding:12px 16px;border-bottom:1px solid var(--bo);flex-shrink:0}
+.rg-w{position:relative;width:72px;height:72px;flex-shrink:0}
+.rg-w svg{width:72px;height:72px}
+.rg-ct{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.rg-n{font-size:13px;font-weight:700;color:var(--tx);display:block;line-height:1;font-family:var(--fh)}
+.rg-l{font-size:9px;color:var(--tx3);display:block;margin-top:2px;font-weight:500}
+.mc-gd{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.mc{background:var(--gy4);border-radius:var(--rx);padding:7px 4px;text-align:center;border:1px solid var(--bo)}
+.mc-v{font-size:12px;font-weight:700;color:var(--tx);font-family:var(--fh)}
+.mc-l{font-size:9px;color:var(--tx3);font-weight:500}
+.mc-b{height:3px;border-radius:2px;background:var(--bo);margin-top:3px}
+.mc-f{height:3px;border-radius:2px;transition:width .4s}
+.tabs{display:flex;border-bottom:1px solid var(--bo);background:var(--cd);flex-shrink:0}
+.tab{flex:1;padding:9px 3px;font-size:9px;font-weight:700;text-align:center;background:none;border:none;color:var(--tx3);cursor:pointer;border-bottom:2px solid transparent;display:flex;flex-direction:column;align-items:center;gap:2px;letter-spacing:.04em;transition:color .15s}
+.tab i{font-size:17px}
+.tab.on{color:var(--br);border-bottom:2px solid var(--br)}
+.tp{display:none;flex-direction:column;flex:1;overflow-y:auto}
+.tp.on{display:flex}
+
+/* ── TODAY ── */
+.greet-card{margin:14px 16px 0;border-radius:var(--ra);padding:16px;position:relative;overflow:hidden;background:var(--dk)}
+.greet-card::before{content:'';position:absolute;top:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,53,.25) 0%,transparent 70%)}
+.greet-time{font-size:10px;font-weight:700;color:var(--br);letter-spacing:.08em;margin-bottom:5px}
+.greet-msg{font-family:var(--fh);font-size:17px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:6px}
+.greet-sub{font-size:11px;color:rgba(255,255,255,.45);line-height:1.5}
+.greet-goal-row{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+.greet-goal-dot{width:8px;height:8px;border-radius:50%;background:var(--br);flex-shrink:0}
+.greet-goal-txt{font-size:11px;color:rgba(255,255,255,.5)}
+.greet-goal-val{font-size:11px;font-weight:700;color:#fff;margin-left:auto;font-family:var(--fh)}
+.today-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 16px 0}
+.streak-card{background:var(--dk);border-radius:var(--ra);padding:13px;position:relative;overflow:hidden}
+.streak-card::after{content:'';position:absolute;bottom:-14px;right:-14px;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,53,.2) 0%,transparent 70%)}
+.streak-num{font-family:var(--fh);font-size:32px;font-weight:700;color:#fff;line-height:1;display:flex;align-items:flex-end;gap:4px}
+.streak-fire{font-size:22px}
+.streak-label{font-size:10px;color:var(--gy);font-weight:500;margin-top:4px}
+.streak-sub{font-size:9px;color:rgba(255,107,53,.7);margin-top:3px;font-weight:600;letter-spacing:.04em}
+.donut-card{background:var(--gy4);border-radius:var(--ra);padding:13px;border:1px solid var(--bo);display:flex;flex-direction:column;align-items:center}
+.donut-title{font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.05em;align-self:flex-start;margin-bottom:8px}
+.donut-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+.donut-center{position:absolute;text-align:center}
+.donut-pct{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--tx);line-height:1}
+.donut-lbl{font-size:8px;color:var(--tx3);font-weight:500}
+.donut-legend{display:flex;flex-direction:column;gap:4px;margin-top:8px;width:100%}
+.donut-leg-item{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--tx2);font-weight:500}
+.donut-leg-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+.ai-analysis-btn{margin:12px 16px 0;width:calc(100% - 32px);padding:13px;background:var(--dk);color:#fff;border:none;border-radius:var(--ra);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;position:relative;overflow:hidden;font-family:var(--fn)}
+.ai-analysis-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,107,53,.15) 0%,transparent 60%)}
+.ai-analysis-btn:hover{background:#1a1a1a}
+.ai-analysis-btn i{font-size:17px;color:var(--br)}
+.ai-analysis-btn .btn-tag{font-size:9px;padding:2px 7px;background:rgba(255,107,53,.2);border-radius:20px;color:var(--br);font-weight:700;letter-spacing:.04em;margin-left:4px}
+.ai-result-card{margin:10px 16px 0;background:var(--dk);border-radius:var(--ra);overflow:hidden;border:1px solid rgba(255,107,53,.2)}
+.ai-result-hdr{background:rgba(255,107,53,.1);padding:11px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,107,53,.15)}
+.ai-result-hdr i{font-size:16px;color:var(--br)}
+.ai-result-hdr span{font-size:12px;font-weight:700;color:#fff}
+.ai-result-score{margin-left:auto;font-family:var(--fh);font-size:18px;font-weight:700;color:var(--br)}
+.ai-result-body{padding:14px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.7}
+.ai-result-body strong{color:#fff;font-weight:600}
+.ai-tip-row{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.ai-tip{display:flex;align-items:flex-start;gap:9px;background:rgba(255,255,255,.05);border-radius:var(--rx);padding:9px 12px}
+.ai-tip i{font-size:15px;flex-shrink:0;margin-top:1px}
+.ai-tip-txt{font-size:11px;color:rgba(255,255,255,.65);line-height:1.5}
+.ai-tip-txt strong{color:#fff}
+.ai-analyzing{display:flex;align-items:center;gap:9px;padding:14px;color:rgba(255,255,255,.5);font-size:12px}
+.macro-card{margin:12px 16px 0;border-radius:var(--ra);padding:15px;background:var(--gy4);border:1px solid var(--bo)}
+.macro-card-title{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.macro-card-title span{font-size:10px;color:var(--br);font-weight:600;letter-spacing:0;text-transform:none;cursor:pointer}
+.mb-row{display:flex;flex-direction:column;gap:10px}
+.mb-item{display:flex;flex-direction:column;gap:5px}
+.mb-top{display:flex;justify-content:space-between;align-items:center}
+.mb-label{font-size:12px;font-weight:600;color:var(--tx2);display:flex;align-items:center;gap:6px}
+.mb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.mb-vals{font-size:11px;color:var(--tx3);font-weight:500}
+.mb-vals strong{color:var(--tx);font-weight:700;font-family:var(--fh)}
+.mb-bar{height:7px;border-radius:4px;background:var(--bo);overflow:hidden;position:relative}
+.mb-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1);position:relative}
+.meal-slots{margin:12px 16px 14px;display:flex;flex-direction:column;gap:8px}
+.meal-slot{border-radius:var(--rs);border:1px solid var(--bo);background:var(--cd);overflow:hidden}
+.meal-slot-hdr{display:flex;align-items:center;gap:10px;padding:10px 13px;cursor:pointer;transition:background .12s}
+.meal-slot-hdr:hover{background:var(--gy4)}
+.meal-slot-ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.meal-slot-info{flex:1}
+.meal-slot-name{font-size:13px;font-weight:700;color:var(--tx)}
+.meal-slot-sub{font-size:10px;color:var(--tx3);font-weight:500;margin-top:1px}
+.meal-slot-right{display:flex;align-items:center;gap:8px}
+.meal-slot-kcal{font-size:13px;font-weight:700;color:var(--tx);font-family:var(--fh)}
+.meal-slot-add{width:28px;height:28px;border-radius:50%;background:var(--brl);border:none;cursor:pointer;font-size:19px;color:var(--br);display:flex;align-items:center;justify-content:center;font-weight:700;transition:all .15s;flex-shrink:0;line-height:1}
+.meal-slot-add:hover{background:var(--br);color:#fff}
+.meal-slot-items{border-top:1px solid var(--bo);background:var(--gy4)}
+.meal-slot-empty{padding:8px 13px;font-size:11px;color:var(--tx3);font-style:italic}
+.fi{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--bo)}
+.fi:last-child{border-bottom:none}
+.fi-d{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.fi-n{font-size:13px;font-weight:500;color:var(--tx);flex:1}
+.fi-s{font-size:10px;color:var(--tx3);font-weight:500}
+.fi-k{font-size:12px;font-weight:700;color:var(--tx);font-family:var(--fh)}
+.fi-x{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:13px;padding:2px 4px;border-radius:4px}
+.fi-x:hover{color:var(--re);background:#FEF2F2}
+.em-lg{text-align:center;padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:9px}
+.em-lg i{font-size:36px;color:var(--bo2)}
+.em-tt{font-size:13px;font-weight:600;color:var(--tx2)}
+.em-sb{font-size:11px;color:var(--tx3);line-height:1.5}
+
+/* ── AI PARSER ── */
+.ai-pnl{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.sec-lb{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.05em;margin-bottom:5px}
+.m-pills{display:flex;gap:6px;flex-wrap:wrap}
+.mp{font-size:11px;padding:4px 11px;border-radius:20px;border:1.5px solid var(--bo);background:transparent;color:var(--tx2);cursor:pointer;transition:all .15s;font-weight:600}
+.mp.on{background:var(--br);color:#fff;border-color:var(--br)}
+.ai-ta{width:100%;padding:11px 13px;border:1.5px solid var(--bo);border-radius:var(--rs);font-size:13px;color:var(--tx);background:var(--gy4);outline:none;resize:none;min-height:78px;line-height:1.5;transition:border-color .15s}
+.ai-ta:focus{border-color:var(--br);background:var(--cd)}
+.ai-ta::placeholder{color:var(--tx3)}
+.ex-lb{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.04em;margin-bottom:5px}
+.ex-pills{display:flex;flex-wrap:wrap;gap:5px}
+.ex-p{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--cd);border:.5px solid var(--bo);color:var(--tx2);cursor:pointer;transition:all .12s;line-height:1.4}
+.ex-p:hover{border-color:var(--br);color:var(--br)}
+.ai-btn{width:100%;padding:12px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .15s}
+.ai-btn:hover{background:var(--brd)}
+.ai-btn:disabled{background:var(--bo);color:var(--tx3);cursor:not-allowed}
+.ld-rw{display:flex;align-items:center;gap:8px;padding:8px 0;color:var(--tx2);font-size:12px;display:none}
+.spin{width:15px;height:15px;border:2px solid var(--bo);border-top-color:var(--br);border-radius:50%;animation:sp .7s linear infinite;flex-shrink:0}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ai-res{background:var(--cd);border:1px solid var(--bo);border-radius:var(--ra);overflow:hidden}
+.ai-rh{background:var(--dk);padding:10px 14px;display:flex;align-items:center;gap:7px}
+.ai-rh i{font-size:16px;color:var(--br)}
+.ai-rh span{font-size:12px;font-weight:600;color:#fff}
+.ai-fi{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid var(--bo)}
+.ai-fi:last-child{border-bottom:none}
+.ai-fd{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ai-fn{font-size:13px;font-weight:500;color:var(--tx);flex:1}
+.ai-fs{font-size:10px;color:var(--tx3)}
+.ai-fm{font-size:10px;color:var(--tx3)}
+.ai-fk{font-size:13px;font-weight:700;color:var(--tx);white-space:nowrap;font-family:var(--fh)}
+.ai-tot{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--gy4);border-top:1.5px solid var(--bo2)}
+.ai-tl{font-size:12px;font-weight:600;color:var(--tx2)}
+.ai-tv{font-size:16px;font-weight:700;color:var(--br);font-family:var(--fh)}
+.ai-mc{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 14px 12px}
+.ai-mb{background:var(--gy4);border-radius:var(--rs);padding:7px 5px;text-align:center;border:1px solid var(--bo)}
+.ai-mv{font-size:13px;font-weight:600;color:var(--tx);font-family:var(--fh)}
+.ai-ml{font-size:10px;color:var(--tx3)}
+.ai-add{margin:0 14px 12px;width:calc(100% - 28px);padding:10px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .15s}
+.ai-add:hover{background:var(--brd)}
+.ai-add i{font-size:15px}
+.suc-bn{background:var(--gnl);border-radius:var(--rs);padding:9px 13px;display:none;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--gnd);border:1px solid #BBF7D0}
+.suc-bn.on{display:flex}
+.suc-bn i{font-size:16px;flex-shrink:0}
+
+/* ── SEARCH ── */
+.sr-pnl{padding:13px 16px 10px;display:flex;flex-direction:column;gap:10px}
+.sr-wrap{position:relative}
+.sr-wrap .si{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--tx3);pointer-events:none}
+.sr-in{width:100%;padding:12px 40px 12px 40px;border:2px solid var(--bo);border-radius:var(--rs);font-size:13px;color:var(--tx);background:var(--gy4);outline:none;transition:border-color .15s}
+.sr-in:focus{border-color:var(--br);background:var(--cd)}
+.sr-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--tx3);font-size:17px;display:none;align-items:center}
+.sr-clear.on{display:flex}
+.cat-sc{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.cat-sc::-webkit-scrollbar{display:none}
+.cat-b{font-size:11px;padding:4px 12px;border-radius:20px;border:1.5px solid var(--bo);background:transparent;color:var(--tx2);cursor:pointer;white-space:nowrap;font-weight:600;transition:all .15s;flex-shrink:0}
+.cat-b.on{background:var(--brl);border-color:var(--br);color:var(--brd)}
+.src-tag{font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.04em}
+.ad-fl{padding:8px 12px;font-size:12px;font-weight:700;color:var(--gnd);background:var(--gnl);border-radius:var(--rx);display:none;border:1px solid #BBF7D0;text-align:center}
+.ad-fl.on{display:block}
+.off-sr{background:var(--brl);border:1px solid var(--brm);border-radius:var(--rs);padding:9px 12px;font-size:12px;color:var(--brd);font-weight:500;display:none;align-items:center;gap:7px}
+.off-sr.on{display:flex}
+.off-sr i{font-size:15px;flex-shrink:0}
+.sr-rs{display:flex;flex-direction:column;padding:0 16px 14px}
+.sr-it{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--rs);cursor:pointer;transition:background .12s;border:1px solid transparent;margin-bottom:3px}
+.sr-it:hover{background:var(--gy4);border-color:var(--bo)}
+.sr-em{font-size:22px;width:30px;text-align:center;flex-shrink:0}
+.sr-if{flex:1;min-width:0}
+.sr-nm{font-size:13px;font-weight:600;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sr-mt{font-size:10px;color:var(--tx3);margin-top:1px;font-weight:500}
+.sr-src{font-size:9px;padding:2px 5px;border-radius:20px;display:inline-block;margin-top:2px;font-weight:600}
+.src-local{background:#E8F0FE;color:#1967D2}
+.src-off{background:var(--gnl);color:var(--gnd)}
+.sr-rt{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.sr-kc{font-size:13px;font-weight:700;color:var(--tx);font-family:var(--fh)}
+.sr-ad{width:28px;height:28px;border-radius:50%;background:var(--brl);border:none;cursor:pointer;font-size:18px;color:var(--br);display:flex;align-items:center;justify-content:center;font-weight:700;transition:all .15s}
+.sr-ad:hover{background:var(--br);color:#fff}
+.no-rs{text-align:center;padding:24px;color:var(--tx3);font-size:13px;font-weight:500}
+.ld-sr{display:flex;align-items:center;justify-content:center;gap:8px;padding:20px;color:var(--tx3);font-size:13px}
+.quick-add-wrap{margin:0 16px;padding:12px 14px;background:var(--gy4);border-radius:var(--rs);border:1px solid var(--bo);display:flex;flex-direction:column;gap:10px}
+.quick-add-title{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.05em}
+.quick-add-row{display:flex;gap:8px;align-items:center}
+.quick-add-input{flex:1;padding:10px 13px;border:1.5px solid var(--bo);border-radius:var(--rs);font-size:14px;color:var(--tx);background:var(--cd);outline:none;transition:border-color .15s}
+.quick-add-input:focus{border-color:var(--br)}
+.quick-add-btn{padding:10px 16px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s}
+.quick-add-btn:hover{background:var(--brd)}
+.quick-add-meals{display:flex;gap:6px;flex-wrap:wrap}
+.qa-pill{font-size:11px;padding:4px 11px;border-radius:20px;border:1.5px solid var(--bo);background:transparent;color:var(--tx2);cursor:pointer;font-weight:600;transition:all .15s}
+.qa-pill.on{background:var(--br);color:#fff;border-color:var(--br)}
+
+/* ── SCAN ── */
+.sc-pnl{padding:14px 16px;display:flex;flex-direction:column;gap:10px;align-items:center}
+.uz{width:100%;border:2px dashed var(--bo2);border-radius:var(--ra);padding:26px 16px;text-align:center;cursor:pointer;transition:all .15s;background:var(--gy4)}
+.uz:hover{border-color:var(--br);background:var(--brl)}
+.uz i{font-size:38px;color:var(--br);display:block;margin-bottom:7px}
+.uz p{font-size:13px;color:var(--tx2);margin-bottom:3px;font-weight:600}
+.uz small{font-size:11px;color:var(--tx3)}
+.sc-ow{position:relative;width:100%}
+.pv-img{width:100%;border-radius:var(--ra);display:block}
+.sc-ov{position:absolute;inset:0;border-radius:var(--ra);background:rgba(0,0,0,.48);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sc-ln{width:72%;height:2px;background:var(--br);border-radius:2px;animation:scA 1.5s ease-in-out infinite}
+@keyframes scA{0%,100%{transform:translateY(-36px);opacity:.5}50%{transform:translateY(36px);opacity:1}}
+.sc-tx{color:#fff;font-size:12px;margin-top:10px;font-weight:500}
+.dts span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--brm);margin:0 2px;animation:dtA .85s ease-in-out infinite}
+.dts span:nth-child(2){animation-delay:.14s}
+.dts span:nth-child(3){animation-delay:.28s}
+@keyframes dtA{0%,80%,100%{transform:scale(.5);opacity:.4}40%{transform:scale(1);opacity:1}}
+.sc-cd{width:100%;background:var(--cd);border:1.5px solid var(--bo);border-radius:var(--ra);overflow:hidden}
+.sc-ch{background:var(--dk);padding:10px 14px;display:flex;align-items:center;gap:7px}
+.sc-ch i{color:var(--br);font-size:17px}
+.sc-ch span{color:#fff;font-size:12px;font-weight:600}
+.dt-it{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid var(--bo)}
+.dt-it:last-child{border-bottom:none}
+.dt-dt{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dt-nm{font-size:13px;font-weight:600;color:var(--tx);flex:1}
+.dt-mt{font-size:10px;color:var(--tx3);font-weight:500}
+.dt-k{font-size:13px;font-weight:700;color:var(--tx);white-space:nowrap;font-family:var(--fh)}
+.cn{font-size:10px;padding:2px 6px;border-radius:20px;background:var(--gnl);color:var(--gnd);margin-left:4px;font-weight:600}
+.ac-bt{display:flex;gap:7px;width:100%}
+.add-al{background:var(--br);color:#fff;border:none;border-radius:var(--rs);cursor:pointer;font-size:12px;padding:9px;font-weight:600;transition:background .15s}
+.add-al:hover{background:var(--brd)}
+.tip-b{background:var(--gy4);border-radius:var(--rx);padding:8px 12px;font-size:11px;color:var(--tx2);line-height:1.6;width:100%;border:1px solid var(--bo);font-weight:500}
+
+/* ── CALENDAR ── */
+.cl-w{padding:15px 16px}
+.cl-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.cl-m{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--tx)}
+.cl-n{background:none;border:1.5px solid var(--bo);border-radius:var(--rx);width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx2)}
+.cl-gd{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cl-dh{font-size:10px;font-weight:700;color:var(--tx3);text-align:center;padding:3px 0;letter-spacing:.04em}
+.cl-d{height:38px;border-radius:var(--rs);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1.5px solid transparent;transition:all .12s}
+.cl-d:hover{background:var(--gy4)}
+.cl-d.td{border-color:var(--br)}
+.cl-d.sl{background:var(--br);border-color:var(--br)}
+.dn{font-size:12px;font-weight:600;color:var(--tx);line-height:1}
+.cl-d.sl .dn{color:#fff}
+.cl-d.td .dn{color:var(--brd)}
+.cl-d.sl.td .dn{color:#fff}
+.dd{width:5px;height:5px;border-radius:50%;margin-top:2px}
+.cl-d.sl .dd{background:rgba(255,255,255,.8)}
+.cl-dt{margin-top:12px;background:var(--gy4);border-radius:var(--ra);padding:13px 15px;border:1px solid var(--bo)}
+.cl-dh2{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.cl-dd{font-size:13px;font-weight:700;color:var(--tx)}
+.cl-bg{height:6px;border-radius:3px;background:var(--bo);overflow:hidden;margin-bottom:5px}
+.cl-bf{height:6px;border-radius:3px;transition:width .5s}
+.cl-bl{display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-bottom:8px;font-weight:500}
+.cl-mr{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bo)}
+.cl-mr:last-child{border-bottom:none}
+.wk-w{padding:13px 16px 17px}
+.wk-t{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px}
+.wk-bs{display:flex;gap:4px;align-items:flex-end;height:56px}
+.wk-b{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.wk-bg{width:100%;border-radius:4px 4px 0 0;background:var(--gy4);flex:1;display:flex;align-items:flex-end;overflow:hidden;border:1px solid var(--bo)}
+.wk-bf{width:100%;border-radius:3px 3px 0 0;transition:height .5s}
+.wk-l{font-size:9px;color:var(--tx3);font-weight:600}
+.weekly-card{margin:12px 16px 0;border-radius:var(--ra);background:var(--gy4);border:1px solid var(--bo);overflow:hidden}
+.weekly-hdr{display:flex;justify-content:space-between;align-items:center;padding:13px 15px;border-bottom:1px solid var(--bo)}
+.weekly-hdr-title{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.06em}
+.weekly-hdr-range{font-size:11px;color:var(--tx3);font-weight:500}
+.weekly-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-bottom:1px solid var(--bo)}
+.ws-stat{padding:12px 10px;text-align:center;border-right:1px solid var(--bo)}
+.ws-stat:last-child{border-right:none}
+.ws-val{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--tx);line-height:1}
+.ws-lbl{font-size:9px;color:var(--tx3);margin-top:3px;font-weight:500}
+.weekly-bars{padding:12px 15px;display:flex;gap:5px;align-items:flex-end;height:64px}
+.wb-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.wb-bg{width:100%;border-radius:4px 4px 0 0;background:var(--bo);flex:1;display:flex;align-items:flex-end;overflow:hidden;position:relative}
+.wb-fill{width:100%;border-radius:3px 3px 0 0;transition:height .5s}
+.wb-goal-line{position:absolute;left:0;right:0;height:1.5px;background:rgba(255,107,53,.4)}
+.wb-day{font-size:9px;color:var(--tx3);font-weight:600}
+.wb-today{color:var(--br)!important;font-weight:700!important}
+
+/* ── ACCOUNT ── */
+.ac-bd{padding:16px;display:flex;flex-direction:column;gap:12px}
+.ac-cd{background:var(--dk);border-radius:var(--ra);padding:16px;display:flex;align-items:center;gap:13px}
+.av-ci{width:50px;height:50px;border-radius:50%;background:var(--br);display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:700;color:#fff;flex-shrink:0;font-family:var(--fh)}
+.ac-nm{font-size:15px;font-weight:700;color:#fff;font-family:var(--fh)}
+.ac-em{font-size:12px;color:var(--gy)}
+.ac-bg{font-size:10px;padding:3px 9px;border-radius:20px;display:inline-block;margin-top:5px;font-weight:600}
+.gl-sc{background:var(--gy4);border-radius:var(--ra);padding:14px;border:1px solid var(--bo)}
+.gl-tt{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.gl-gd{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gs{background:var(--cd);border-radius:var(--rs);padding:10px;text-align:center;border:1px solid var(--bo)}
+.gs-v{font-size:16px;font-weight:700;color:var(--br);font-family:var(--fh)}
+.gs-l{font-size:10px;color:var(--tx3);margin-top:2px;font-weight:500}
+.ac-cd-edit{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.08);border:none;border-radius:var(--rx);padding:5px 9px;font-size:11px;color:rgba(255,255,255,.6);cursor:pointer;font-weight:600;display:flex;align-items:center;gap:4px;transition:background .15s}
+.ac-cd-edit:hover{background:rgba(255,255,255,.15);color:#fff}
+.ac-cd-wrap{position:relative}
+.prof-av-big{width:80px;height:80px;border-radius:50%;background:var(--br);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:#fff;font-family:var(--fh);position:relative;cursor:pointer;overflow:hidden;flex-shrink:0}
+.prof-av-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.prof-av-big:hover .prof-av-overlay{opacity:1}
+.prof-av-overlay i{font-size:20px;color:#fff}
+.prof-av-hint{font-size:11px;color:var(--tx3);font-weight:500}
+
+/* ── MODALS ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.hidden{display:none}
+.modal-sheet{background:var(--cd);border-radius:20px 20px 0 0;width:100%;max-width:430px;padding:20px 20px 32px;display:flex;flex-direction:column;gap:14px;animation:slideUp .25s ease;max-height:90vh;overflow-y:auto}
+.prof-sheet{background:var(--cd);border-radius:20px 20px 0 0;width:100%;max-width:430px;padding:20px 20px 36px;display:flex;flex-direction:column;gap:14px;animation:slideUp .25s ease;max-height:90vh;overflow-y:auto}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--bo2);margin:0 auto 4px}
+.modal-title{font-family:var(--fh);font-size:17px;font-weight:700;color:var(--tx)}
+.modal-food-row{display:flex;align-items:center;gap:10px;background:var(--gy4);border-radius:var(--rs);padding:11px 13px}
+.modal-food-em{font-size:26px}
+.modal-food-name{font-size:13px;font-weight:600;color:var(--tx)}
+.modal-food-base{font-size:11px;color:var(--tx3)}
+.serving-row{display:flex;align-items:center;gap:10px}
+.serving-lbl{font-size:12px;font-weight:600;color:var(--tx2);flex-shrink:0}
+.serving-input{flex:1;padding:11px 14px;border:1.5px solid var(--bo);border-radius:var(--rs);font-size:16px;font-weight:700;color:var(--tx);background:var(--gy4);outline:none;text-align:center;font-family:var(--fh)}
+.serving-input:focus{border-color:var(--br)}
+.serving-unit-btns{display:flex;gap:6px}
+.su-btn{padding:8px 14px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--bo);background:transparent;color:var(--tx2);transition:all .15s}
+.su-btn.on{background:var(--brl);border-color:var(--br);color:var(--brd)}
+.serving-preview{background:var(--gy4);border-radius:var(--rs);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--bo)}
+.sp-kc{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--br)}
+.sp-mac{font-size:11px;color:var(--tx3)}
+.modal-add-btn{width:100%;padding:14px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--fn);transition:background .15s}
+.modal-add-btn:hover{background:var(--brd)}
+.modal-cancel{font-size:12px;color:var(--tx3);text-align:center;cursor:pointer;padding:4px}
+.prof-section{display:flex;flex-direction:column;gap:10px}
+.prof-section-title{font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.06em;text-transform:uppercase}
+.prof-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.edit-fld{display:flex;flex-direction:column;gap:5px}
+.edit-fld label{font-size:11px;font-weight:600;color:var(--tx2)}
+.edit-fld input,.edit-fld select{width:100%;padding:11px 13px;border:1.5px solid var(--bo);border-radius:var(--rs);font-size:14px;color:var(--tx);background:var(--gy4);outline:none;transition:border-color .15s;font-family:var(--fn)}
+.edit-fld input:focus,.edit-fld select:focus{border-color:var(--br);background:var(--cd)}
+.recalc-banner{background:var(--brl);border:1px solid var(--brm);border-radius:var(--rs);padding:10px 13px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--brd);font-weight:500}
+.recalc-banner i{font-size:15px;flex-shrink:0;color:var(--br)}
+.prof-save-btn{width:100%;padding:13px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--fn);transition:background .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.prof-save-btn:hover{background:var(--brd)}
+.recalc-result{background:var(--dk);border-radius:var(--ra);padding:16px;display:none;flex-direction:column;gap:10px}
+.recalc-result.show{display:flex}
+.recalc-new-goal{font-family:var(--fh);font-size:36px;font-weight:700;color:var(--br);text-align:center;line-height:1}
+.prof-av-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 0}
+
+/* ── PREMIUM ── */
+.pm-hdr{position:relative;overflow:hidden;padding:40px 24px 28px;text-align:center;background:linear-gradient(to bottom,#1a0a00,#0a0a0a);flex-shrink:0}
+.pm-hdr::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,53,.25) 0%,transparent 70%)}
+.pm-crown{font-size:44px;display:block;margin-bottom:12px}
+.pm-title{font-family:var(--fh);font-size:26px;font-weight:700;color:#fff;margin-bottom:6px}
+.pm-title span{color:var(--br)}
+.pm-sub{font-size:13px;color:var(--gy);line-height:1.5}
+.pm-body{padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;background:var(--dk)}
+.pm-plan-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pm-plan{border-radius:var(--ra);padding:16px;cursor:pointer;transition:all .15s;position:relative;border:1.5px solid var(--bo)}
+.pm-plan.free{background:var(--gy4)}
+.pm-plan.pro{background:linear-gradient(135deg,#2a1200,#1a0d00);border-color:rgba(255,107,53,.4)}
+.pm-plan.sel{border-color:var(--br);box-shadow:0 0 0 2px rgba(255,107,53,.2)}
+.pm-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;display:inline-block;margin-bottom:8px;letter-spacing:.06em}
+.pm-price{font-family:var(--fh);font-size:22px;font-weight:700;line-height:1}
+.pm-period{font-size:11px;color:var(--tx3);margin-top:2px}
+.pm-plan.pro .pm-price{color:#fff}
+.pm-plan.pro .pm-period{color:rgba(255,255,255,.5)}
+.pm-feats{display:flex;flex-direction:column;gap:8px}
+.pm-fr{display:flex;align-items:center;gap:10px;padding:10px 13px;background:rgba(255,255,255,.04);border-radius:var(--rs);border:1px solid rgba(255,255,255,.06)}
+.pm-fi{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.pm-fn{font-size:13px;font-weight:600;color:#fff}
+.pm-fd{font-size:11px;color:var(--gy);margin-top:1px}
+.pm-ftag{margin-left:auto;font-size:9px;padding:2px 7px;border-radius:20px;font-weight:700;flex-shrink:0}
+.pm-cta{width:100%;padding:15px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:15px;font-weight:700;cursor:pointer;font-family:var(--fh);transition:background .15s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}
+.pm-cta:hover{background:var(--brd)}
+.pm-restore{font-size:11px;color:var(--gy);text-align:center;cursor:pointer;padding:6px}
+.pm-terms{font-size:10px;color:rgba(255,255,255,.2);text-align:center;line-height:1.7;padding:0 10px 16px}
+
+/* ── BOTTOM NAV ── */
+.bn{display:flex;border-top:1px solid var(--bo);background:var(--cd);flex-shrink:0}
+.nb{flex:1;padding:9px 3px;background:none;border:none;cursor:pointer;font-size:9px;font-weight:700;color:var(--tx3);display:flex;flex-direction:column;align-items:center;gap:2px;letter-spacing:.04em;transition:color .15s}
+.nb i{font-size:19px}
+.nb.on{color:var(--br)}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SPLASH -->
+<div class="sc on" id="sc-splash">
+  <div style="position:relative;height:55%;min-height:0;overflow:hidden;background:#111;flex-shrink:0">
+    <img id="spPhoto" src="https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=640&q=85&fit=crop&crop=center" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block" alt="Food"/>
+    <img id="spPhotoNext" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=640&q=85&fit=crop" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease;pointer-events:none" alt=""/>
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.5) 0%,transparent 40%,rgba(0,0,0,0.8) 100%);pointer-events:none"></div>
+    <div style="position:absolute;top:18px;left:18px;display:flex;align-items:center;gap:9px;pointer-events:none">
+      <div style="width:34px;height:34px;background:#FF6B35;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;font-family:Space Grotesk,sans-serif">B</div>
+      <div style="font-family:Space Grotesk,sans-serif;font-size:17px;font-weight:700;color:#fff">Bite<span style="color:#FF6B35">Wise</span></div>
+    </div>
+    <div id="spDots" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;pointer-events:none">
+      <div class="sp-dot active"></div><div class="sp-dot"></div><div class="sp-dot"></div><div class="sp-dot"></div><div class="sp-dot"></div>
+    </div>
+  </div>
+  <div style="flex:1;background:#000;display:flex;flex-direction:column;padding:20px 22px 0;min-height:0">
+    <div id="spMacros" style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px">
+      <div style="background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:4px 11px;font-size:11px;font-weight:600;color:#f59e0b">C: 40g</div>
+      <div style="background:rgba(34,197,94,0.14);border:1px solid rgba(34,197,94,0.3);border-radius:20px;padding:4px 11px;font-size:11px;font-weight:600;color:#22c55e">P: 22g</div>
+      <div style="background:rgba(59,130,246,0.14);border:1px solid rgba(59,130,246,0.3);border-radius:20px;padding:4px 11px;font-size:11px;font-weight:600;color:#3b82f6">F: 6g</div>
+      <div style="background:rgba(255,107,53,0.14);border:1px solid rgba(255,107,53,0.35);border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700;color:#FF6B35">310 kcal</div>
+    </div>
+    <div style="font-family:Space Grotesk,sans-serif;font-size:26px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:7px"><span style="color:#FF6B35">Snap it.</span> Describe it.<br/>Track it.</div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.5;margin-bottom:auto">AI identifies any dish from any country — instantly</div>
+  </div>
+  <div style="background:#000;padding:16px 22px 24px;display:flex;flex-direction:column;gap:9px;flex-shrink:0">
+    <button onclick="go('sc-signup')" style="width:100%;padding:14px;background:#FF6B35;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:Outfit,sans-serif"><i class="ti ti-user-plus" style="font-size:17px"></i>Get started free</button>
+    <button onclick="startGoogle()" style="width:100%;padding:13px;background:transparent;color:#fff;border:1.5px solid #333;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-family:Outfit,sans-serif">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+    <div style="text-align:center;font-size:12px;color:#555">Already have an account? <span onclick="go('sc-login')" style="color:#FF6B35;cursor:pointer;font-weight:600">Log in</span></div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="sc" id="sc-login">
+  <div class="ah"><button class="a-bk" onclick="go('sc-splash')"><i class="ti ti-arrow-left"></i></button><div><div class="ah-ttl">Welcome back</div><div class="ah-sub">Log in to BiteWise</div></div></div>
+  <div class="ab">
+    <div class="al al-e" id="loginErr"><i class="ti ti-alert-circle"></i><span id="loginErrMsg"></span></div>
+    <div class="fld"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com"/></div>
+    <div class="fld"><label>Password</label><div class="pw-w"><input type="password" id="loginPw" placeholder="Your password"/><button class="pw-e" onclick="tpw('loginPw',this)"><i class="ti ti-eye"></i></button></div></div>
+    <button class="btn-pr" onclick="doLogin()"><i class="ti ti-login" style="font-size:16px"></i>Log in</button>
+    <div class="dv"><div class="dv-l"></div><span class="dv-t">or</span><div class="dv-l"></div></div>
+    <button class="btn-gg" onclick="startGoogle()"><svg class="gi" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Continue with Google</button>
+    <div class="lr">No account? <span class="lnk" onclick="go('sc-signup')">Sign up free</span></div>
+  </div>
+</div>
+
+<!-- SIGNUP -->
+<div class="sc" id="sc-signup">
+  <div class="ah"><button class="a-bk" onclick="go('sc-splash')"><i class="ti ti-arrow-left"></i></button><div><div class="ah-ttl">Create account</div><div class="ah-sub">Free forever</div></div></div>
+  <div class="ab">
+    <div class="al al-e" id="signupErr"><i class="ti ti-alert-circle"></i><span id="signupErrMsg"></span></div>
+    <div class="fld"><label>Full name</label><input type="text" id="suName" placeholder="Your name"/></div>
+    <div class="fld"><label>Email</label><input type="email" id="suEmail" placeholder="you@example.com"/></div>
+    <div class="fld"><label>Password</label><div class="pw-w"><input type="password" id="suPw" placeholder="Min 8 characters"/><button class="pw-e" onclick="tpw('suPw',this)"><i class="ti ti-eye"></i></button></div></div>
+    <div class="fld"><label>Confirm password</label><div class="pw-w"><input type="password" id="suPw2" placeholder="Repeat password"/><button class="pw-e" onclick="tpw('suPw2',this)"><i class="ti ti-eye"></i></button></div></div>
+    <button class="btn-pr" onclick="doSignup()"><i class="ti ti-mail" style="font-size:16px"></i>Send verification code</button>
+    <div class="dv"><div class="dv-l"></div><span class="dv-t">or</span><div class="dv-l"></div></div>
+    <button class="btn-gg" onclick="startGoogle()"><svg class="gi" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Continue with Google</button>
+    <div class="lr">Already have an account? <span class="lnk" onclick="go('sc-login')">Log in</span></div>
+  </div>
+</div>
+
+<!-- OTP -->
+<div class="sc" id="sc-otp">
+  <div class="ah"><button class="a-bk" onclick="go('sc-signup')"><i class="ti ti-arrow-left"></i></button><div><div class="ah-ttl">Verify email</div><div class="ah-sub">Check your inbox</div></div></div>
+  <div class="ab">
+    <div style="text-align:center"><i class="ti ti-mail-forward" style="font-size:46px;color:var(--br)"></i></div>
+    <div style="font-size:14px;font-weight:700;color:var(--tx);text-align:center">We sent a 6-digit code to:</div>
+    <div class="otp-em" id="otpBadge">—</div>
+    <div style="font-size:11px;color:var(--tx3);text-align:center;font-weight:500">Email preview (demo):</div>
+    <div class="otp-pre"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:9px;border-bottom:1px solid var(--bo)"><div style="width:34px;height:34px;border-radius:10px;background:var(--br);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-salad" style="font-size:17px;color:#fff"></i></div><div><div style="font-size:13px;font-weight:700;color:var(--tx)">BiteWise</div><div style="font-size:10px;color:var(--tx3)">noreply@bitewise.app</div></div></div><div style="font-size:12px;color:var(--tx2);margin-bottom:4px">Your verification code:</div><div class="otp-cd" id="otpDisplay">— — — — — —</div><div style="font-size:11px;color:var(--tx3);font-weight:500">Expires in 10 mins. Never share this.</div></div>
+    <div class="otp-boxes"><input class="otp-box" id="o0" maxlength="1" inputmode="numeric" oninput="oin(this,0)" onkeydown="okey(event,0)"/><input class="otp-box" id="o1" maxlength="1" inputmode="numeric" oninput="oin(this,1)" onkeydown="okey(event,1)"/><input class="otp-box" id="o2" maxlength="1" inputmode="numeric" oninput="oin(this,2)" onkeydown="okey(event,2)"/><input class="otp-box" id="o3" maxlength="1" inputmode="numeric" oninput="oin(this,3)" onkeydown="okey(event,3)"/><input class="otp-box" id="o4" maxlength="1" inputmode="numeric" oninput="oin(this,4)" onkeydown="okey(event,4)"/><input class="otp-box" id="o5" maxlength="1" inputmode="numeric" oninput="oin(this,5)" onkeydown="okey(event,5)"/></div>
+    <div class="al al-e" id="otpErr"><i class="ti ti-alert-circle"></i><span>Wrong code. Try again.</span></div>
+    <div class="al al-ok" id="otpOk"><i class="ti ti-circle-check"></i><span>Verified! Setting up your account...</span></div>
+    <button class="btn-pr" onclick="verOtp()"><i class="ti ti-shield-check" style="font-size:16px"></i>Verify &amp; continue</button>
+    <div class="lr">Didn't get it? <span class="lnk" onclick="resend()">Resend code</span></div>
+  </div>
+</div>
+
+<!-- GOOGLE CONFIRM -->
+<div class="sc" id="sc-google">
+  <div class="ah"><button class="a-bk" onclick="go('sc-splash')"><i class="ti ti-arrow-left"></i></button><div><div class="ah-ttl">Google sign-in</div><div class="ah-sub">Confirm your account</div></div></div>
+  <div class="ab" style="justify-content:center">
+    <div class="g-card"><div class="g-av" id="gAv">A</div><div class="g-nm" id="gNm">—</div><div class="g-em" id="gEm">—</div><div class="g-tg"><i class="ti ti-brand-google" style="font-size:13px"></i>Verified by Google</div></div>
+    <button class="btn-pr" onclick="confGoogle()"><i class="ti ti-check" style="font-size:16px"></i>Continue as <span id="gFirst" style="margin-left:3px">—</span></button>
+    <button class="btn-gh" onclick="go('sc-splash')">Use a different account</button>
+  </div>
+</div>
+
+<!-- ONB 1 -->
+<div class="sc" id="sc-onb1">
+  <div class="oh"><div class="o-lr"><div class="o-li"><i class="ti ti-salad"></i></div><div class="o-ln">BiteWise</div></div><div class="o-sl">STEP 1 OF 4</div><div class="o-pg"><div class="o-pd dn"></div><div class="o-pd"></div><div class="o-pd"></div><div class="o-pd"></div></div></div>
+  <div class="ob"><div class="o-tt">About you</div><div class="o-st">Used to calculate your personalised daily calorie goal.</div>
+    <div class="fld"><label>Your name</label><input type="text" id="pName" placeholder="How should we call you?"/></div>
+    <div class="fld-row"><div class="fld"><label>Age</label><input type="number" id="pAge" placeholder="28" min="10" max="99"/></div><div class="fld"><label>Weight (kg)</label><input type="number" id="pWt" placeholder="70" step="0.1" min="30" max="300"/></div></div>
+    <div class="fld"><label>Height (cm)</label><input type="number" id="pHt" placeholder="170" min="100" max="230"/></div>
+  </div>
+  <div class="of"><button class="btn-nx" onclick="valOnb1()">Continue</button></div>
+</div>
+
+<!-- ONB 2 -->
+<div class="sc" id="sc-onb2">
+  <div class="oh"><div class="o-lr"><div class="o-li"><i class="ti ti-salad"></i></div><div class="o-ln">BiteWise</div></div><div class="o-sl">STEP 2 OF 4</div><div class="o-pg"><div class="o-pd dn"></div><div class="o-pd dn"></div><div class="o-pd"></div><div class="o-pd"></div></div></div>
+  <div class="ob"><div class="o-tt">Your body</div><div class="o-st">Used for your BMR calculation.</div>
+    <div class="sx-gd"><div class="sx-cd on" id="sx-m" onclick="setSex('male')"><i class="ti ti-man"></i><span>Male</span></div><div class="sx-cd" id="sx-f" onclick="setSex('female')"><i class="ti ti-woman"></i><span>Female</span></div></div>
+    <div class="o-tt" style="font-size:15px;margin-top:2px">Activity level</div>
+    <div class="a-ls">
+      <div class="a-it" onclick="setAct(this,1.2)"><div class="a-nm">Sedentary</div><div class="a-ds">Desk job, very little movement</div></div>
+      <div class="a-it on" onclick="setAct(this,1.375)"><div class="a-nm">Lightly active</div><div class="a-ds">Light exercise 1–3 days/week</div></div>
+      <div class="a-it" onclick="setAct(this,1.55)"><div class="a-nm">Moderately active</div><div class="a-ds">Exercise 3–5 days/week</div></div>
+      <div class="a-it" onclick="setAct(this,1.725)"><div class="a-nm">Very active</div><div class="a-ds">Hard exercise 6–7 days/week</div></div>
+    </div>
+  </div>
+  <div class="of"><button class="btn-nx" onclick="go('sc-onb3')">Continue</button><div class="btn-bk" onclick="go('sc-onb2')">Back</div></div>
+</div>
+
+<!-- ONB 3 -->
+<div class="sc" id="sc-onb3">
+  <div class="oh"><div class="o-lr"><div class="o-li"><i class="ti ti-salad"></i></div><div class="o-ln">BiteWise</div></div><div class="o-sl">STEP 3 OF 4</div><div class="o-pg"><div class="o-pd dn"></div><div class="o-pd dn"></div><div class="o-pd dn"></div><div class="o-pd"></div></div></div>
+  <div class="ob"><div class="o-tt">Your goal</div><div class="o-st">We adjust your daily calorie target based on this.</div>
+    <div class="g-ls">
+      <div class="g-it" id="gl-lose" onclick="setGoal('lose',this)"><i class="ti ti-trending-down"></i><div><div class="g-nm2">Lose weight</div><div class="g-sb">500 kcal deficit per day</div></div></div>
+      <div class="g-it on" id="gl-maintain" onclick="setGoal('maintain',this)"><i class="ti ti-scale"></i><div><div class="g-nm2">Maintain weight</div><div class="g-sb">Eat at your TDEE</div></div></div>
+      <div class="g-it" id="gl-gain" onclick="setGoal('gain',this)"><i class="ti ti-trending-up"></i><div><div class="g-nm2">Build muscle</div><div class="g-sb">300 kcal surplus per day</div></div></div>
+    </div>
+  </div>
+  <div class="of"><button class="btn-nx" onclick="calcShow()">Calculate my goals</button><div class="btn-bk" onclick="go('sc-onb2')">Back</div></div>
+</div>
+
+<!-- ONB 4 -->
+<div class="sc" id="sc-onb4">
+  <div class="oh"><div class="o-lr"><div class="o-li"><i class="ti ti-salad"></i></div><div class="o-ln">BiteWise</div></div><div class="o-sl">STEP 4 OF 4 — YOUR PLAN</div><div class="o-pg"><div class="o-pd dn"></div><div class="o-pd dn"></div><div class="o-pd dn"></div><div class="o-pd dn"></div></div></div>
+  <div class="ob">
+    <div class="rh"><div class="rl" id="resLbl">YOUR DAILY GOAL</div><div class="rn" id="resNum">—</div><div class="ru">kcal per day</div><div class="rt" id="resTag">—</div></div>
+    <div class="rc-gd"><div class="rc"><div class="rc-v" id="rBmr">—</div><div class="rc-l">BMR</div></div><div class="rc"><div class="rc-v" id="rCarb">—g</div><div class="rc-l">Carbs</div></div><div class="rc"><div class="rc-v" id="rProt">—g</div><div class="rc-l">Protein</div></div></div>
+    <div class="bmi-w"><div class="bmi-r"><span class="bmi-t">BMI</span><span style="display:flex;align-items:center;gap:6px"><span class="bmi-v" id="rBmi">—</span><span style="font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600" id="rBmiLbl"></span></span></div><div class="bmi-tr"><div class="bmi-mk" id="bmiMk" style="left:30%"></div></div><div class="bmi-cs"><span class="bmi-c">Under</span><span class="bmi-c">Normal</span><span class="bmi-c">Over</span><span class="bmi-c">Obese</span></div></div>
+    <div style="background:var(--gy4);border-radius:var(--rs);padding:12px 14px;font-size:12px;color:var(--tx2);line-height:1.7;border:1px solid var(--bo)" id="rAdvice"></div>
+  </div>
+  <div class="of"><button class="st-bt" onclick="startApp()"><i class="ti ti-rocket"></i>Start tracking with BiteWise</button></div>
+</div>
+
+<!-- MAIN APP -->
+<div class="sc" id="sc-app">
+  <div class="ap-hd">
+    <div class="ap-hr">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:28px;height:28px;background:#FF6B35;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;font-family:Space Grotesk,sans-serif">B</div>
+          <div style="font-family:Space Grotesk,sans-serif;font-size:15px;font-weight:700;color:#fff">Bite<span style="color:#FF6B35">Wise</span></div>
+        </div>
+        <div class="ap-dt" id="appDate"></div>
+      </div>
+      <div class="rm-bx"><div class="rm-lb">REMAINING</div><div class="rm-vl" id="remVal">—</div></div>
+    </div>
+  </div>
+  <div class="st-rw">
+    <div class="rg-w">
+      <svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="28" fill="none" stroke="var(--bo)" stroke-width="7"/><circle id="ringArc" cx="36" cy="36" r="28" fill="none" stroke="var(--br)" stroke-width="7" stroke-linecap="round" stroke-dasharray="175.9" stroke-dashoffset="175.9" transform="rotate(-90 36 36)" style="transition:stroke-dashoffset .5s,stroke .3s"/></svg>
+      <div class="rg-ct"><span class="rg-n" id="ringNum">0</span><span class="rg-l">kcal eaten</span></div>
+    </div>
+    <div class="mc-gd">
+      <div class="mc"><div class="mc-v" id="cV">0g</div><div class="mc-l">Carbs</div><div class="mc-b"><div class="mc-f" id="cB" style="width:0%;background:var(--am)"></div></div></div>
+      <div class="mc"><div class="mc-v" id="pV">0g</div><div class="mc-l">Protein</div><div class="mc-b"><div class="mc-f" id="pB" style="width:0%;background:var(--gn)"></div></div></div>
+      <div class="mc"><div class="mc-v" id="fV">0g</div><div class="mc-l">Fat</div><div class="mc-b"><div class="mc-f" id="fB" style="width:0%;background:#F97316"></div></div></div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab on" onclick="swTab('tlog',this)"><i class="ti ti-home"></i>today</button>
+    <button class="tab" onclick="swTab('tai',this)"><i class="ti ti-brain"></i>AI log</button>
+    <button class="tab" onclick="swTab('tsr',this)"><i class="ti ti-search"></i>search</button>
+    <button class="tab" onclick="swTab('tsc',this)"><i class="ti ti-camera"></i>scan</button>
+    <button class="tab" onclick="swTab('tcl',this)"><i class="ti ti-calendar"></i>history</button>
+    <button class="tab" onclick="swTab('tac',this)"><i class="ti ti-user"></i>me</button>
+  </div>
+
+  <!-- TODAY -->
+  <div class="tp on" id="tlog">
+    <div class="greet-card" id="greetCard"></div>
+    <div class="today-row" id="streakChartRow"></div>
+    <div id="aiAnalysisWrap"></div>
+    <div class="macro-card">
+      <div class="macro-card-title">NUTRITION TODAY <span onclick="swTab('tsr',document.querySelectorAll('.nb')[2])">+ Add food</span></div>
+      <div class="mb-row" id="macroBars"></div>
+    </div>
+    <div class="meal-slots" id="mealSlots"></div>
+  </div>
+
+  <!-- AI LOG -->
+  <div class="tp" id="tai">
+    <div class="ai-pnl">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:14px;font-weight:700;color:var(--tx)">AI meal log</div>
+        <div id="logCountBadge"></div>
+      </div>
+      <div><div class="sec-lb">LOG TO MEAL</div><div class="m-pills" id="aiMealPills"><button class="mp on" onclick="setAiMeal(this,'Breakfast')">Breakfast</button><button class="mp" onclick="setAiMeal(this,'Lunch')">Lunch</button><button class="mp" onclick="setAiMeal(this,'Dinner')">Dinner</button><button class="mp" onclick="setAiMeal(this,'Snack')">Snack</button></div></div>
+      <div><div class="sec-lb">DESCRIBE YOUR MEAL</div><textarea class="ai-ta" id="aiInput" placeholder="e.g. 1 plate of rice with chicken curry, 2 pieces of chicken, carrots and a glass of mango juice"></textarea></div>
+      <div><div class="ex-lb">TRY AN EXAMPLE</div>
+        <div class="ex-pills">
+          <button class="ex-p" onclick="tryEx(this)">1 bowl nasi lemak with 2 fried chicken</button>
+          <button class="ex-p" onclick="tryEx(this)">large spaghetti bolognese with garlic bread</button>
+          <button class="ex-p" onclick="tryEx(this)">grilled salmon, brown rice, steamed broccoli</button>
+          <button class="ex-p" onclick="tryEx(this)">2 roti canai with dhal and teh tarik</button>
+          <button class="ex-p" onclick="tryEx(this)">Big Mac meal large fries and Coke</button>
+          <button class="ex-p" onclick="tryEx(this)">bowl of ramen with egg, chashu, nori</button>
+          <button class="ex-p" onclick="tryEx(this)">half plate chicken biryani with raita</button>
+        </div>
+      </div>
+      <div class="al al-e" id="aiErr"><i class="ti ti-alert-circle"></i><span id="aiErrMsg"></span></div>
+      <button class="ai-btn" id="aiBtn" onclick="parseMeal()"><i class="ti ti-sparkles" style="font-size:16px"></i>Analyse meal with AI</button>
+      <div class="ld-rw" id="aiLoad"><div class="spin"></div><span id="aiLoadTxt">AI is breaking down your meal...</span></div>
+      <div id="aiResWrap" style="display:none;flex-direction:column;gap:9px">
+        <div class="ai-res" id="aiResCard"></div>
+        <div class="suc-bn" id="aiSuc"><i class="ti ti-circle-check"></i><span id="aiSucTxt"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="tp" id="tsr">
+    <div class="sr-pnl">
+      <div style="font-size:14px;font-weight:700;color:var(--tx)">Search &amp; log food</div>
+      <div class="m-pills" id="srMealPills"><button class="mp on" onclick="setSrMeal(this,'Breakfast')">Breakfast</button><button class="mp" onclick="setSrMeal(this,'Lunch')">Lunch</button><button class="mp" onclick="setSrMeal(this,'Dinner')">Dinner</button><button class="mp" onclick="setSrMeal(this,'Snack')">Snack</button></div>
+      <div class="sr-wrap"><i class="ti ti-search si"></i><input class="sr-in" id="srQ" placeholder="Search any food — chicken curry, nasi lemak, banana..." oninput="onSearchInput()"/><button class="sr-clear" id="srClr" onclick="clearSearch()"><i class="ti ti-x"></i></button></div>
+      <div class="cat-sc" id="catSc"></div>
+      <div class="off-sr" id="offSrMsg"><i class="ti ti-world"></i><span>Also searching Open Food Facts database...</span></div>
+      <div class="ad-fl" id="adFl"></div>
+      <div class="src-tag" id="rcCt"></div>
+      <div class="quick-add-wrap">
+        <div class="quick-add-title">⚡ QUICK ADD CALORIES</div>
+        <div class="quick-add-meals" id="qaMealPills">
+          <button class="qa-pill on" onclick="setQaMeal(this,'Breakfast')">Breakfast</button>
+          <button class="qa-pill" onclick="setQaMeal(this,'Lunch')">Lunch</button>
+          <button class="qa-pill" onclick="setQaMeal(this,'Dinner')">Dinner</button>
+          <button class="qa-pill" onclick="setQaMeal(this,'Snack')">Snack</button>
+        </div>
+        <div class="quick-add-row">
+          <input class="quick-add-input" id="qaInput" type="text" placeholder="e.g. 400 or 400 kcal chicken snack" onkeydown="if(event.key==='Enter')quickAddCalories()"/>
+          <button class="quick-add-btn" onclick="quickAddCalories()">Add</button>
+        </div>
+      </div>
+    </div>
+    <div id="srLoadWrap" class="ld-sr" style="display:none"><div class="spin"></div><span>Searching food databases...</span></div>
+    <div class="sr-rs" id="srRs"></div>
+  </div>
+
+  <!-- SCAN -->
+  <div class="tp" id="tsc">
+    <div class="sc-pnl">
+      <div style="width:100%">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:14px;font-weight:700;color:var(--tx)">AI photo scanner</div>
+          <div id="scanCountBadge"></div>
+        </div>
+        <div class="m-pills" id="scMealPills"><button class="mp on" onclick="setScMeal(this,'Breakfast')">Breakfast</button><button class="mp" onclick="setScMeal(this,'Lunch')">Lunch</button><button class="mp" onclick="setScMeal(this,'Dinner')">Dinner</button><button class="mp" onclick="setScMeal(this,'Snack')">Snack</button></div>
+      </div>
+      <div id="uz" class="uz" onclick="document.getElementById('fi').click()"><i class="ti ti-camera"></i><p>Snap or upload your food</p><small>AI identifies any cuisine worldwide</small></div>
+      <input type="file" id="fi" accept="image/*" capture="environment" style="display:none" onchange="handleImg(event)"/>
+      <div id="pvA" style="display:none;width:100%"></div>
+      <div id="rsA" style="width:100%"></div>
+      <div class="tip-b"><i class="ti ti-world" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Works with any cuisine — nasi lemak, pizza, sushi, biryani, tacos and more</div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="tp" id="tcl">
+    <div class="cl-w">
+      <div class="cl-h"><button class="cl-n" onclick="chMo(-1)"><i class="ti ti-chevron-left" style="font-size:14px"></i></button><span class="cl-m" id="calMonth"></span><button class="cl-n" onclick="chMo(1)"><i class="ti ti-chevron-right" style="font-size:14px"></i></button></div>
+      <div class="cl-gd" id="calGrid"></div>
+      <div class="cl-dt" id="calDet"></div>
+    </div>
+    <div id="weeklySummary"></div>
+    <div class="wk-w" id="wkW"></div>
+  </div>
+
+  <!-- ME -->
+  <div class="tp" id="tac">
+    <div class="ac-bd">
+      <div class="ac-cd ac-cd-wrap">
+        <div class="prof-av-big" id="acAvBig" onclick="openProfileEdit()" style="width:52px;height:52px;font-size:21px">
+          <span id="acAvTxt">A</span>
+          <img id="acAvImg" src="" style="display:none"/>
+          <div class="prof-av-overlay"><i class="ti ti-camera"></i></div>
+        </div>
+        <div style="flex:1"><div class="ac-nm" id="acNm">—</div><div class="ac-em" id="acEm">—</div><span class="ac-bg" id="acBg"></span></div>
+        <button class="ac-cd-edit" onclick="openProfileEdit()"><i class="ti ti-edit" style="font-size:13px"></i>Edit</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="profileStats"></div>
+      <div class="gl-sc">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div class="gl-tt" style="margin-bottom:0">YOUR GOALS</div>
+          <button onclick="openRecalcModal()" style="font-size:11px;color:var(--br);background:var(--brl);border:none;border-radius:var(--rx);padding:4px 9px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:4px"><i class="ti ti-refresh" style="font-size:12px"></i>Recalculate</button>
+        </div>
+        <div class="gl-gd">
+          <div class="gs"><div class="gs-v" id="acKcal">—</div><div class="gs-l">kcal per day</div></div>
+          <div class="gs"><div class="gs-v" id="acGoal" style="font-size:13px">—</div><div class="gs-l">current goal</div></div>
+          <div class="gs"><div class="gs-v" id="acBmi" style="font-size:13px">—</div><div class="gs-l">BMI</div></div>
+          <div class="gs"><div class="gs-v" id="acWeight" style="font-size:13px">—</div><div class="gs-l">Weight</div></div>
+        </div>
+      </div>
+      <div onclick="document.getElementById('sc-premium').style.display='flex'" style="background:linear-gradient(135deg,#2a1200,#1a0d00);border-radius:var(--ra);padding:16px;display:flex;align-items:center;gap:13px;cursor:pointer;border:1px solid rgba(255,107,53,.3)">
+        <div style="width:42px;height:42px;background:rgba(255,107,53,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">👑</div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff;font-family:var(--fh)">Upgrade to Pro</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">Unlimited AI · RM 9.90/mo</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--br);font-size:18px"></i>
+      </div>
+      <button class="btn-dn" onclick="logout()"><i class="ti ti-logout" style="font-size:16px"></i>Log out</button>
+      <!-- API Key section -->
+      <div style="background:var(--gy4);border-radius:var(--ra);padding:14px;border:1px solid var(--bo)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.06em">ANTHROPIC API KEY</div>
+          <div id="apiKeyBadge"></div>
+        </div>
+        <div style="font-size:11px;color:var(--tx3);line-height:1.5;margin-bottom:10px">Required for AI meal log, photo scan and nutrition analysis.</div>
+        <button onclick="openApiKeyModal()" style="width:100%;padding:10px;background:var(--dk);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:var(--fn)"><i class="ti ti-key" style="font-size:15px;color:var(--br)"></i>Set API key</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bn">
+    <button class="nb on" onclick="swTab('tlog',this)"><i class="ti ti-home"></i>today</button>
+    <button class="nb" onclick="swTab('tai',this)"><i class="ti ti-brain"></i>AI log</button>
+    <button class="nb" onclick="swTab('tsr',this)"><i class="ti ti-search"></i>search</button>
+    <button class="nb" onclick="swTab('tsc',this)"><i class="ti ti-camera"></i>scan</button>
+    <button class="nb" onclick="swTab('tcl',this)"><i class="ti ti-calendar"></i>history</button>
+    <button class="nb" onclick="swTab('tac',this)"><i class="ti ti-user"></i>me</button>
+  </div>
+</div>
+</div>
+
+<!-- SERVING SIZE MODAL -->
+<div class="modal-overlay hidden" id="servingModal" onclick="closeModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Adjust serving size</div>
+    <div class="modal-food-row"><div class="modal-food-em" id="mFoodEm">🍚</div><div><div class="modal-food-name" id="mFoodName">Food</div><div class="modal-food-base" id="mFoodBase">Per 100g</div></div></div>
+    <div class="serving-row"><div class="serving-lbl">Amount</div><input class="serving-input" type="number" id="servingAmt" value="1" min="0.1" step="0.1" oninput="updatePreview()"/></div>
+    <div class="serving-unit-btns" id="servingUnitBtns"></div>
+    <div class="serving-preview"><div><div style="font-size:11px;color:var(--tx3);font-weight:500;margin-bottom:3px">ESTIMATED NUTRITION</div><div class="sp-mac" id="mPreviewMac">C:0g P:0g F:0g</div></div><div class="sp-kc" id="mPreviewKcal">0 kcal</div></div>
+    <button class="modal-add-btn" id="mAddBtn" onclick="confirmServing()">Add to Log</button>
+    <div class="modal-cancel" onclick="closeServingModal()">Cancel</div>
+  </div>
+</div>
+
+<!-- PROFILE EDIT MODAL -->
+<div class="modal-overlay hidden" id="profileModal" onclick="if(event.target.id==='profileModal')closeProfileModal()">
+  <div class="prof-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Edit Profile</div>
+    <div class="prof-av-wrap">
+      <div class="prof-av-big" onclick="document.getElementById('avatarInput').click()">
+        <span id="editAvTxt">A</span>
+        <img id="editAvImg" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0"/>
+        <div class="prof-av-overlay"><i class="ti ti-camera"></i></div>
+      </div>
+      <div class="prof-av-hint">Tap to change photo</div>
+      <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)"/>
+    </div>
+    <div class="prof-section"><div class="prof-section-title">Personal Info</div>
+      <div class="edit-fld"><label>Full name</label><input type="text" id="editName" placeholder="Your name"/></div>
+      <div class="edit-fld"><label>Email</label><input type="email" id="editEmail" placeholder="your@email.com" readonly style="opacity:.6"/></div>
+    </div>
+    <div class="prof-section"><div class="prof-section-title">Body Stats</div>
+      <div class="prof-row">
+        <div class="edit-fld"><label>Age</label><input type="number" id="editAge" placeholder="28" min="10" max="99"/></div>
+        <div class="edit-fld"><label>Sex</label><select id="editSex"><option value="male">Male</option><option value="female">Female</option></select></div>
+      </div>
+      <div class="prof-row">
+        <div class="edit-fld"><label>Weight (kg)</label><input type="number" id="editWeight" placeholder="70" step="0.1"/></div>
+        <div class="edit-fld"><label>Height (cm)</label><input type="number" id="editHeight" placeholder="170"/></div>
+      </div>
+    </div>
+    <div class="prof-section"><div class="prof-section-title">Activity Level</div>
+      <div class="edit-fld"><select id="editActivity"><option value="1.2">Sedentary</option><option value="1.375">Lightly active</option><option value="1.55">Moderately active</option><option value="1.725">Very active</option></select></div>
+    </div>
+    <div class="prof-section"><div class="prof-section-title">Goal</div>
+      <div class="edit-fld"><select id="editGoal"><option value="lose">Lose weight</option><option value="maintain">Maintain weight</option><option value="gain">Build muscle</option></select></div>
+    </div>
+    <div class="recalc-banner"><i class="ti ti-info-circle"></i>Saving will automatically recalculate your daily calorie goal.</div>
+    <button class="prof-save-btn" onclick="saveProfile()"><i class="ti ti-check" style="font-size:16px"></i>Save changes</button>
+    <div class="modal-cancel" onclick="closeProfileModal()">Cancel</div>
+  </div>
+</div>
+
+<!-- RECALCULATE MODAL -->
+<div class="modal-overlay hidden" id="recalcModal" onclick="if(event.target.id==='recalcModal')closeRecalcModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Recalculate Goals</div>
+    <div style="font-size:13px;color:var(--tx2);line-height:1.5">Update your measurements to get a fresh calorie target.</div>
+    <div class="prof-row">
+      <div class="edit-fld"><label>Current weight (kg)</label><input type="number" id="rcWeight" placeholder="70" step="0.1"/></div>
+      <div class="edit-fld"><label>Height (cm)</label><input type="number" id="rcHeight" placeholder="170"/></div>
+    </div>
+    <div class="prof-row">
+      <div class="edit-fld"><label>Age</label><input type="number" id="rcAge" placeholder="28"/></div>
+      <div class="edit-fld"><label>Goal</label><select id="rcGoal"><option value="lose">Lose weight</option><option value="maintain">Maintain</option><option value="gain">Build muscle</option></select></div>
+    </div>
+    <div class="recalc-result" id="rcResult">
+      <div style="font-size:11px;color:var(--gy);text-align:center;letter-spacing:.06em;font-weight:600">YOUR NEW DAILY GOAL</div>
+      <div class="recalc-new-goal" id="rcNewGoal">—</div>
+      <div style="font-size:12px;text-align:center;font-weight:500" id="rcDiff"></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:4px" id="rcMacros"></div>
+    </div>
+    <button class="prof-save-btn" onclick="doRecalc()" id="rcBtn"><i class="ti ti-calculator" style="font-size:16px"></i>Calculate new goal</button>
+    <button class="prof-save-btn" onclick="applyRecalc()" id="rcApplyBtn" style="display:none;background:var(--gn)"><i class="ti ti-check" style="font-size:16px"></i>Apply new goal</button>
+    <div class="modal-cancel" onclick="closeRecalcModal()">Cancel</div>
+  </div>
+</div>
+
+<!-- PREMIUM SCREEN -->
+<div style="position:fixed;inset:0;background:var(--dk);z-index:50;display:none;flex-direction:column;max-width:430px;margin:0 auto;overflow-y:auto" id="sc-premium">
+  <button onclick="document.getElementById('sc-premium').style.display='none'" style="position:absolute;top:18px;right:18px;background:rgba(255,255,255,.1);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:1"><i class="ti ti-x"></i></button>
+  <div class="pm-hdr"><span class="pm-crown">👑</span><div class="pm-title">Go <span>Premium</span></div><div class="pm-sub">Unlock unlimited AI, no ads and advanced analytics</div></div>
+  <div class="pm-body">
+    <div class="pm-plan-row">
+      <div class="pm-plan free" id="planFree" onclick="selectPlan('free')"><div class="pm-badge" style="background:var(--bo);color:var(--tx3)">FREE</div><div class="pm-price" style="color:var(--tx)">RM 0</div><div class="pm-period">forever</div><div style="margin-top:10px;font-size:11px;color:var(--tx3);line-height:1.6">1 AI scan/day<br/>1 AI log/day<br/>7-day history<br/>Ads shown</div></div>
+      <div class="pm-plan pro sel" id="planPro" onclick="selectPlan('pro')"><div class="pm-badge" style="background:rgba(255,107,53,.2);color:var(--br)">⭐ PRO</div><div class="pm-price">RM 9.90</div><div class="pm-period">per month</div><div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.6);line-height:1.6">Unlimited AI scans<br/>Unlimited AI logs<br/>Full history<br/>No ads</div></div>
+    </div>
+    <div class="pm-feats">
+      <div class="pm-fr"><div class="pm-fi" style="background:rgba(255,107,53,.15)"><i class="ti ti-camera" style="color:var(--br);font-size:17px"></i></div><div><div class="pm-fn">Unlimited AI photo scans</div><div class="pm-fd">Snap any meal, AI tracks instantly</div></div><div class="pm-ftag" style="background:rgba(255,107,53,.15);color:var(--br)">PRO</div></div>
+      <div class="pm-fr"><div class="pm-fi" style="background:rgba(34,197,94,.15)"><i class="ti ti-brain" style="color:#22c55e;font-size:17px"></i></div><div><div class="pm-fn">Unlimited AI meal logs</div><div class="pm-fd">Describe any meal, no daily limit</div></div><div class="pm-ftag" style="background:rgba(34,197,94,.15);color:#22c55e">PRO</div></div>
+      <div class="pm-fr"><div class="pm-fi" style="background:rgba(59,130,246,.15)"><i class="ti ti-chart-bar" style="color:#3b82f6;font-size:17px"></i></div><div><div class="pm-fn">Advanced analytics</div><div class="pm-fd">Trends, insights, weekly reports</div></div><div class="pm-ftag" style="background:rgba(59,130,246,.15);color:#3b82f6">PRO</div></div>
+      <div class="pm-fr"><div class="pm-fi" style="background:rgba(139,92,246,.15)"><i class="ti ti-ad-off" style="color:#8b5cf6;font-size:17px"></i></div><div><div class="pm-fn">Ad-free experience</div><div class="pm-fd">Clean distraction-free tracking</div></div><div class="pm-ftag" style="background:rgba(139,92,246,.15);color:#8b5cf6">PRO</div></div>
+    </div>
+    <button class="pm-cta" onclick="subscribePro()"><i class="ti ti-crown" style="font-size:18px"></i>Start 7-day free trial</button>
+    <div class="pm-restore" onclick="restorePurchase()">Restore purchase</div>
+    <div class="pm-terms">Cancel anytime. RM 9.90/month after trial.<br/>Auto-renews until cancelled.</div>
+  </div>
+</div>
+
+<script>
+
+// ── API KEY MANAGEMENT ───────────────────────────────────────────────────────
+function getApiKey(){
+  return localStorage.getItem('bw_api_key')||'';
+}
+function setApiKey(key){
+  localStorage.setItem('bw_api_key',key.trim());
+  showToast('✓ API key saved!');
+  document.getElementById('apiKeyModal').classList.add('hidden');
+  updateApiKeyBadge();
+}
+function updateApiKeyBadge(){
+  const key=getApiKey();
+  const badge=document.getElementById('apiKeyBadge');
+  if(!badge)return;
+  if(key){
+    badge.innerHTML='<span style="font-size:11px;font-weight:700;color:var(--gn);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:20px;padding:3px 10px">✓ AI Ready</span>';
+  } else {
+    badge.innerHTML='<span style="font-size:11px;font-weight:700;color:var(--re);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:20px;padding:3px 10px;cursor:pointer" onclick="openApiKeyModal()">⚠ Add API Key</span>';
+  }
+}
+function openApiKeyModal(){
+  document.getElementById('apiKeyInput').value=getApiKey();
+  document.getElementById('apiKeyModal').classList.remove('hidden');
+}
+function checkApiKey(){
+  if(!getApiKey()){
+    showToast('⚠ Add your API key in the Me tab to use AI features');
+    openApiKeyModal();
+    return false;
+  }
+  return true;
+}
+
+window.onerror = function(msg, src, line, col, err) {
+  console.error('ERROR at line '+line+':'+col+' - '+msg);
+  if(err) console.error(err.stack);
+  return false;
+};
+// ═══════════════════════════════════════════════════════
+// LOCAL FOOD DATABASE — 800+ items covering all common searches
+// ═══════════════════════════════════════════════════════
+const FOODS = [
+// ── GRAINS & RICE ──
+{n:"White rice (plain, cooked)",e:"🍚",c:"Grains",s:"100g cooked",k:130,carb:28,prot:3,fat:0,kw:"rice plain white"},
+{n:"White rice (1 cup cooked)",e:"🍚",c:"Grains",s:"1 cup / 186g",k:242,carb:53,prot:4,fat:0,kw:"rice white cup"},
+{n:"Brown rice (plain)",e:"🍚",c:"Grains",s:"100g cooked",k:123,carb:26,prot:3,fat:1,kw:"rice brown plain"},
+{n:"Brown rice (1 cup)",e:"🍚",c:"Grains",s:"1 cup / 195g",k:218,carb:46,prot:5,fat:2,kw:"rice brown cup"},
+{n:"Jasmine rice (plain)",e:"🍚",c:"Grains",s:"100g cooked",k:135,carb:29,prot:3,fat:0,kw:"jasmine rice"},
+{n:"Basmati rice (plain)",e:"🍚",c:"Grains",s:"100g cooked",k:121,carb:25,prot:4,fat:0,kw:"basmati rice"},
+{n:"Sticky rice / glutinous rice",e:"🍚",c:"Grains",s:"100g cooked",k:175,carb:39,prot:3,fat:0,kw:"sticky glutinous rice"},
+{n:"Fried rice (plain)",e:"🍳",c:"Grains",s:"1 cup / 200g",k:290,carb:42,prot:7,fat:10,kw:"fried rice plain"},
+{n:"Quinoa (cooked)",e:"🌾",c:"Grains",s:"100g",k:120,carb:22,prot:4,fat:2,kw:"quinoa"},
+{n:"Oatmeal (water)",e:"🥣",c:"Grains",s:"1 bowl",k:166,carb:28,prot:6,fat:4,kw:"oatmeal oats porridge"},
+{n:"Oatmeal (milk)",e:"🥣",c:"Grains",s:"1 bowl",k:210,carb:30,prot:9,fat:6,kw:"oatmeal oats milk"},
+{n:"Couscous (cooked)",e:"🌾",c:"Grains",s:"100g",k:112,carb:23,prot:4,fat:0,kw:"couscous"},
+{n:"Millet (cooked)",e:"🌾",c:"Grains",s:"100g",k:119,carb:24,prot:3,fat:1,kw:"millet"},
+{n:"Barley (cooked)",e:"🌾",c:"Grains",s:"100g",k:123,carb:28,prot:2,fat:0,kw:"barley"},
+// ── NOODLES & PASTA ──
+{n:"Plain noodles (cooked)",e:"🍜",c:"Noodles",s:"100g cooked",k:138,carb:25,prot:5,fat:2,kw:"noodles plain cooked"},
+{n:"Egg noodles (cooked)",e:"🍜",c:"Noodles",s:"100g cooked",k:138,carb:26,prot:5,fat:2,kw:"egg noodles"},
+{n:"Rice noodles (cooked)",e:"🍜",c:"Noodles",s:"100g cooked",k:109,carb:25,prot:2,fat:0,kw:"rice noodles"},
+{n:"Glass noodles / vermicelli",e:"🍜",c:"Noodles",s:"100g cooked",k:99,carb:25,prot:0,fat:0,kw:"glass noodles vermicelli"},
+{n:"Ramen noodles (plain, cooked)",e:"🍜",c:"Noodles",s:"100g cooked",k:148,carb:22,prot:5,fat:5,kw:"ramen noodles plain"},
+{n:"Soba noodles",e:"🍜",c:"Noodles",s:"100g cooked",k:99,carb:21,prot:5,fat:0,kw:"soba noodles"},
+{n:"Udon noodles (plain)",e:"🍜",c:"Noodles",s:"100g cooked",k:95,carb:21,prot:3,fat:0,kw:"udon noodles plain"},
+{n:"Spaghetti (plain, cooked)",e:"🍝",c:"Noodles",s:"100g cooked",k:157,carb:31,prot:6,fat:1,kw:"spaghetti pasta plain"},
+{n:"Penne (cooked)",e:"🍝",c:"Noodles",s:"100g cooked",k:158,carb:31,prot:6,fat:1,kw:"penne pasta"},
+{n:"Macaroni (cooked)",e:"🍝",c:"Noodles",s:"100g cooked",k:156,carb:31,prot:6,fat:1,kw:"macaroni pasta"},
+{n:"Whole wheat pasta",e:"🍝",c:"Noodles",s:"100g cooked",k:151,carb:30,prot:6,fat:1,kw:"whole wheat pasta"},
+// ── BREADS ──
+{n:"White bread (1 slice)",e:"🍞",c:"Bread",s:"1 slice / 30g",k:80,carb:15,prot:3,fat:1,kw:"white bread slice"},
+{n:"White bread (2 slices)",e:"🍞",c:"Bread",s:"2 slices",k:160,carb:30,prot:5,fat:2,kw:"white bread 2 slices"},
+{n:"Whole wheat bread (1 slice)",e:"🍞",c:"Bread",s:"1 slice / 32g",k:81,carb:14,prot:4,fat:1,kw:"whole wheat brown bread slice"},
+{n:"Sourdough (1 slice)",e:"🍞",c:"Bread",s:"1 slice / 47g",k:120,carb:24,prot:4,fat:0,kw:"sourdough bread"},
+{n:"Baguette",e:"🥖",c:"Bread",s:"100g",k:270,carb:55,prot:9,fat:1,kw:"baguette french bread"},
+{n:"Pita bread",e:"🫓",c:"Bread",s:"1 piece / 60g",k:165,carb:33,prot:5,fat:1,kw:"pita flatbread"},
+{n:"Naan (plain)",e:"🫓",c:"Bread",s:"1 piece / 90g",k:260,carb:46,prot:9,fat:5,kw:"naan bread indian"},
+{n:"Chapati / roti",e:"🫓",c:"Bread",s:"1 piece / 40g",k:120,carb:20,prot:4,fat:3,kw:"chapati roti flatbread"},
+{n:"Flour tortilla",e:"🫔",c:"Bread",s:"1 piece / 45g",k:146,carb:26,prot:4,fat:3,kw:"tortilla wrap flour"},
+{n:"Bagel (plain)",e:"🥯",c:"Bread",s:"1 bagel / 98g",k:270,carb:52,prot:10,fat:1,kw:"bagel plain"},
+{n:"Croissant",e:"🥐",c:"Bread",s:"1 croissant / 57g",k:231,carb:26,prot:5,fat:12,kw:"croissant pastry"},
+// ── CHICKEN (all variations) ──
+{n:"Chicken breast (grilled)",e:"🍗",c:"Protein",s:"100g",k:165,carb:0,prot:31,fat:4,kw:"chicken breast grilled"},
+{n:"Chicken breast (boiled)",e:"🍗",c:"Protein",s:"100g",k:150,carb:0,prot:28,fat:3,kw:"chicken breast boiled"},
+{n:"Chicken breast (fried)",e:"🍗",c:"Protein",s:"100g",k:219,carb:7,prot:28,fat:9,kw:"chicken breast fried"},
+{n:"Chicken thigh (grilled)",e:"🍗",c:"Protein",s:"100g",k:209,carb:0,prot:26,fat:11,kw:"chicken thigh grilled"},
+{n:"Chicken drumstick (grilled)",e:"🍗",c:"Protein",s:"1 drumstick / 80g",k:155,carb:0,prot:22,fat:7,kw:"chicken drumstick leg"},
+{n:"Chicken wing",e:"🍗",c:"Protein",s:"1 wing / 40g",k:99,carb:0,prot:9,fat:7,kw:"chicken wing"},
+{n:"Roast chicken",e:"🍗",c:"Protein",s:"100g",k:215,carb:0,prot:25,fat:13,kw:"roast chicken"},
+{n:"Chicken curry",e:"🍛",c:"Protein",s:"1 serving / 200g",k:280,carb:10,prot:28,fat:15,kw:"chicken curry"},
+{n:"Butter chicken",e:"🍛",c:"Protein",s:"1 portion / 200g",k:360,carb:12,prot:30,fat:22,kw:"butter chicken murgh makhani"},
+{n:"Chicken tikka masala",e:"🍛",c:"Protein",s:"1 portion / 200g",k:340,carb:14,prot:28,fat:18,kw:"chicken tikka masala"},
+{n:"Chicken biryani",e:"🍚",c:"Protein",s:"1 plate / 350g",k:620,carb:82,prot:28,fat:18,kw:"chicken biryani rice"},
+{n:"Tandoori chicken",e:"🍗",c:"Protein",s:"2 pieces / 200g",k:320,carb:8,prot:40,fat:14,kw:"tandoori chicken"},
+{n:"Chicken satay (5 sticks)",e:"🍢",c:"Protein",s:"5 skewers",k:280,carb:8,prot:30,fat:14,kw:"chicken satay skewer"},
+{n:"Fried chicken (1 piece)",e:"🍗",c:"Protein",s:"1 piece / 100g",k:290,carb:14,prot:24,fat:16,kw:"fried chicken piece"},
+{n:"KFC style fried chicken",e:"🍗",c:"Protein",s:"1 piece",k:320,carb:16,prot:22,fat:18,kw:"fried chicken KFC"},
+{n:"Chicken soup",e:"🍲",c:"Protein",s:"1 bowl",k:160,carb:8,prot:18,fat:6,kw:"chicken soup broth"},
+// ── BEEF ──
+{n:"Beef mince (lean, cooked)",e:"🥩",c:"Protein",s:"100g",k:218,carb:0,prot:26,fat:12,kw:"beef mince ground"},
+{n:"Beef steak (grilled)",e:"🥩",c:"Protein",s:"100g",k:207,carb:0,prot:30,fat:9,kw:"beef steak grilled"},
+{n:"Beef curry",e:"🍛",c:"Protein",s:"1 serving / 200g",k:320,carb:12,prot:26,fat:20,kw:"beef curry"},
+{n:"Beef rendang",e:"🥩",c:"Protein",s:"1 portion",k:380,carb:10,prot:28,fat:26,kw:"rendang beef"},
+{n:"Beef ribs (cooked)",e:"🍖",c:"Protein",s:"100g",k:339,carb:0,prot:28,fat:24,kw:"beef ribs"},
+{n:"Beef bolognese sauce",e:"🍝",c:"Protein",s:"100g",k:160,carb:8,prot:12,fat:9,kw:"bolognese beef sauce"},
+// ── PORK ──
+{n:"Pork belly (cooked)",e:"🥩",c:"Protein",s:"100g",k:518,carb:0,prot:9,fat:53,kw:"pork belly"},
+{n:"Pork chop (grilled)",e:"🥩",c:"Protein",s:"100g",k:231,carb:0,prot:31,fat:11,kw:"pork chop"},
+{n:"Bacon (fried, 2 strips)",e:"🥓",c:"Protein",s:"2 strips / 23g",k:87,carb:0,prot:6,fat:7,kw:"bacon strips"},
+{n:"Ham (sliced)",e:"🥩",c:"Protein",s:"100g",k:163,carb:1,prot:22,fat:8,kw:"ham sliced"},
+{n:"Sausage (pork)",e:"🌭",c:"Protein",s:"1 sausage / 85g",k:280,carb:3,prot:12,fat:24,kw:"pork sausage"},
+// ── FISH & SEAFOOD ──
+{n:"Salmon (grilled)",e:"🐟",c:"Protein",s:"100g",k:208,carb:0,prot:20,fat:13,kw:"salmon grilled"},
+{n:"Tuna (grilled)",e:"🐟",c:"Protein",s:"100g",k:184,carb:0,prot:30,fat:6,kw:"tuna grilled"},
+{n:"Tuna (canned in water)",e:"🐟",c:"Protein",s:"1 can / 185g",k:194,carb:0,prot:43,fat:1,kw:"tuna canned"},
+{n:"Cod (baked)",e:"🐟",c:"Protein",s:"100g",k:105,carb:0,prot:23,fat:1,kw:"cod fish baked"},
+{n:"Tilapia (grilled)",e:"🐟",c:"Protein",s:"100g",k:128,carb:0,prot:26,fat:3,kw:"tilapia fish"},
+{n:"Mackerel (grilled)",e:"🐟",c:"Protein",s:"100g",k:239,carb:0,prot:22,fat:16,kw:"mackerel ikan tenggiri"},
+{n:"Fish curry",e:"🍛",c:"Protein",s:"1 serving / 200g",k:260,carb:10,prot:26,fat:14,kw:"fish curry"},
+{n:"Fried fish (1 piece)",e:"🐟",c:"Protein",s:"1 piece / 100g",k:230,carb:8,prot:22,fat:12,kw:"fried fish"},
+{n:"Grilled fish (ikan bakar)",e:"🐟",c:"Protein",s:"1 portion",k:290,carb:5,prot:38,fat:13,kw:"ikan bakar grilled fish"},
+{n:"Sardines (canned)",e:"🐟",c:"Protein",s:"1 can / 92g",k:191,carb:0,prot:23,fat:11,kw:"sardines canned"},
+{n:"Prawns / shrimp (boiled)",e:"🦐",c:"Protein",s:"100g",k:99,carb:0,prot:24,fat:0,kw:"prawns shrimp udang boiled"},
+{n:"Prawns (fried)",e:"🦐",c:"Protein",s:"100g",k:188,carb:0,prot:24,fat:10,kw:"prawns fried udang"},
+{n:"Squid (cooked)",e:"🦑",c:"Protein",s:"100g",k:175,carb:8,prot:18,fat:7,kw:"squid sotong"},
+{n:"Crab (boiled)",e:"🦀",c:"Protein",s:"100g",k:97,carb:0,prot:19,fat:2,kw:"crab ketam"},
+// ── EGGS ──
+{n:"Egg (boiled)",e:"🥚",c:"Protein",s:"1 large / 50g",k:78,carb:1,prot:6,fat:5,kw:"boiled egg"},
+{n:"Egg (fried)",e:"🥚",c:"Protein",s:"1 large",k:90,carb:0,prot:6,fat:7,kw:"fried egg telur goreng"},
+{n:"Scrambled eggs (2 eggs)",e:"🍳",c:"Protein",s:"2 eggs",k:148,carb:1,prot:12,fat:11,kw:"scrambled eggs"},
+{n:"Omelette",e:"🍳",c:"Protein",s:"2-egg omelette",k:200,carb:2,prot:14,fat:15,kw:"omelette telur dadar"},
+{n:"Egg white",e:"🥚",c:"Protein",s:"1 large / 33g",k:17,carb:0,prot:4,fat:0,kw:"egg white"},
+// ── PLANT PROTEINS ──
+{n:"Tofu (firm, raw)",e:"🫘",c:"Protein",s:"100g",k:76,carb:2,prot:8,fat:5,kw:"tofu tauhu firm"},
+{n:"Tofu (fried)",e:"🫘",c:"Protein",s:"100g",k:271,carb:9,prot:17,fat:20,kw:"fried tofu tauhu goreng"},
+{n:"Tempeh",e:"🫘",c:"Protein",s:"100g",k:195,carb:8,prot:19,fat:11,kw:"tempeh tempe"},
+{n:"Lentils (boiled)",e:"🫘",c:"Protein",s:"100g",k:116,carb:20,prot:9,fat:0,kw:"lentils dal"},
+{n:"Chickpeas (boiled)",e:"🫘",c:"Protein",s:"100g",k:164,carb:27,prot:9,fat:3,kw:"chickpeas channa"},
+{n:"Black beans",e:"🫘",c:"Protein",s:"100g cooked",k:132,carb:24,prot:9,fat:1,kw:"black beans"},
+{n:"Edamame (boiled)",e:"🫛",c:"Protein",s:"100g",k:121,carb:10,prot:11,fat:5,kw:"edamame soy beans"},
+// ── CURRIES & SAUCES ──
+{n:"Dal curry (lentil)",e:"🍲",c:"Curry",s:"1 bowl / 200g",k:220,carb:32,prot:13,fat:5,kw:"dal dhal curry lentil"},
+{n:"Lamb curry",e:"🍛",c:"Curry",s:"1 serving / 200g",k:360,carb:10,prot:28,fat:24,kw:"lamb mutton curry"},
+{n:"Vegetable curry",e:"🍛",c:"Curry",s:"1 bowl / 200g",k:180,carb:22,prot:6,fat:8,kw:"vegetable curry sabzi"},
+{n:"Green curry (Thai)",e:"🍛",c:"Curry",s:"1 bowl",k:420,carb:24,prot:26,fat:26,kw:"green curry thai"},
+{n:"Red curry (Thai)",e:"🍛",c:"Curry",s:"1 bowl",k:440,carb:20,prot:28,fat:28,kw:"red curry thai"},
+{n:"Massaman curry",e:"🍛",c:"Curry",s:"1 bowl",k:480,carb:34,prot:24,fat:28,kw:"massaman curry"},
+{n:"Palak paneer",e:"🍃",c:"Curry",s:"1 bowl / 200g",k:320,carb:14,prot:16,fat:22,kw:"palak paneer spinach cheese"},
+{n:"Aloo gobi",e:"🥔",c:"Curry",s:"1 bowl / 200g",k:180,carb:26,prot:6,fat:7,kw:"aloo gobi potato cauliflower"},
+// ── VEGETABLES ──
+{n:"Broccoli (steamed)",e:"🥦",c:"Vegetables",s:"100g",k:35,carb:7,prot:2,fat:0,kw:"broccoli steamed"},
+{n:"Spinach (raw)",e:"🥬",c:"Vegetables",s:"100g",k:23,carb:4,prot:3,fat:0,kw:"spinach bayam"},
+{n:"Carrot (raw)",e:"🥕",c:"Vegetables",s:"1 medium / 60g",k:25,carb:6,prot:1,fat:0,kw:"carrot raw"},
+{n:"Carrot (boiled)",e:"🥕",c:"Vegetables",s:"100g",k:35,carb:8,prot:1,fat:0,kw:"carrot boiled"},
+{n:"Potato (boiled)",e:"🥔",c:"Vegetables",s:"100g",k:87,carb:20,prot:2,fat:0,kw:"potato boiled kentang"},
+{n:"Potato (baked)",e:"🥔",c:"Vegetables",s:"1 medium / 150g",k:161,carb:37,prot:4,fat:0,kw:"baked potato"},
+{n:"Sweet potato (baked)",e:"🍠",c:"Vegetables",s:"1 medium / 130g",k:112,carb:26,prot:2,fat:0,kw:"sweet potato ubi"},
+{n:"Corn (boiled)",e:"🌽",c:"Vegetables",s:"1 ear / 90g kernels",k:88,carb:19,prot:3,fat:1,kw:"corn jagung boiled"},
+{n:"Tomato (raw)",e:"🍅",c:"Vegetables",s:"1 medium / 125g",k:22,carb:5,prot:1,fat:0,kw:"tomato tomat"},
+{n:"Cucumber (raw)",e:"🥒",c:"Vegetables",s:"100g",k:16,carb:4,prot:1,fat:0,kw:"cucumber timun"},
+{n:"Lettuce (raw)",e:"🥗",c:"Vegetables",s:"100g",k:15,carb:3,prot:1,fat:0,kw:"lettuce salad"},
+{n:"Cabbage (raw)",e:"🥬",c:"Vegetables",s:"100g",k:25,carb:6,prot:1,fat:0,kw:"cabbage kobis"},
+{n:"Cauliflower (steamed)",e:"🥦",c:"Vegetables",s:"100g",k:23,carb:5,prot:2,fat:0,kw:"cauliflower"},
+{n:"Mushrooms (raw)",e:"🍄",c:"Vegetables",s:"100g",k:22,carb:3,prot:3,fat:0,kw:"mushrooms cendawan"},
+{n:"Bell pepper (raw)",e:"🫑",c:"Vegetables",s:"1 medium",k:31,carb:7,prot:1,fat:0,kw:"bell pepper capsicum"},
+{n:"Onion (raw)",e:"🧅",c:"Vegetables",s:"1 medium / 110g",k:44,carb:10,prot:1,fat:0,kw:"onion bawang"},
+{n:"Eggplant / brinjal",e:"🍆",c:"Vegetables",s:"100g cooked",k:35,carb:9,prot:1,fat:0,kw:"eggplant brinjal terung"},
+{n:"Bok choy (cooked)",e:"🥬",c:"Vegetables",s:"100g",k:13,carb:2,prot:2,fat:0,kw:"bok choy sawi"},
+{n:"Bean sprouts",e:"🌱",c:"Vegetables",s:"100g",k:30,carb:6,prot:3,fat:0,kw:"bean sprouts taugeh"},
+{n:"Pumpkin (boiled)",e:"🎃",c:"Vegetables",s:"100g",k:20,carb:5,prot:1,fat:0,kw:"pumpkin labu"},
+{n:"Mixed vegetables (stir-fried)",e:"🥦",c:"Vegetables",s:"100g",k:60,carb:8,prot:3,fat:2,kw:"mixed vegetables stir fried"},
+// ── FRUITS ──
+{n:"Apple",e:"🍎",c:"Fruits",s:"1 medium / 182g",k:95,carb:25,prot:0,fat:0,kw:"apple epal"},
+{n:"Banana",e:"🍌",c:"Fruits",s:"1 medium / 118g",k:105,carb:27,prot:1,fat:0,kw:"banana pisang"},
+{n:"Orange",e:"🍊",c:"Fruits",s:"1 medium / 131g",k:62,carb:15,prot:1,fat:0,kw:"orange"},
+{n:"Grapes",e:"🍇",c:"Fruits",s:"100g",k:69,carb:18,prot:1,fat:0,kw:"grapes anggur"},
+{n:"Strawberries",e:"🍓",c:"Fruits",s:"100g",k:32,carb:8,prot:1,fat:0,kw:"strawberries"},
+{n:"Blueberries",e:"🫐",c:"Fruits",s:"100g",k:57,carb:14,prot:1,fat:0,kw:"blueberries"},
+{n:"Watermelon",e:"🍉",c:"Fruits",s:"100g",k:30,carb:8,prot:1,fat:0,kw:"watermelon tembikai"},
+{n:"Mango",e:"🥭",c:"Fruits",s:"1 cup / 165g",k:99,carb:25,prot:1,fat:1,kw:"mango mangga"},
+{n:"Pineapple",e:"🍍",c:"Fruits",s:"100g",k:50,carb:13,prot:1,fat:0,kw:"pineapple nenas"},
+{n:"Avocado",e:"🥑",c:"Fruits",s:"100g",k:160,carb:9,prot:2,fat:15,kw:"avocado"},
+{n:"Avocado (whole)",e:"🥑",c:"Fruits",s:"1 whole / 200g",k:322,carb:17,prot:4,fat:29,kw:"avocado whole"},
+{n:"Kiwi",e:"🥝",c:"Fruits",s:"1 medium / 76g",k:46,carb:11,prot:1,fat:0,kw:"kiwi"},
+{n:"Papaya",e:"🍈",c:"Fruits",s:"100g",k:43,carb:11,prot:0,fat:0,kw:"papaya betik"},
+{n:"Coconut (flesh)",e:"🥥",c:"Fruits",s:"100g",k:354,carb:15,prot:3,fat:33,kw:"coconut kelapa"},
+{n:"Dates (dried)",e:"🍑",c:"Fruits",s:"3 dates / 24g",k:67,carb:18,prot:0,fat:0,kw:"dates kurma"},
+// ── DAIRY ──
+{n:"Whole milk",e:"🥛",c:"Dairy",s:"250ml",k:150,carb:12,prot:8,fat:8,kw:"whole milk susu"},
+{n:"Skimmed milk",e:"🥛",c:"Dairy",s:"250ml",k:85,carb:12,prot:8,fat:0,kw:"skimmed skim milk"},
+{n:"Greek yogurt (full fat)",e:"🥛",c:"Dairy",s:"100g",k:97,carb:4,prot:9,fat:5,kw:"greek yogurt"},
+{n:"Natural yogurt",e:"🥛",c:"Dairy",s:"100g",k:61,carb:5,prot:4,fat:3,kw:"natural yogurt"},
+{n:"Cottage cheese",e:"🧀",c:"Dairy",s:"100g",k:103,carb:3,prot:12,fat:5,kw:"cottage cheese"},
+{n:"Cheddar cheese",e:"🧀",c:"Dairy",s:"30g slice",k:120,carb:0,prot:7,fat:10,kw:"cheddar cheese"},
+{n:"Mozzarella",e:"🧀",c:"Dairy",s:"100g",k:280,carb:2,prot:28,fat:17,kw:"mozzarella cheese"},
+{n:"Butter",e:"🧈",c:"Dairy",s:"1 tbsp / 14g",k:102,carb:0,prot:0,fat:12,kw:"butter mentega"},
+{n:"Ice cream (vanilla, 2 scoops)",e:"🍦",c:"Dairy",s:"100g",k:207,carb:24,prot:4,fat:11,kw:"ice cream vanilla"},
+// ── NUTS & FATS ──
+{n:"Almonds",e:"🌰",c:"Nuts",s:"30g handful",k:174,carb:6,prot:6,fat:15,kw:"almonds badam"},
+{n:"Cashews",e:"🌰",c:"Nuts",s:"30g",k:163,carb:9,prot:4,fat:13,kw:"cashews gajus"},
+{n:"Walnuts",e:"🌰",c:"Nuts",s:"30g",k:196,carb:4,prot:5,fat:20,kw:"walnuts"},
+{n:"Peanuts (roasted)",e:"🥜",c:"Nuts",s:"30g",k:170,carb:6,prot:7,fat:15,kw:"peanuts kacang"},
+{n:"Peanut butter",e:"🥜",c:"Nuts",s:"2 tbsp / 32g",k:191,carb:7,prot:7,fat:16,kw:"peanut butter"},
+{n:"Olive oil",e:"🫙",c:"Nuts",s:"1 tbsp / 14ml",k:119,carb:0,prot:0,fat:14,kw:"olive oil minyak zaitun"},
+{n:"Coconut oil",e:"🫙",c:"Nuts",s:"1 tbsp / 14ml",k:121,carb:0,prot:0,fat:14,kw:"coconut oil"},
+// ── DRINKS ──
+{n:"Water",e:"💧",c:"Drinks",s:"Any amount",k:0,carb:0,prot:0,fat:0,kw:"water air"},
+{n:"Black coffee",e:"☕",c:"Drinks",s:"1 cup / 240ml",k:2,carb:0,prot:0,fat:0,kw:"black coffee kopi O"},
+{n:"Coffee with milk (latte)",e:"☕",c:"Drinks",s:"1 cup / 300ml",k:190,carb:18,prot:10,fat:7,kw:"latte coffee milk kopi"},
+{n:"Cappuccino",e:"☕",c:"Drinks",s:"1 cup / 180ml",k:120,carb:10,prot:7,fat:5,kw:"cappuccino coffee"},
+{n:"Green tea",e:"🍵",c:"Drinks",s:"1 cup",k:2,carb:0,prot:0,fat:0,kw:"green tea teh hijau"},
+{n:"Orange juice (fresh)",e:"🍊",c:"Drinks",s:"250ml",k:112,carb:26,prot:2,fat:0,kw:"orange juice oj"},
+{n:"Apple juice",e:"🍎",c:"Drinks",s:"250ml",k:114,carb:28,prot:0,fat:0,kw:"apple juice"},
+{n:"Mango juice",e:"🥭",c:"Drinks",s:"250ml",k:130,carb:32,prot:1,fat:0,kw:"mango juice"},
+{n:"Coca-Cola",e:"🥤",c:"Drinks",s:"330ml can",k:140,carb:39,prot:0,fat:0,kw:"coca cola coke"},
+{n:"Diet Coke / Coke Zero",e:"🥤",c:"Drinks",s:"330ml can",k:1,carb:0,prot:0,fat:0,kw:"diet coke zero"},
+{n:"Coconut water",e:"🥥",c:"Drinks",s:"250ml",k:46,carb:9,prot:2,fat:0,kw:"coconut water air kelapa"},
+{n:"Teh tarik",e:"🍵",c:"Drinks",s:"1 cup",k:135,carb:20,prot:4,fat:4,kw:"teh tarik milk tea"},
+{n:"Teh O (plain tea)",e:"🍵",c:"Drinks",s:"1 cup",k:5,carb:1,prot:0,fat:0,kw:"teh O plain tea"},
+{n:"Milo ais",e:"🥤",c:"Drinks",s:"1 cup",k:180,carb:30,prot:5,fat:5,kw:"milo ais chocolate"},
+{n:"Kopi O",e:"☕",c:"Drinks",s:"1 cup",k:10,carb:2,prot:0,fat:0,kw:"kopi O coffee black"},
+{n:"Mango lassi",e:"🥭",c:"Drinks",s:"1 glass / 300ml",k:220,carb:38,prot:6,fat:4,kw:"mango lassi yogurt"},
+{n:"Beer (lager)",e:"🍺",c:"Drinks",s:"330ml",k:140,carb:11,prot:1,fat:0,kw:"beer lager"},
+{n:"Red wine",e:"🍷",c:"Drinks",s:"150ml glass",k:125,carb:4,prot:0,fat:0,kw:"red wine"},
+{n:"Whey protein shake",e:"💪",c:"Drinks",s:"1 scoop / 300ml",k:130,carb:5,prot:25,fat:2,kw:"protein shake whey"},
+// ── SNACKS & FAST FOOD ──
+{n:"Potato chips (small bag)",e:"🥔",c:"Snacks",s:"25g bag",k:135,carb:14,prot:2,fat:8,kw:"chips crisps potato"},
+{n:"Chocolate bar (milk)",e:"🍫",c:"Snacks",s:"1 bar / 45g",k:240,carb:27,prot:4,fat:13,kw:"chocolate bar milk"},
+{n:"Dark chocolate",e:"🍫",c:"Snacks",s:"30g",k:170,carb:13,prot:2,fat:12,kw:"dark chocolate"},
+{n:"Cheeseburger (fast food)",e:"🍔",c:"Snacks",s:"1 burger",k:535,carb:40,prot:29,fat:28,kw:"cheeseburger burger fast food"},
+{n:"Big Mac",e:"🍔",c:"Snacks",s:"1 burger",k:550,carb:45,prot:25,fat:30,kw:"big mac mcdonalds burger"},
+{n:"French fries (medium)",e:"🍟",c:"Snacks",s:"Medium serving",k:365,carb:48,prot:4,fat:17,kw:"french fries chips fries"},
+{n:"Pizza (cheese, 2 slices)",e:"🍕",c:"Snacks",s:"2 slices",k:480,carb:60,prot:20,fat:16,kw:"pizza cheese"},
+{n:"Hot dog",e:"🌭",c:"Snacks",s:"1 with bun",k:310,carb:24,prot:11,fat:18,kw:"hot dog sausage bun"},
+{n:"Donut (glazed)",e:"🍩",c:"Snacks",s:"1 donut",k:300,carb:42,prot:4,fat:13,kw:"donut doughnut glazed"},
+{n:"Granola bar",e:"🍫",c:"Snacks",s:"1 bar / 47g",k:193,carb:30,prot:4,fat:7,kw:"granola bar cereal"},
+// ── MALAYSIAN ──
+{n:"Nasi lemak",e:"🍚",c:"Malaysian",s:"1 serving",k:644,carb:78,prot:16,fat:31,kw:"nasi lemak"},
+{n:"Nasi goreng",e:"🍳",c:"Malaysian",s:"1 plate",k:510,carb:68,prot:14,fat:22,kw:"nasi goreng fried rice"},
+{n:"Nasi kandar",e:"🍛",c:"Malaysian",s:"1 plate",k:850,carb:100,prot:30,fat:38,kw:"nasi kandar"},
+{n:"Nasi dagang",e:"🍚",c:"Malaysian",s:"1 plate",k:580,carb:80,prot:20,fat:18,kw:"nasi dagang"},
+{n:"Roti canai (plain)",e:"🫓",c:"Malaysian",s:"1 piece",k:301,carb:42,prot:7,fat:12,kw:"roti canai plain"},
+{n:"Roti canai with dhal",e:"🫓",c:"Malaysian",s:"1 set",k:420,carb:58,prot:12,fat:14,kw:"roti canai dhal curry"},
+{n:"Char kuey teow",e:"🍜",c:"Malaysian",s:"1 plate",k:744,carb:90,prot:22,fat:34,kw:"char kuey teow fried noodles"},
+{n:"Mee goreng mamak",e:"🍜",c:"Malaysian",s:"1 plate",k:660,carb:85,prot:18,fat:28,kw:"mee goreng mamak noodles"},
+{n:"Laksa Penang",e:"🍜",c:"Malaysian",s:"1 bowl",k:408,carb:51,prot:18,fat:16,kw:"laksa penang noodles"},
+{n:"Bak kut teh",e:"🍲",c:"Malaysian",s:"1 bowl",k:380,carb:8,prot:32,fat:24,kw:"bak kut teh pork ribs soup"},
+{n:"Cendol",e:"🍧",c:"Malaysian",s:"1 bowl",k:295,carb:56,prot:3,fat:8,kw:"cendol dessert"},
+{n:"Pisang goreng (3 pcs)",e:"🍌",c:"Malaysian",s:"3 pieces",k:270,carb:40,prot:3,fat:11,kw:"pisang goreng banana fritter"},
+{n:"Hokkien mee",e:"🍜",c:"Malaysian",s:"1 plate",k:620,carb:72,prot:24,fat:28,kw:"hokkien mee noodles"},
+{n:"Wonton mee",e:"🍜",c:"Malaysian",s:"1 bowl",k:420,carb:55,prot:18,fat:15,kw:"wonton mee noodles"},
+{n:"Kaya toast set",e:"🍞",c:"Malaysian",s:"2 slices + 2 eggs",k:380,carb:44,prot:14,fat:16,kw:"kaya toast breakfast set"},
+{n:"Yong tau foo",e:"🍲",c:"Malaysian",s:"6 pieces",k:310,carb:28,prot:18,fat:14,kw:"yong tau foo"},
+{n:"Ayam percik",e:"🍗",c:"Malaysian",s:"1 piece",k:350,carb:12,prot:34,fat:19,kw:"ayam percik grilled chicken"},
+// ── CHINESE ──
+{n:"Dim sum (har gao, 4 pcs)",e:"🥟",c:"Chinese",s:"4 pieces",k:200,carb:26,prot:12,fat:6,kw:"har gao dim sum"},
+{n:"Char siu (BBQ pork)",e:"🍖",c:"Chinese",s:"100g",k:270,carb:14,prot:24,fat:13,kw:"char siu BBQ pork"},
+{n:"Spring rolls (fried)",e:"🥚",c:"Chinese",s:"2 rolls",k:280,carb:30,prot:8,fat:14,kw:"spring rolls popiah goreng"},
+{n:"Kung Pao chicken",e:"🍗",c:"Chinese",s:"1 portion",k:440,carb:22,prot:32,fat:24,kw:"kung pao chicken"},
+{n:"Fried rice (Chinese style)",e:"🍳",c:"Chinese",s:"1 plate",k:430,carb:62,prot:14,fat:12,kw:"chinese fried rice"},
+{n:"Congee / porridge (plain)",e:"🥣",c:"Chinese",s:"1 bowl",k:175,carb:38,prot:5,fat:1,kw:"congee porridge plain"},
+{n:"Wonton soup",e:"🥣",c:"Chinese",s:"1 bowl",k:220,carb:26,prot:14,fat:6,kw:"wonton soup"},
+// ── JAPANESE ──
+{n:"Sushi — salmon nigiri (2 pcs)",e:"🍣",c:"Japanese",s:"2 pieces",k:110,carb:14,prot:8,fat:2,kw:"salmon sushi nigiri"},
+{n:"Sushi roll (california, 8 pcs)",e:"🍣",c:"Japanese",s:"8 pieces",k:250,carb:38,prot:8,fat:7,kw:"california roll sushi"},
+{n:"Ramen (tonkotsu)",e:"🍜",c:"Japanese",s:"1 bowl",k:530,carb:65,prot:26,fat:18,kw:"ramen tonkotsu noodles"},
+{n:"Gyoza (6 pcs)",e:"🥟",c:"Japanese",s:"6 pieces",k:320,carb:34,prot:16,fat:12,kw:"gyoza dumplings"},
+{n:"Teriyaki chicken",e:"🍗",c:"Japanese",s:"1 portion",k:280,carb:14,prot:30,fat:10,kw:"teriyaki chicken"},
+{n:"Tempura prawn (4 pcs)",e:"🍤",c:"Japanese",s:"4 pieces",k:280,carb:28,prot:14,fat:12,kw:"tempura prawn"},
+{n:"Miso soup",e:"🍵",c:"Japanese",s:"1 bowl",k:40,carb:5,prot:3,fat:1,kw:"miso soup"},
+// ── INDIAN ──
+{n:"Biryani (lamb)",e:"🍚",c:"Indian",s:"1 plate",k:680,carb:82,prot:34,fat:22,kw:"lamb biryani"},
+{n:"Samosa (2 pcs)",e:"🔺",c:"Indian",s:"2 pieces",k:280,carb:34,prot:6,fat:13,kw:"samosa pastry"},
+{n:"Gulab jamun (2 pcs)",e:"🍮",c:"Indian",s:"2 pieces",k:360,carb:58,prot:6,fat:12,kw:"gulab jamun dessert"},
+{n:"Masala chai",e:"☕",c:"Indian",s:"1 cup",k:90,carb:14,prot:3,fat:2,kw:"masala chai spiced tea"},
+// ── THAI ──
+{n:"Pad Thai",e:"🍜",c:"Thai",s:"1 plate",k:490,carb:62,prot:22,fat:16,kw:"pad thai noodles"},
+{n:"Tom Yum soup",e:"🍲",c:"Thai",s:"1 bowl",k:160,carb:12,prot:16,fat:6,kw:"tom yum soup"},
+{n:"Som tam (papaya salad)",e:"🥗",c:"Thai",s:"1 bowl",k:180,carb:28,prot:6,fat:5,kw:"som tam papaya salad"},
+{n:"Mango sticky rice",e:"🥭",c:"Thai",s:"1 serving",k:380,carb:72,prot:6,fat:7,kw:"mango sticky rice dessert"},
+// ── KOREAN ──
+{n:"Bibimbap",e:"🍲",c:"Korean",s:"1 bowl",k:560,carb:78,prot:24,fat:14,kw:"bibimbap rice bowl"},
+{n:"Korean fried chicken",e:"🍗",c:"Korean",s:"6 pieces",k:580,carb:40,prot:38,fat:28,kw:"korean fried chicken"},
+{n:"Bulgogi",e:"🥩",c:"Korean",s:"1 portion",k:380,carb:18,prot:32,fat:18,kw:"bulgogi beef korean"},
+{n:"Kimchi",e:"🥬",c:"Korean",s:"100g",k:30,carb:5,prot:2,fat:0,kw:"kimchi fermented"},
+// ── ITALIAN ──
+{n:"Spaghetti Bolognese",e:"🍝",c:"Italian",s:"1 plate",k:520,carb:68,prot:28,fat:14,kw:"spaghetti bolognese pasta"},
+{n:"Margherita pizza (2 slices)",e:"🍕",c:"Italian",s:"2 slices",k:480,carb:60,prot:20,fat:16,kw:"margherita pizza"},
+{n:"Lasagna",e:"🫕",c:"Italian",s:"1 portion",k:580,carb:50,prot:30,fat:28,kw:"lasagna pasta"},
+{n:"Risotto",e:"🍚",c:"Italian",s:"1 bowl",k:440,carb:62,prot:12,fat:14,kw:"risotto rice"},
+{n:"Tiramisu",e:"🍰",c:"Italian",s:"1 slice",k:380,carb:40,prot:8,fat:20,kw:"tiramisu dessert"},
+// ── WESTERN ──
+{n:"Caesar salad",e:"🥗",c:"Western",s:"1 bowl",k:360,carb:18,prot:10,fat:28,kw:"caesar salad"},
+{n:"Club sandwich",e:"🥪",c:"Western",s:"1 sandwich",k:540,carb:46,prot:30,fat:24,kw:"club sandwich"},
+{n:"Pancakes (3 pcs)",e:"🥞",c:"Western",s:"3 pancakes",k:370,carb:58,prot:8,fat:11,kw:"pancakes breakfast"},
+{n:"Mac and cheese",e:"🧀",c:"Western",s:"1 cup",k:400,carb:48,prot:15,fat:16,kw:"mac cheese macaroni"},
+{n:"Fish and chips",e:"🐟",c:"Western",s:"1 portion",k:600,carb:66,prot:30,fat:24,kw:"fish chips"},
+{n:"Shepherd's pie",e:"🥧",c:"Western",s:"1 portion",k:480,carb:44,prot:28,fat:20,kw:"shepherd pie"},
+// ── MEXICAN ──
+{n:"Tacos (chicken, 2 pcs)",e:"🌮",c:"Mexican",s:"2 tacos",k:360,carb:38,prot:18,fat:14,kw:"tacos chicken"},
+{n:"Beef burrito",e:"🌯",c:"Mexican",s:"1 burrito",k:580,carb:68,prot:26,fat:20,kw:"burrito beef"},
+{n:"Nachos with cheese",e:"🧀",c:"Mexican",s:"1 plate",k:480,carb:52,prot:14,fat:24,kw:"nachos cheese"},
+{n:"Guacamole",e:"🥑",c:"Mexican",s:"2 tbsp / 30g",k:50,carb:3,prot:1,fat:4,kw:"guacamole avocado"},
+// ── MIDDLE EASTERN ──
+{n:"Hummus",e:"🫘",c:"Middle Eastern",s:"2 tbsp / 30g",k:70,carb:6,prot:2,fat:4,kw:"hummus chickpea"},
+{n:"Falafel (4 pcs)",e:"🧆",c:"Middle Eastern",s:"4 pieces",k:280,carb:30,prot:12,fat:12,kw:"falafel"},
+{n:"Shawarma (chicken)",e:"🌯",c:"Middle Eastern",s:"1 wrap",k:490,carb:48,prot:28,fat:20,kw:"shawarma chicken wrap"},
+{n:"Kofta kebab",e:"🍢",c:"Middle Eastern",s:"2 skewers",k:380,carb:8,prot:32,fat:24,kw:"kofta kebab"},
+// ── VIETNAMESE ──
+{n:"Pho (beef)",e:"🍜",c:"Vietnamese",s:"1 bowl",k:420,carb:52,prot:28,fat:8,kw:"pho beef noodle soup"},
+{n:"Banh mi",e:"🥖",c:"Vietnamese",s:"1 sandwich",k:480,carb:58,prot:22,fat:16,kw:"banh mi sandwich"},
+// ── SINGAPOREAN ──
+{n:"Hainanese chicken rice",e:"🍚",c:"Singaporean",s:"1 plate",k:540,carb:66,prot:28,fat:16,kw:"chicken rice hainanese"},
+{n:"Chilli crab",e:"🦀",c:"Singaporean",s:"1 portion",k:480,carb:22,prot:40,fat:24,kw:"chilli crab singapore"},
+// ── INDONESIAN ──
+{n:"Rendang (beef)",e:"🥩",c:"Indonesian",s:"1 portion",k:480,carb:14,prot:32,fat:34,kw:"rendang beef"},
+{n:"Gado-gado",e:"🥜",c:"Indonesian",s:"1 plate",k:380,carb:40,prot:16,fat:18,kw:"gado gado salad peanut"},
+{n:"Soto ayam",e:"🍜",c:"Indonesian",s:"1 bowl",k:320,carb:28,prot:24,fat:12,kw:"soto ayam chicken soup"},
+// ── FITNESS ──
+{n:"Protein bar",e:"💪",c:"Fitness",s:"1 bar / 60g",k:200,carb:22,prot:20,fat:6,kw:"protein bar"},
+{n:"Chicken breast 150g (grilled)",e:"🍗",c:"Fitness",s:"150g",k:248,carb:0,prot:46,fat:5,kw:"chicken breast 150g fitness"},
+// ── DESSERTS ──
+{n:"Cheesecake",e:"🍰",c:"Desserts",s:"1 slice / 125g",k:400,carb:38,prot:7,fat:24,kw:"cheesecake cake"},
+{n:"Chocolate cake",e:"🎂",c:"Desserts",s:"1 slice / 100g",k:352,carb:50,prot:5,fat:15,kw:"chocolate cake"},
+{n:"Chocolate ice cream",e:"🍦",c:"Desserts",s:"2 scoops / 100g",k:216,carb:28,prot:3,fat:11,kw:"chocolate ice cream"},
+{n:"Brownie",e:"🍫",c:"Desserts",s:"1 piece / 60g",k:243,carb:35,prot:3,fat:12,kw:"brownie chocolate"},
+{n:"Mango sticky rice",e:"🥭",c:"Desserts",s:"1 serving",k:380,carb:72,prot:6,fat:7,kw:"mango sticky rice"},
+{n:"Cendol",e:"🍧",c:"Desserts",s:"1 bowl",k:295,carb:56,prot:3,fat:8,kw:"cendol dessert"},
+{n:"ABC (ice kacang)",e:"🧊",c:"Desserts",s:"1 bowl",k:260,carb:52,prot:4,fat:4,kw:"ABC ice kacang shaved ice"},
+];
+
+const CATS=[...new Set(FOODS.map(f=>f.c))];
+const dotC=["#FF6B35","#3B82F6","#22C55E","#F59E0B","#8B5CF6","#EC4899","#14B8A6","#F43F5E"];
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+let pSex="male",pAct=1.375,pGoal="maintain";
+let dGoal=2000,cGoal=250,prGoal=125,fGoal=55;
+let aiMeal="Breakfast",srMeal="Breakfast",scMeal="Lunch";
+let curUser={},genOtp="",pSU={};
+let calV=new Date(),selCal=new Date(),tdKey="";
+let hist={},tdLog={Breakfast:[],Lunch:[],Dinner:[],Snack:[]};
+let scanned=[],aiItems=[],actCat="";
+let srTimer=null,offResults=[];
+
+// ── SPLASH SLIDESHOW ─────────────────────────────────────────────────────────
+const SLIDES=[
+  {url:"https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=640&q=85&fit=crop",dish:"Salmon Sushi",c:"40g",p:"22g",f:"6g",k:"310"},
+  {url:"https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=640&q=85&fit=crop",dish:"Chicken Biryani",c:"82g",p:"28g",f:"18g",k:"620"},
+  {url:"https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=640&q=85&fit=crop",dish:"Grilled Salmon",c:"0g",p:"20g",f:"13g",k:"208"},
+  {url:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=640&q=85&fit=crop",dish:"Food Spread",c:"55g",p:"30g",f:"14g",k:"560"},
+  {url:"https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=640&q=85&fit=crop",dish:"Pizza Margherita",c:"60g",p:"20g",f:"16g",k:"480"},
+];
+let curSlide=0,slideTimer=null;
+
+function goSlide(idx){
+  const prev=curSlide;curSlide=idx;
+  const photo=document.getElementById('spPhoto');
+  const next=document.getElementById('spPhotoNext');
+  const dots=document.querySelectorAll('.sp-dot');
+  const s=SLIDES[curSlide];
+  // preload next image into the back layer
+  next.src=s.url;
+  next.style.opacity='0';
+  // after load, crossfade
+  next.onload=()=>{
+    next.style.opacity='1';
+    photo.style.opacity='0';
+    setTimeout(()=>{
+      photo.src=s.url;
+      photo.style.opacity='1';
+      next.style.opacity='0';
+    },1300);
+  };
+  // update macro pills
+  const mp=document.getElementById('spMacros');
+  if(mp){mp.innerHTML=`<div class="sp-macro-pill sp-macro-c">C: ${s.c}</div><div class="sp-macro-pill sp-macro-p">P: ${s.p}</div><div class="sp-macro-pill sp-macro-f">F: ${s.f}</div><div class="sp-macro-pill sp-macro-k">${s.k} kcal</div>`;}
+  // update dots
+  dots.forEach((d,i)=>d.classList.toggle('active',i===curSlide));
+  // restart timer
+  clearInterval(slideTimer);
+  slideTimer=setInterval(()=>goSlide((curSlide+1)%SLIDES.length),5000);
+}
+
+// preload all images silently
+SLIDES.forEach(s=>{const i=new Image();i.src=s.url;});
+// start cycling after 5s
+slideTimer=setInterval(()=>goSlide((curSlide+1)%SLIDES.length),5000);
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+function go(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on')}
+function sal(id,on){document.getElementById(id).classList.toggle('on',on)}
+function tpw(id,btn){const el=document.getElementById(id);const s=el.type==='password';el.type=s?'text':'password';btn.querySelector('i').className='ti ti-'+(s?'eye-off':'eye')}
+
+function doLogin(){
+  sal('loginErr',false);
+  const em=document.getElementById('loginEmail').value.trim(),pw=document.getElementById('loginPw').value;
+  if(!em||!pw){document.getElementById('loginErrMsg').textContent='Please fill in all fields.';sal('loginErr',true);return}
+  if(!em.includes('@')){document.getElementById('loginErrMsg').textContent='Invalid email address.';sal('loginErr',true);return}
+  curUser={name:em.split('@')[0],email:em,method:'email',ini:em[0].toUpperCase()};go('sc-onb1');
+}
+function doSignup(){
+  sal('signupErr',false);
+  const nm=document.getElementById('suName').value.trim(),em=document.getElementById('suEmail').value.trim(),pw=document.getElementById('suPw').value,pw2=document.getElementById('suPw2').value;
+  if(!nm||!em||!pw||!pw2){document.getElementById('signupErrMsg').textContent='Please fill in all fields.';sal('signupErr',true);return}
+  if(!em.includes('@')){document.getElementById('signupErrMsg').textContent='Invalid email address.';sal('signupErr',true);return}
+  if(pw.length<8){document.getElementById('signupErrMsg').textContent='Password must be at least 8 characters.';sal('signupErr',true);return}
+  if(pw!==pw2){document.getElementById('signupErrMsg').textContent='Passwords do not match.';sal('signupErr',true);return}
+  pSU={name:nm,email:em};genOtp=String(Math.floor(100000+Math.random()*900000));
+  document.getElementById('otpBadge').textContent=em;
+  document.getElementById('otpDisplay').textContent=genOtp.split('').join(' ');
+  for(let i=0;i<6;i++)document.getElementById('o'+i).value='';
+  sal('otpErr',false);sal('otpOk',false);go('sc-otp');setTimeout(()=>document.getElementById('o0').focus(),400);
+}
+function oin(el,i){el.value=el.value.replace(/[^0-9]/g,'');if(el.value&&i<5)document.getElementById('o'+(i+1)).focus();autoV()}
+function okey(e,i){if(e.key==='Backspace'&&!document.getElementById('o'+i).value&&i>0)document.getElementById('o'+(i-1)).focus()}
+function autoV(){const c=[0,1,2,3,4,5].map(i=>document.getElementById('o'+i).value).join('');if(c.length===6)verOtp()}
+function verOtp(){
+  sal('otpErr',false);sal('otpOk',false);
+  const c=[0,1,2,3,4,5].map(i=>document.getElementById('o'+i).value).join('');
+  if(c.length<6){sal('otpErr',true);return}
+  if(c===genOtp){
+    sal('otpOk',true);curUser={name:pSU.name,email:pSU.email,method:'email',ini:pSU.name[0].toUpperCase()};
+    setTimeout(()=>{document.getElementById('pName').value=pSU.name;go('sc-onb1')},1300);
+  }else{sal('otpErr',true);[0,1,2,3,4,5].forEach(i=>document.getElementById('o'+i).value='');document.getElementById('o0').focus();}
+}
+function resend(){
+  genOtp=String(Math.floor(100000+Math.random()*900000));
+  document.getElementById('otpDisplay').textContent=genOtp.split('').join(' ');
+  [0,1,2,3,4,5].forEach(i=>document.getElementById('o'+i).value='');
+  sal('otpErr',false);sal('otpOk',false);document.getElementById('o0').focus();
+  alert('New code sent!\n(Demo: check preview above. Real app emails '+pSU.email+')');
+}
+function startGoogle(){
+  const nms=["Alex Chen","Sarah Johnson","Mohammed Al-Rashid","Priya Patel","Lucas Silva","Yuki Tanaka"];
+  const i=Math.floor(Math.random()*nms.length),nm=nms[i];
+  const em=nm.toLowerCase().replace(/ /g,'.')+Math.floor(Math.random()*99)+'@gmail.com';
+  const ini=nm.split(' ').map(w=>w[0]).join('').slice(0,2);
+  document.getElementById('gAv').textContent=ini;document.getElementById('gNm').textContent=nm;
+  document.getElementById('gEm').textContent=em;document.getElementById('gFirst').textContent=nm.split(' ')[0];
+  pSU={name:nm,email:em,ini};go('sc-google');
+}
+function confGoogle(){
+  curUser={name:pSU.name,email:pSU.email,method:'google',ini:pSU.ini||pSU.name[0].toUpperCase()};
+  document.getElementById('pName').value=pSU.name;go('sc-onb1');
+}
+
+// ── ONBOARDING ────────────────────────────────────────────────────────────────
+function setSex(s){pSex=s;document.getElementById('sx-m').classList.toggle('on',s==='male');document.getElementById('sx-f').classList.toggle('on',s==='female')}
+function setAct(el,v){pAct=v;document.querySelectorAll('.a-it').forEach(i=>i.classList.remove('on'));el.classList.add('on')}
+function setGoal(g,el){pGoal=g;document.querySelectorAll('.g-it').forEach(i=>i.classList.remove('on'));el.classList.add('on')}
+function valOnb1(){
+  const n=document.getElementById('pName').value.trim(),a=parseFloat(document.getElementById('pAge').value),w=parseFloat(document.getElementById('pWt').value),h=parseFloat(document.getElementById('pHt').value);
+  if(!n||!a||!w||!h){alert('Please fill in all fields.');return}go('sc-onb2');
+}
+function calcShow(){
+  const n=document.getElementById('pName').value.trim(),a=parseFloat(document.getElementById('pAge').value),w=parseFloat(document.getElementById('pWt').value),h=parseFloat(document.getElementById('pHt').value);
+  const bmr=pSex==='male'?Math.round(10*w+6.25*h-5*a+5):Math.round(10*w+6.25*h-5*a-161);
+  const tdee=Math.round(bmr*pAct);const adj=pGoal==='lose'?-500:pGoal==='gain'?300:0;
+  dGoal=Math.round(tdee+adj);cGoal=Math.round(dGoal*0.5/4);prGoal=Math.round(dGoal*0.25/4);fGoal=Math.round(dGoal*0.25/9);
+  const bmi=parseFloat((w/((h/100)**2)).toFixed(1));
+  const bmiPct=Math.min(Math.max((bmi-15)/25*100,0),100);
+  const bmiLbl=bmi<18.5?'Underweight':bmi<25?'Normal':bmi<30?'Overweight':'Obese';
+  const bmiC={Underweight:'#60A5FA',Normal:'#22C55E',Overweight:'#F59E0B',Obese:'#EF4444'};
+  const bmiT={Underweight:'#1D4ED8',Normal:'#15803D',Overweight:'#92400E',Obese:'#991B1B'};
+  const gLbl={lose:'Weight loss — 500 kcal deficit/day',maintain:'Maintenance plan',gain:'Muscle building — 300 kcal surplus/day'};
+  const adv={lose:`Great, ${n}! At ${dGoal.toLocaleString()} kcal/day you'll lose about 0.5kg/week.`,maintain:`${n}, ${dGoal.toLocaleString()} kcal/day keeps your weight stable. Aim for ${prGoal}g protein.`,gain:`Let's build, ${n}! ${dGoal.toLocaleString()} kcal/day with ${prGoal}g protein supports muscle growth.`};
+  document.getElementById('resLbl').textContent=n.toUpperCase()+"'S DAILY GOAL";
+  document.getElementById('resNum').textContent=dGoal.toLocaleString();
+  document.getElementById('resTag').textContent=gLbl[pGoal];
+  document.getElementById('rBmr').textContent=bmr;document.getElementById('rCarb').textContent=cGoal+'g';document.getElementById('rProt').textContent=prGoal+'g';
+  document.getElementById('rBmi').textContent=bmi;document.getElementById('rBmiLbl').textContent=bmiLbl;
+  document.getElementById('rBmiLbl').style.cssText=`background:${bmiC[bmiLbl]}22;color:${bmiT[bmiLbl]}`;
+  document.getElementById('bmiMk').style.left=bmiPct+'%';document.getElementById('rAdvice').textContent=adv[pGoal];
+  go('sc-onb4');
+}
+
+// ── APP ───────────────────────────────────────────────────────────────────────
+function startApp(){
+  const today=new Date();tdKey=dk(today);selCal=new Date(today);calV=new Date(today);
+  document.getElementById('appDate').textContent=today.toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long'});
+  const n=document.getElementById('pName').value.trim()||curUser.name||'User';
+  const age=parseFloat(document.getElementById('pAge').value)||0;
+  const weight=parseFloat(document.getElementById('pWt').value)||0;
+  const height=parseFloat(document.getElementById('pHt').value)||0;
+  // Initialise profileData from onboarding values
+  profileData={
+    name:n,
+    email:curUser.email||'',
+    age,weight,height,
+    sex:pSex||'male',
+    activity:pAct||1.375,
+    goal:pGoal||'maintain',
+    avatarUrl:''
+  };
+  refreshMeTab();
+  seedHist();buildCats();renderDefaultSearch();
+  go('sc-app');renderLog();updateTotals();
+  // Init monetisation
+  renderBannerAd();
+  updateScanCounter();
+  updateApiKeyBadge();
+}
+function logout(){tdLog={Breakfast:[],Lunch:[],Dinner:[],Snack:[]};hist={};curUser={};go('sc-splash')}
+function dk(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function seedHist(){
+  const t=new Date();
+  for(let i=1;i<=14;i++){const d=new Date(t);d.setDate(d.getDate()-i);const k=dk(d);const kcal=Math.round(dGoal*(0.6+Math.random()*0.7));
+    hist[k]={kcal,meals:{Breakfast:[{n:"Oatmeal",k:Math.round(kcal*.2),carb:28,prot:6,fat:4,s:"1 bowl"}],Lunch:[{n:"Chicken rice",k:Math.round(kcal*.38),carb:55,prot:30,fat:14,s:"1 plate"}],Dinner:[{n:"Grilled salmon",k:Math.round(kcal*.35),carb:0,prot:36,fat:14,s:"150g"}],Snack:[{n:"Banana",k:Math.round(kcal*.07),carb:27,prot:1,fat:0,s:"1 medium"}]}};}
+}
+function saveTd(){const kcal=Object.values(tdLog).reduce((s,a)=>s+a.reduce((ss,f)=>ss+f.k,0),0);hist[tdKey]={kcal,meals:JSON.parse(JSON.stringify(tdLog))}}
+function swTab(nm,el){
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
+  document.getElementById(nm).classList.add('on');
+  document.querySelectorAll('.tab,.nb').forEach(b=>b.classList.remove('on'));
+  if(el)el.classList.add('on');
+  if(nm==='tlog')renderLog();
+  if(nm==='tcl'){renderCal();renderWk();renderWeeklySummary();}
+  if(nm==='tsc'||nm==='tai')updateScanCounter();
+}
+function updateTotals(){
+  let kcal=0,carb=0,prot=0,fat=0;
+  Object.values(tdLog).forEach(a=>a.forEach(f=>{kcal+=f.k;carb+=f.carb;prot+=f.prot;fat+=f.fat}));
+  document.getElementById('ringNum').textContent=kcal;
+  document.getElementById('remVal').textContent=Math.max(0,dGoal-kcal).toLocaleString()+' kcal';
+  const pct=Math.min(kcal/dGoal,1);
+  document.getElementById('ringArc').style.strokeDashoffset=Math.round(175.9-(175.9*pct));
+  document.getElementById('ringArc').style.stroke=kcal>dGoal?'#EF4444':'#FF6B35';
+  document.getElementById('cV').textContent=carb+'g';document.getElementById('pV').textContent=prot+'g';document.getElementById('fV').textContent=fat+'g';
+  document.getElementById('cB').style.width=Math.min(carb/cGoal*100,100)+'%';
+  document.getElementById('pB').style.width=Math.min(prot/prGoal*100,100)+'%';
+  document.getElementById('fB').style.width=Math.min(fat/fGoal*100,100)+'%';
+  saveTd();
+  renderLog();
+}
+
+function renderLog(){
+  renderGreeting();
+  renderStreakAndChart();
+  renderAiAnalysisBtn();
+  renderMacroBars();
+  renderMealSlots();
+}
+
+function renderStreakAndChart(){
+  const el=document.getElementById('streakChartRow');
+  if(!el)return;
+
+  // Calculate streak
+  const today=new Date();
+  let streak=0;
+  for(let i=0;i<365;i++){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    const k=dk(d);
+    const hasData=k===tdKey
+      ?Object.values(tdLog).some(a=>a.length>0)
+      :hist[k]&&hist[k].kcal>0;
+    if(hasData)streak++;
+    else if(i>0)break;
+  }
+
+  // Calorie breakdown per meal
+  const meals=['Breakfast','Lunch','Dinner','Snack'];
+  const mealColors=['#FF6B35','#3B82F6','#22C55E','#F59E0B'];
+  const mealKcals=meals.map(m=>(tdLog[m]||[]).reduce((s,f)=>s+f.k,0));
+  const totalK=mealKcals.reduce((a,b)=>a+b,0);
+  const pct=Math.min(totalK/dGoal*100,100);
+
+  // Build SVG donut
+  const r=34,cx=42,cy=42,circ=2*Math.PI*r;
+  let offset=0;
+  const segments=meals.map((m,i)=>{
+    const seg=totalK>0?(mealKcals[i]/totalK)*circ:0;
+    const d=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${mealColors[i]}" stroke-width="9" stroke-dasharray="${seg} ${circ-seg}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${cx} ${cy})"/>`;
+    offset+=seg;
+    return d;
+  }).join('');
+
+  const legendItems=meals.map((m,i)=>mealKcals[i]>0
+    ?`<div class="donut-leg-item"><div class="donut-leg-dot" style="background:${mealColors[i]}"></div>${m} · ${mealKcals[i]}</div>`
+    :''
+  ).join('');
+
+  el.innerHTML=`
+    <div class="streak-card">
+      <div class="streak-num"><span class="streak-fire">🔥</span>${streak}</div>
+      <div class="streak-label">day${streak===1?'':'s'} logged</div>
+      <div class="streak-sub">${streak===0?'START TODAY':streak<3?'KEEP GOING!':streak<7?'ON A ROLL!':'ON FIRE!'}</div>
+    </div>
+    <div class="donut-card">
+      <div class="donut-title">MEAL BREAKDOWN</div>
+      ${totalK>0?`
+      <div class="donut-wrap">
+        <svg width="84" height="84" viewBox="0 0 84 84">
+          <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--bo)" stroke-width="9"/>
+          ${segments}
+        </svg>
+        <div class="donut-center">
+          <div class="donut-pct">${Math.round(pct)}%</div>
+          <div class="donut-lbl">of goal</div>
+        </div>
+      </div>
+      <div class="donut-legend">${legendItems}</div>`
+      :`<div style="font-size:11px;color:var(--tx3);text-align:center;padding:12px 0">Log meals to<br/>see breakdown</div>`}
+    </div>`;
+}
+
+function renderAiAnalysisBtn(){
+  const el=document.getElementById('aiAnalysisWrap');
+  if(!el)return;
+  const totalK=Object.values(tdLog).reduce((s,a)=>s+a.reduce((ss,f)=>ss+f.k,0),0);
+  if(totalK===0){el.innerHTML='';return;}
+  el.innerHTML=`<button class="ai-analysis-btn" onclick="runAiAnalysis()">
+    <i class="ti ti-sparkles"></i>
+    Analyse my nutrition with AI
+    <span class="btn-tag">NEW</span>
+  </button>`;
+}
+
+async function runAiAnalysis(){
+  const totalK=Object.values(tdLog).reduce((s,a)=>s+a.reduce((ss,f)=>ss+f.k,0),0);
+  if(totalK===0)return;
+
+  // Build meal summary for AI
+  const summary=Object.entries(tdLog).filter(([,a])=>a.length>0).map(([meal,items])=>{
+    const k=items.reduce((s,f)=>s+f.k,0);
+    const foods=items.map(f=>f.n).join(', ');
+    return meal+': '+foods+' ('+k+' kcal)';
+  }).join('\n');
+
+  let carb=0,prot=0,fat=0;
+  Object.values(tdLog).forEach(a=>a.forEach(f=>{carb+=f.carb;prot+=f.prot;fat+=f.fat}));
+
+  // Show loading state
+  const wrap=document.getElementById('aiAnalysisWrap');
+  wrap.innerHTML=`<button class="ai-analysis-btn" disabled>
+    <div class="spin" style="border-top-color:var(--br);width:14px;height:14px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--br);border-radius:50%;animation:sp .7s linear infinite"></div>
+    AI is analysing your day...
+    <span class="ai-est">~10 sec</span>
+  </button>`;
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:800,
+        messages:[{role:'user',content:`You are a nutrition coach. Analyse this person's food intake for today and give personalised recommendations.
+
+Daily goal: ${dGoal} kcal (Goal: ${pGoal==='lose'?'Lose weight':pGoal==='gain'?'Build muscle':'Maintain weight'})
+Today's intake: ${totalK} kcal eaten
+Macros: Carbs ${carb}g (goal ${cGoal}g), Protein ${prot}g (goal ${prGoal}g), Fat ${fat}g (goal ${fGoal}g)
+
+Meals logged today:
+${summary}
+
+Give a nutrition score out of 10, then 3 specific actionable tips. Keep it friendly and encouraging but honest.
+
+Return ONLY this JSON, no markdown:
+{
+  "score": 7,
+  "summary": "One sentence overall assessment",
+  "tips": [
+    {"icon": "ti-meat", "title": "Increase protein", "detail": "You are 65g short on protein today. Add a chicken breast or Greek yogurt for your next meal."},
+    {"icon": "ti-droplet", "title": "Watch the carbs", "detail": "Carbs are 55g over target. Consider swapping white rice for cauliflower rice tomorrow."},
+    {"icon": "ti-sun", "title": "Great breakfast choice", "detail": "Your breakfast macro balance was excellent. Keep starting your day this way."}
+  ]
+}`}]
+      })
+    });
+
+    const data=await resp.json();
+    const txt=data.content.map(c=>c.text||'').join('');
+    let result;
+    try{result=JSON.parse(txt.replace(/```json|```/g,'').trim())}
+    catch(e){throw new Error('Parse error')}
+
+    const scoreColor=result.score>=8?'#22C55E':result.score>=6?'#FF6B35':'#EF4444';
+    const tipsHtml=result.tips.map(t=>`
+      <div class="ai-tip">
+        <i class="ti ${t.icon}" style="color:var(--br)"></i>
+        <div class="ai-tip-txt"><strong>${t.title}</strong><br/>${t.detail}</div>
+      </div>`).join('');
+
+    wrap.innerHTML=`
+      <div class="ai-result-card">
+        <div class="ai-result-hdr">
+          <i class="ti ti-sparkles"></i>
+          <span>AI Nutrition Analysis</span>
+          <div class="ai-result-score" style="color:${scoreColor}">${result.score}/10</div>
+        </div>
+        <div class="ai-result-body">
+          ${result.summary}
+          <div class="ai-tip-row">${tipsHtml}</div>
+        </div>
+      </div>
+      <button class="ai-analysis-btn" onclick="runAiAnalysis()" style="margin-top:8px;font-size:12px;padding:10px;background:transparent;border:1px solid #2a2a2a">
+        <i class="ti ti-refresh" style="font-size:14px"></i> Re-analyse
+      </button>`;
+
+  }catch(err){
+    wrap.innerHTML=`<button class="ai-analysis-btn" onclick="runAiAnalysis()">
+      <i class="ti ti-sparkles"></i>
+      Analyse my nutrition with AI
+      <span class="btn-tag">RETRY</span>
+    </button>`;
+  }
+}
+
+function renderGreeting(){
+  const el=document.getElementById('greetCard');
+  if(!el)return;
+  const nm=document.getElementById('pName')?document.getElementById('pName').value.trim():'';
+  const name=nm||curUser.name||'there';
+  const h=new Date().getHours();
+  const period=h<12?'morning':h<17?'afternoon':'evening';
+  const emoji=h<12?'🌅':h<17?'☀️':'🌙';
+  const msgs={
+    morning:['Start strong today','Fuel your morning right','A great day starts here'],
+    afternoon:['Keep it going!','Halfway through — stay on track','You are doing great'],
+    evening:['Almost done for today','Wind down well','Finish the day strong']
+  };
+  const msg=msgs[period][Math.floor(Math.random()*msgs[period].length)];
+  const kcalEaten=Object.values(tdLog).reduce((s,a)=>s+a.reduce((ss,f)=>ss+f.k,0),0);
+  const rem=Math.max(0,dGoal-kcalEaten);
+  const goalLbl=pGoal==='lose'?'Lose weight':pGoal==='gain'?'Build muscle':'Maintain weight';
+  const subTxt = kcalEaten===0
+    ? 'You have '+rem.toLocaleString()+' kcal remaining today. Log your first meal!'
+    : rem.toLocaleString()+' kcal remaining — keep it up!';
+  el.innerHTML='<div class="greet-time">'+emoji+' GOOD '+period.toUpperCase()+'</div>'
+    +'<div class="greet-msg">'+msg+', '+name.split(' ')[0]+'!</div>'
+    +'<div class="greet-sub">'+subTxt+'</div>'
+    +'<div class="greet-goal-row">'
+    +'<div class="greet-goal-dot"></div>'
+    +'<div class="greet-goal-txt">Current goal</div>'
+    +'<div class="greet-goal-val">'+goalLbl+' · '+dGoal.toLocaleString()+' kcal/day</div>'
+    +'</div>';
+}
+
+function renderMacroBars(){
+  const el=document.getElementById('macroBars');
+  if(!el)return;
+  let carb=0,prot=0,fat=0;
+  Object.values(tdLog).forEach(a=>a.forEach(f=>{carb+=f.carb;prot+=f.prot;fat+=f.fat}));
+  const macros=[
+    {label:'Carbohydrates',val:carb,goal:cGoal,color:'#F59E0B',bg:'rgba(245,158,11,0.1)'},
+    {label:'Protein',val:prot,goal:prGoal,color:'#22C55E',bg:'rgba(34,197,94,0.1)'},
+    {label:'Fat',val:fat,goal:fGoal,color:'#3B82F6',bg:'rgba(59,130,246,0.1)'},
+  ];
+  el.innerHTML=macros.map(m=>{
+    const pct=Math.min(m.val/m.goal*100,100);
+    const over=m.val>m.goal;
+    return`<div class="mb-item">
+      <div class="mb-top">
+        <div class="mb-label"><div class="mb-dot" style="background:${m.color}"></div>${m.label}</div>
+        <div class="mb-vals"><strong>${m.val}g</strong> / ${m.goal}g</div>
+      </div>
+      <div class="mb-bar" style="background:${m.bg}">
+        <div class="mb-fill${over?' mb-over':''}" style="width:${Math.round(pct)||0}%;background:${over?'#EF4444':m.color}"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+const MEAL_META={
+  Breakfast:{ic:'🌅',bg:'#FFF7E6',hint:'Start your day'},
+  Lunch:{ic:'☀️',bg:'#F0FDF4',hint:'Midday fuel'},
+  Dinner:{ic:'🌙',bg:'#EFF6FF',hint:'Evening meal'},
+  Snack:{ic:'⚡',bg:'#FDF4FF',hint:'Extras & drinks'},
+};
+
+function renderMealSlots(){
+  const el=document.getElementById('mealSlots');
+  if(!el)return;
+  el.innerHTML=['Breakfast','Lunch','Dinner','Snack'].map(meal=>{
+    const items=tdLog[meal]||[];
+    const mK=items.reduce((s,f)=>s+f.k,0);
+    const meta=MEAL_META[meal];
+    const itemsHtml=items.length
+      ? `<div class="meal-slot-items">${items.map((f,i)=>`<div class="fi" style="padding:6px 13px"><div class="fi-d" style="background:${dotC[i%8]}"></div><div style="flex:1"><div class="fi-n">${f.n}</div><div class="fi-s">${f.s}</div></div><span class="fi-k">${f.k}</span><button class="fi-x" onclick="delItem('${meal}',${f.id})">&#x2715;</button></div>`).join('')}</div>`
+      : `<div class="meal-slot-items"><div class="meal-slot-empty">Tap + to log ${meal.toLowerCase()}</div></div>`;
+    return`<div class="meal-slot">
+      <div class="meal-slot-hdr">
+        <div class="meal-slot-ic" style="background:${meta.bg}">${meta.ic}</div>
+        <div class="meal-slot-info">
+          <div class="meal-slot-name">${meal}</div>
+          <div class="meal-slot-sub">${items.length?items.length+' item'+(items.length>1?'s':''):meta.hint}</div>
+        </div>
+        <div class="meal-slot-right">
+          <div class="meal-slot-kcal" style="color:${mK>0?'var(--br)':'var(--tx3)'}">${mK>0?mK+' kcal':'—'}</div>
+          <button class="meal-slot-add" onclick="quickLog('${meal}')" title="Add to ${meal}">+</button>
+        </div>
+      </div>
+      ${itemsHtml}
+    </div>`;
+  }).join('');
+}
+
+function quickLog(meal){
+  swTab('tsr',document.querySelectorAll('.nb')[2]);
+  const pills=document.querySelectorAll('#srMealPills .mp');
+  ['Breakfast','Lunch','Dinner','Snack'].forEach((m,i)=>pills[i]&&pills[i].classList.toggle('on',m===meal));
+  srMeal=meal;
+  setTimeout(()=>{const q=document.getElementById('srQ');if(q)q.focus();},200);
+}
+
+function delItem(meal,id){tdLog[meal]=tdLog[meal].filter(f=>f.id!==id);updateTotals()}
+
+// ── AI PARSER ─────────────────────────────────────────────────────────────────
+function setAiMeal(el,meal){aiMeal=meal;document.querySelectorAll('#aiMealPills .mp').forEach(p=>p.classList.remove('on'));el.classList.add('on')}
+function tryEx(el){document.getElementById('aiInput').value=el.textContent.trim();sal('aiErr',false);document.getElementById('aiResWrap').style.display='none';sal('aiSuc',false)}
+async function parseMeal(){
+  const input=document.getElementById('aiInput').value.trim();
+  if(!input){document.getElementById('aiErrMsg').textContent='Please describe what you ate.';sal('aiErr',true);return}
+  if(!checkApiKey())return;
+  // Check AI log daily limit
+  if(!isPro&&getLogsRemaining()<=0){
+    sal('aiErr',false);
+    showLogPaywall();
+    return;
+  }
+  incrementLogs();updateScanCounter();
+  sal('aiErr',false);document.getElementById('aiResWrap').style.display='none';sal('aiSuc',false);
+  document.getElementById('aiBtn').disabled=true;
+  const ld=document.getElementById('aiLoad');ld.style.display='flex';
+  const msgs=["AI is breaking down your meal...","Estimating portion sizes...","Calculating calories and macros...","Almost done..."];
+  let li=0;const lt=setInterval(()=>{li=(li+1)%msgs.length;document.getElementById('aiLoadTxt').textContent=msgs[li]},1100);
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1500,
+      messages:[{role:'user',content:`You are a world-class food nutrition expert. Break this meal description into INDIVIDUAL food components.\n\nMeal: "${input}"\n\nRules:\n- List EACH component separately (rice, chicken curry, carrots = 3 separate items)\n- Include ALL components including drinks, sides, sauces\n- Estimate realistic portions from the description\n- Use local dish names (Malaysian, Indian, Japanese etc.)\n- For fast food use standard menu calories\n\nReturn ONLY a valid JSON array:\n[{"name":"White rice","serving":"1 plate (200g)","kcal":260,"carb":56,"prot":5,"fat":0}]\n\nReturn ONLY the JSON array.`}]
+    })});
+    const data=await resp.json();
+    clearInterval(lt);ld.style.display='none';document.getElementById('aiBtn').disabled=false;
+    // Handle API errors
+    if(data.error){document.getElementById('aiErrMsg').textContent='API error: '+data.error.message;sal('aiErr',true);return;}
+    if(!data.content||!data.content.length){document.getElementById('aiErrMsg').textContent='No response. Check your API key in Me tab.';sal('aiErr',true);return;}
+    const txt=data.content.map(c=>c.text||'').join('');
+    let items=[];
+    try{
+      const match=txt.match(/\[[\s\S]*\]/);
+      if(match)items=JSON.parse(match[0]);
+      else items=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    }catch(e){items=[];}
+    if(!items.length){document.getElementById('aiErrMsg').textContent='Could not parse response. Try again.';sal('aiErr',true);return;}
+    aiItems=items;showAiResults(items);
+  }catch(err){
+    clearInterval(lt);ld.style.display='none';document.getElementById('aiBtn').disabled=false;
+    console.error('AI Log error:',err);
+    const msg=err.message||'Unknown error';
+    if(msg.includes('Failed to fetch')||msg.includes('NetworkError')||msg.includes('CORS')){
+      document.getElementById('aiErrMsg').textContent='Network error — make sure you are connected to the internet and try again.';
+    } else if(msg.includes('401')||msg.includes('403')){
+      document.getElementById('aiErrMsg').textContent='API key error — please check your Anthropic key is correct.';
+    } else {
+      document.getElementById('aiErrMsg').textContent='Error: '+msg+'. Please try again.';
+    }
+    sal('aiErr',true);
+  }
+}
+function showAiResults(items){
+  const total=items.reduce((s,f)=>s+f.kcal,0);
+  const tc=items.reduce((s,f)=>s+f.carb,0),tp=items.reduce((s,f)=>s+f.prot,0),tf=items.reduce((s,f)=>s+f.fat,0);
+  document.getElementById('aiResCard').innerHTML=`<div class="ai-rh"><i class="ti ti-sparkles"></i><span>${items.length} item${items.length>1?'s':''} identified</span></div>${items.map((f,i)=>`<div class="ai-fi"><div class="ai-fd" style="background:${dotC[i%8]}"></div><div style="flex:1"><div class="ai-fn">${f.name}</div><div class="ai-fs">${f.serving}</div><div class="ai-fm">C:${f.carb}g · P:${f.prot}g · F:${f.fat}g</div></div><div class="ai-fk">${f.kcal} kcal</div></div>`).join('')}<div class="ai-tot"><span class="ai-tl">Total</span><span class="ai-tv">${total} kcal</span></div><div class="ai-mc"><div class="ai-mb"><div class="ai-mv">${tc}g</div><div class="ai-ml">carbs</div></div><div class="ai-mb"><div class="ai-mv">${tp}g</div><div class="ai-ml">protein</div></div><div class="ai-mb"><div class="ai-mv">${tf}g</div><div class="ai-ml">fat</div></div></div><button class="ai-add" onclick="addAiAll()"><i class="ti ti-plus"></i>Add all to ${aiMeal}</button>`;
+  document.getElementById('aiResWrap').style.display='flex';
+}
+function addAiAll(){
+  if(!aiItems.length)return;
+  aiItems.forEach(f=>tdLog[aiMeal].push({n:f.name,k:f.kcal,carb:f.carb,prot:f.prot,fat:f.fat,s:f.serving||'1 portion',id:Date.now()+Math.random()}));
+  updateTotals();document.getElementById('aiSucTxt').textContent=`${aiItems.length} items added to ${aiMeal}!`;sal('aiSuc',true);
+  aiItems=[];document.getElementById('aiInput').value='';document.getElementById('aiResWrap').style.display='none';
+  setTimeout(()=>sal('aiSuc',false),3000);
+}
+
+// ── SEARCH (LOCAL + OPEN FOOD FACTS API) ──────────────────────────────────────
+function buildCats(){
+  const ord=['Grains','Noodles','Bread','Protein','Curry','Vegetables','Fruits','Dairy','Nuts','Drinks','Snacks','Malaysian','Chinese','Japanese','Indian','Thai','Korean','Italian','Western','Mexican','Middle Eastern','Vietnamese','Singaporean','Indonesian','Fitness','Desserts'];
+  document.getElementById('catSc').innerHTML=['All',...ord.filter(c=>CATS.includes(c))].map(c=>`<button class="cat-b${c==='All'?' on':''}" onclick="filterCat('${c.replace(/'/g,"\\'")}',this)">${c}</button>`).join('');
+}
+function filterCat(cat,el){actCat=cat==='All'?'':cat;document.querySelectorAll('.cat-b').forEach(b=>b.classList.remove('on'));el.classList.add('on');doSearch()}
+function setSrMeal(el,meal){srMeal=meal;document.querySelectorAll('#srMealPills .mp').forEach(p=>p.classList.remove('on'));el.classList.add('on')}
+function setScMeal(el,meal){scMeal=meal;document.querySelectorAll('#scMealPills .mp').forEach(p=>p.classList.remove('on'));el.classList.add('on')}
+
+function onSearchInput(){
+  const q=document.getElementById('srQ').value;
+  const clr=document.getElementById('srClr');
+  clr.classList.toggle('on',q.length>0);
+  clearTimeout(srTimer);
+  srTimer=setTimeout(()=>doSearch(),300);
+}
+function clearSearch(){
+  document.getElementById('srQ').value='';
+  document.getElementById('srClr').classList.remove('on');
+  actCat='';document.querySelectorAll('.cat-b').forEach(b=>b.classList.remove('on'));
+  document.querySelector('.cat-b').classList.add('on');
+  offResults=[];sal('offSrMsg',false);
+  renderDefaultSearch();
+}
+
+function renderDefaultSearch(){
+  document.getElementById('rcCt').textContent='Browse popular foods — tap + to log';
+  const popular=FOODS.slice(0,30);
+  renderResults(popular,[]);
+}
+
+function doSearch(){
+  const q=document.getElementById('srQ').value.toLowerCase().trim();
+  if(!q&&!actCat){renderDefaultSearch();return}
+  
+  // LOCAL SEARCH — search name, category, and keywords
+  let local=FOODS;
+  if(actCat)local=local.filter(f=>f.c===actCat);
+  if(q){
+    local=local.filter(f=>{
+      const combined=(f.n+' '+f.c+' '+(f.kw||'')).toLowerCase();
+      return combined.includes(q)||q.split(' ').every(word=>combined.includes(word));
+    });
+    local.sort((a,b)=>{
+      const an=a.n.toLowerCase(),bn=b.n.toLowerCase();
+      if(an===q&&bn!==q)return-1;if(bn===q&&an!==q)return 1;
+      if(an.startsWith(q)&&!bn.startsWith(q))return-1;if(bn.startsWith(q)&&!an.startsWith(q))return 1;
+      return an.localeCompare(bn);
+    });
+  }
+
+  // Show local results immediately
+  renderResults(local,[]);
+  
+  // OPEN FOOD FACTS API search (runs in parallel, extends results)
+  if(q&&q.length>=2){
+    sal('offSrMsg',true);
+    searchOpenFoodFacts(q,local);
+  }else{
+    sal('offSrMsg',false);
+  }
+}
+
+async function searchOpenFoodFacts(q,localResults){
+  try{
+    const url=`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=20&fields=product_name,nutriments,serving_size,serving_quantity,categories_tags`;
+    const resp=await fetch(url);
+    if(!resp.ok)throw new Error('API error');
+    const data=await resp.json();
+    sal('offSrMsg',false);
+
+    // Parse and filter OFF results — only include items with valid calorie data
+    const offItems=[];
+    const localNames=new Set(localResults.map(f=>f.n.toLowerCase()));
+
+    for(const p of (data.products||[])){
+      const nm=p.product_name;
+      if(!nm||nm.length<2)continue;
+      const n=p.nutriments||{};
+      const kcalPer100=n['energy-kcal_100g']||n['energy_100g']/4.184||null;
+      if(!kcalPer100||kcalPer100<=0||kcalPer100>1000)continue;
+
+      // Estimate serving: use serving_quantity if available, else default 100g
+      const serving=p.serving_quantity||100;
+      const kcal=Math.round(kcalPer100*serving/100);
+      const carb=Math.round((n['carbohydrates_100g']||0)*serving/100);
+      const prot=Math.round((n['proteins_100g']||0)*serving/100);
+      const fat=Math.round((n['fat_100g']||0)*serving/100);
+      const servLbl=p.serving_size||`${serving}g`;
+
+      // Skip duplicates with local database
+      if(localNames.has(nm.toLowerCase()))continue;
+
+      offItems.push({n:nm,e:'🌍',c:'Open Food Facts',s:servLbl,k:kcal,carb,prot,fat,_off:true});
+      if(offItems.length>=15)break;
+    }
+
+    offResults=offItems;
+    const local=localResults;
+    renderResults(local,offItems);
+    document.getElementById('rcCt').textContent=`${local.length+offItems.length} results (${local.length} local + ${offItems.length} from Open Food Facts)`;
+  }catch(err){
+    sal('offSrMsg',false);
+    document.getElementById('rcCt').textContent=`${localResults.length} results (Open Food Facts unavailable — showing local database)`;
+  }
+}
+
+function renderResults(local,off){
+  const all=[...local,...off];
+  const cont=document.getElementById('srRs');
+  document.getElementById('adFl').classList.remove('on');
+  if(!all.length){
+    cont.innerHTML=`<div class="no-rs"><i class="ti ti-search" style="font-size:28px;display:block;margin-bottom:8px;color:var(--bo2)"></i>No food found.<br>Try: "rice", "chicken curry", "banana", "nasi lemak"...</div>`;
+    return;
+  }
+  document.getElementById('rcCt').textContent=`${all.length} results — tap to adjust serving · + to quick-add`;
+  cont.innerHTML=all.map((f,i)=>{
+    const isOff=f._off;
+    const srcBadge=isOff?'<span class="sr-src src-off">Open Food Facts</span>':'<span class="sr-src src-local">Database</span>';
+    const localIdx=isOff?-(i+1):FOODS.indexOf(f);
+    const clickFn=isOff?`openServingModalOff(${i})`:`openServingModal(FOODS[${FOODS.indexOf(f)}],${FOODS.indexOf(f)},'${srMeal}')`;
+    const addFn=isOff?`addSr('off',${i})`:`addSr('local',${FOODS.indexOf(f)})`;
+    return`<div class="sr-it" onclick="${clickFn}">
+      <div class="sr-em">${f.e}</div>
+      <div class="sr-if">
+        <div class="sr-nm">${f.n}</div>
+        <div class="sr-mt">${f.s} · C:${f.carb}g P:${f.prot}g F:${f.fat}g</div>
+        ${srcBadge}
+      </div>
+      <div class="sr-rt">
+        <span class="sr-kc">${f.k}</span>
+        <button class="sr-ad" onclick="event.stopPropagation();${addFn}" title="Quick add to ${srMeal}">+</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openServingModalOff(i){
+  const q=document.getElementById('srQ').value.toLowerCase().trim();
+  let local=FOODS;if(actCat)local=local.filter(f=>f.c===actCat);
+  if(q)local=local.filter(f=>{const c=(f.n+' '+f.c+' '+(f.kw||'')).toLowerCase();return c.includes(q)||q.split(' ').every(w=>c.includes(w))});
+  const all=[...local,...offResults];
+  const f=all[i];if(f)openServingModal(f,i,srMeal);
+}
+
+function addSr(type,idx){
+  let f;
+  if(type==='local'){f=FOODS[idx]}
+  else{
+    // Find in combined results
+    const q=document.getElementById('srQ').value.toLowerCase().trim();
+    let local=FOODS;if(actCat)local=local.filter(f=>f.c===actCat);
+    if(q)local=local.filter(f=>{const c=(f.n+' '+f.c+' '+(f.kw||'')).toLowerCase();return c.includes(q)||q.split(' ').every(w=>c.includes(w))});
+    const all=[...local,...offResults];f=all[idx];
+  }
+  if(!f)return;
+  tdLog[srMeal].push({n:f.n,k:f.k,carb:f.carb,prot:f.prot,fat:f.fat,s:f.s,id:Date.now()+Math.random()});
+  updateTotals();
+  const fl=document.getElementById('adFl');fl.textContent=`✓ ${f.n} added to ${srMeal}!`;fl.classList.add('on');
+  setTimeout(()=>fl.classList.remove('on'),2000);
+}
+
+// ── AI SCAN ───────────────────────────────────────────────────────────────────
+function handleImg(e){
+  const file=e.target.files[0];if(!file)return;
+  // Check scan limit for free users
+  checkScanAllowed(()=>{
+    incrementScans();
+    updateScanBadge();
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      document.getElementById('pvA').style.display='block';
+      document.getElementById('pvA').innerHTML=`<div class="sc-ow"><img src="${ev.target.result}" class="pv-img" alt="Food"/><div class="sc-ov" id="scOv"><div class="sc-ln"></div><p class="sc-tx"><span class="dts"><span></span><span></span><span></span></span> AI identifying food...</p></div></div>`;
+      document.getElementById('uz').style.display='none';document.getElementById('rsA').innerHTML='';
+      analyseFood(ev.target.result,file.type||'image/jpeg');
+    };reader.readAsDataURL(file);
+  });
+  // Reset file input so same file can be re-selected
+  e.target.value='';
+}
+async function analyseFood(dataUrl,mimeType){
+  if(!checkApiKey()){retryScan();return;}
+  const b64=dataUrl.split(',')[1];
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mimeType,data:b64}},{type:'text',text:`Food nutrition expert. Identify EVERY distinct food item separately.\n\nReturn ONLY JSON:\n[{"name":"Nasi Lemak","serving":"1 plate","kcal":644,"carb":78,"prot":16,"fat":31,"confidence":96}]\n\nList each component separately. Any world cuisine. Return ONLY the array.`}]}]})});
+    const data=await resp.json();const txt=data.content.map(c=>c.text||'').join('');
+    let det=[];try{det=JSON.parse(txt.replace(/```json|```/g,'').trim())}catch(e){det=[]}
+    showScanRes(det);
+  }catch(err){showScanErr()}
+}
+function showScanRes(det){
+  const ov=document.getElementById('scOv');if(ov)ov.style.display='none';
+  const area=document.getElementById('rsA');
+  if(!det||!det.length){area.innerHTML=`<div style="text-align:center;padding:16px"><i class="ti ti-mood-sad" style="font-size:28px;color:var(--bo2)"></i><p style="font-size:13px;color:var(--tx2);margin:8px 0;font-weight:500">Could not identify food. Try a clearer photo.</p><button onclick="retryScan()" style="font-size:13px;padding:7px 16px">Try again</button></div>`;return}
+  scanned=det;const total=det.reduce((s,f)=>s+f.kcal,0);
+  area.innerHTML=`<div class="sc-cd"><div class="sc-ch"><i class="ti ti-sparkles"></i><span>${det.length} item${det.length>1?'s':''} · ${total} kcal</span></div>${det.map((f,i)=>`<div class="dt-it"><div class="dt-dt" style="background:${dotC[i%8]}"></div><div style="flex:1"><div class="dt-nm">${f.name}${f.confidence?`<span class="cn">${f.confidence}%</span>`:''}</div><div class="dt-mt">${f.serving} · C:${f.carb}g P:${f.prot}g F:${f.fat}g</div></div><span class="dt-k">${f.kcal}</span></div>`).join('')}</div><div class="ac-bt" style="margin-top:9px"><button onclick="retryScan()" style="font-size:12px;padding:9px;font-weight:500">Scan again</button><button class="add-al" onclick="addAllScan()">+ Log all to ${scMeal}</button></div>`;
+}
+function showScanErr(msg){const ov=document.getElementById('scOv');if(ov)ov.style.display='none';const errTxt=msg||'Something went wrong.';document.getElementById('rsA').innerHTML=`<div style="text-align:center;padding:16px;font-size:13px;color:var(--tx2)"><p style="font-weight:500">${errTxt}</p><p style="font-size:11px;color:var(--tx3);margin-top:4px">Check internet connection and try again</p><button onclick="retryScan()" style="font-size:13px;padding:7px 16px;margin-top:8px;background:var(--br);color:#fff;border:none;border-radius:8px;cursor:pointer">Retry</button></div>`}
+function retryScan(){document.getElementById('uz').style.display='block';document.getElementById('pvA').style.display='none';document.getElementById('pvA').innerHTML='';document.getElementById('rsA').innerHTML='';document.getElementById('fi').value='';scanned=[]}
+function addAllScan(){
+  if(!scanned.length)return;
+  scanned.forEach(f=>tdLog[scMeal].push({n:f.name,k:f.kcal,carb:f.carb,prot:f.prot,fat:f.fat,s:f.serving||'1 portion',id:Date.now()+Math.random()}));
+  scanned=[];updateTotals();
+  document.getElementById('rsA').innerHTML=`<div style="text-align:center;padding:13px;color:var(--gnd)"><i class="ti ti-circle-check" style="font-size:28px"></i><p style="font-size:13px;margin:5px 0;font-weight:700">Added to ${scMeal}!</p><button onclick="retryScan()" style="font-size:12px;padding:6px 14px;margin-top:3px">Scan another</button></div>`;
+  document.getElementById('pvA').style.display='none';document.getElementById('uz').style.display='block';
+}
+
+// ── CALENDAR ──────────────────────────────────────────────────────────────────
+function chMo(dir){calV=new Date(calV.getFullYear(),calV.getMonth()+dir,1);renderCal()}
+function renderCal(){
+  const y=calV.getFullYear(),m=calV.getMonth();
+  document.getElementById('calMonth').textContent=MONTHS[m]+' '+y;
+  const first=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate(),dip=new Date(y,m,0).getDate();
+  const today=new Date();
+  let html=DAYS.map(d=>`<div class="cl-dh">${d}</div>`).join('');
+  let cells=[];
+  for(let i=0;i<first;i++)cells.push({day:dip-first+1+i,cur:false});
+  for(let d=1;d<=dim;d++)cells.push({day:d,cur:true});
+  let rem=42-cells.length;for(let i=1;i<=rem;i++)cells.push({day:i,cur:false});
+  html+=cells.map(c=>{
+    const dt=new Date(y,c.cur?m:c.day<=7?m+1:m-1,c.day),k=dk(dt);
+    const isT=dk(dt)===dk(today),isS=selCal&&dk(dt)===dk(selCal);
+    const kcal=k===tdKey?Object.values(tdLog).reduce((s,a)=>s+a.reduce((ss,f)=>ss+f.k,0),0):(hist[k]?hist[k].kcal:0);
+    const pct=kcal/dGoal,dotCol=!kcal?'transparent':pct>=1?'#EF4444':pct>=0.8?'#F59E0B':'#22C55E';
+    return`<div class="cl-d${!c.cur?' ot':''}${isT?' td':''}${isS?' sl':''}" onclick="selDay(${dt.getFullYear()},${dt.getMonth()},${dt.getDate()})"><span class="dn">${c.day}</span><div class="dd" style="background:${isS?'rgba(255,255,255,.8)':dotCol}"></div></div>`;
+  }).join('');
+  document.getElementById('calGrid').innerHTML=html;if(selCal)renderCalDet(selCal);
+}
+function selDay(y,m,d){selCal=new Date(y,m,d);calV=new Date(y,m,1);renderCal()}
+function renderCalDet(dt){
+  const k=dk(dt),isT=k===tdKey;
+  const data=isT?{kcal:Object.values(tdLog).reduce((s,a)=>s+a.reduce((ss,f)=>ss+f.k,0),0),meals:tdLog}:hist[k];
+  const lbl=dt.toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short'});
+  if(!data||!data.kcal){document.getElementById('calDet').innerHTML=`<div class="cl-dh2"><span class="cl-dd">${lbl}</span><span style="font-size:12px;color:var(--tx3);font-weight:500">No data</span></div><div style="font-size:12px;color:var(--tx3)">No meals logged.</div>`;return}
+  const pct=Math.min(data.kcal/dGoal*100,100),bc=data.kcal>dGoal?'#EF4444':data.kcal>dGoal*.8?'#F59E0B':'#22C55E';
+  const ms=Object.entries(data.meals).filter(([,a])=>a.length>0).map(([meal,a])=>`<div class="cl-mr"><span style="font-size:11px;color:var(--tx2);font-weight:500">${meal}</span><span style="font-size:11px;font-weight:700;color:var(--tx)">${a.reduce((s,f)=>s+(f.k||0),0)} kcal</span></div>`).join('');
+  document.getElementById('calDet').innerHTML=`<div class="cl-dh2"><span class="cl-dd">${lbl}${isT?' (today)':''}</span><span style="font-size:13px;font-weight:700;color:${data.kcal>dGoal?'#B91C1C':'#15803D'}">${data.kcal.toLocaleString()} kcal</span></div><div class="cl-bg"><div class="cl-bf" style="width:${Math.round(pct)}%;background:${bc}"></div></div><div class="cl-bl"><span>${Math.round(pct)}% of goal</span><span>Goal: ${dGoal.toLocaleString()}</span></div>${ms}`;
+}
+function renderWk(){
+  const today=new Date(),days=[];for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);days.push(d)}
+  const vals=days.map(d=>{const k=dk(d);return k===tdKey?Object.values(tdLog).reduce((s,a)=>s+a.reduce((ss,f)=>ss+f.k,0),0):(hist[k]?hist[k].kcal:0)});
+  const maxK=Math.max(...vals,dGoal);
+  document.getElementById('wkW').innerHTML=`<div class="wk-t">LAST 7 DAYS</div><div class="wk-bs">${days.map((d,i)=>{const kcal=vals[i],hp=kcal?Math.max(Math.round(kcal/maxK*100),4):0;const isT=dk(d)===dk(today),col=!kcal?'var(--bo)':kcal>dGoal?'#EF4444':'#FF6B35';return`<div class="wk-b"><div class="wk-bg"><div class="wk-bf" style="height:${hp}%;background:${col}"></div></div><span class="wk-l" style="color:${isT?'var(--br)':'var(--tx3)'};font-weight:${isT?700:500}">${isT?'Today':DAYS[d.getDay()]}</span></div>`}).join('')}</div>`;
+}
+
+// ── WEEKLY SUMMARY ────────────────────────────────────────────────────────────
+function renderWeeklySummary(){
+  const el=document.getElementById('weeklySummary');
+  if(!el)return;
+  const today=new Date();
+  const days=[];
+  for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);days.push(d)}
+  const vals=days.map(d=>{
+    const k=dk(d);
+    return k===tdKey?Object.values(tdLog).reduce((s,a)=>s+a.reduce((ss,f)=>ss+f.k,0),0):(hist[k]?hist[k].kcal:0);
+  });
+  const logged=vals.filter(v=>v>0);
+  if(logged.length===0){el.innerHTML='';return}
+  const avg=Math.round(logged.reduce((a,b)=>a+b,0)/logged.length);
+  const best=Math.min(...logged);
+  const deficit=logged.reduce((s,v)=>s+(dGoal-v),0);
+  const maxK=Math.max(...vals,dGoal);
+  const dayNames=days.map(d=>DAYS[d.getDay()]);
+  const barsHtml=days.map((d,i)=>{
+    const kcal=vals[i],isT=dk(d)===dk(today);
+    const hp=kcal?Math.max(Math.round(kcal/maxK*100),4):0;
+    const goalLinePos=Math.round(dGoal/maxK*100);
+    const col=!kcal?'var(--bo)':kcal>dGoal?'#EF4444':'#FF6B35';
+    return`<div class="wb-col">
+      <div class="wb-bg">
+        <div class="wb-fill" style="height:${hp}%;background:${col}"></div>
+        <div class="wb-goal-line" style="bottom:${goalLinePos}%"></div>
+      </div>
+      <span class="wb-day${isT?' wb-today':''}">${isT?'Now':dayNames[i]}</span>
+    </div>`;
+  }).join('');
+  const rangeStart=days[0].toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const rangeEnd=days[6].toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  el.innerHTML=`
+    <div class="weekly-card">
+      <div class="weekly-hdr">
+        <div class="weekly-hdr-title">WEEKLY SUMMARY</div>
+        <div class="weekly-hdr-range">${rangeStart} – ${rangeEnd}</div>
+      </div>
+      <div class="weekly-stats">
+        <div class="ws-stat"><div class="ws-val">${avg.toLocaleString()}</div><div class="ws-lbl">Avg kcal/day</div></div>
+        <div class="ws-stat"><div class="ws-val">${logged.length}/7</div><div class="ws-lbl">Days logged</div></div>
+        <div class="ws-stat"><div class="ws-val" style="color:${deficit>0?'var(--gn)':'var(--re)'}">${deficit>0?'-':'+'}${Math.abs(deficit).toLocaleString()}</div><div class="ws-lbl">${deficit>0?'Total deficit':'Total surplus'}</div></div>
+      </div>
+      <div class="weekly-bars">${barsHtml}</div>
+    </div>`;
+}
+
+// ── CUSTOM SERVING SIZE ───────────────────────────────────────────────────────
+let modalFood=null,modalFoodIdx=null,modalUnit='serving',modalMeal='Breakfast';
+
+function openServingModal(f,idx,meal){
+  modalFood=f;modalFoodIdx=idx;modalMeal=meal||srMeal;
+  document.getElementById('mFoodEm').textContent=f.e||'🍽';
+  document.getElementById('mFoodName').textContent=f.n;
+  document.getElementById('mFoodBase').textContent='Per '+f.s;
+  document.getElementById('servingAmt').value='1';
+  // Build unit buttons
+  const units=[{id:'serving',lbl:'1 serving'},{id:'100g',lbl:'100g'},{id:'50g',lbl:'50g'}];
+  document.getElementById('servingUnitBtns').innerHTML=units.map(u=>`<button class="su-btn${modalUnit===u.id?' on':''}" onclick="setUnit('${u.id}')">${u.lbl}</button>`).join('');
+  document.getElementById('mAddBtn').textContent='Add to '+modalMeal;
+  updatePreview();
+  document.getElementById('servingModal').classList.remove('hidden');
+}
+
+function setUnit(u){
+  modalUnit=u;
+  document.querySelectorAll('.su-btn').forEach(b=>b.classList.toggle('on',b.textContent.includes(u==='serving'?'serving':u)));
+  document.getElementById('servingAmt').value='1';
+  updatePreview();
+}
+
+function updatePreview(){
+  if(!modalFood)return;
+  const amt=parseFloat(document.getElementById('servingAmt').value)||1;
+  let multiplier=amt;
+  if(modalUnit==='100g')multiplier=amt;
+  else if(modalUnit==='50g')multiplier=amt*0.5;
+  // For serving: base multiplier is amt * 1 serving ratio
+  const kcal=Math.round(modalFood.k*multiplier);
+  const carb=Math.round(modalFood.carb*multiplier);
+  const prot=Math.round(modalFood.prot*multiplier);
+  const fat=Math.round(modalFood.fat*multiplier);
+  document.getElementById('mPreviewKcal').textContent=kcal+' kcal';
+  document.getElementById('mPreviewMac').textContent='C:'+carb+'g · P:'+prot+'g · F:'+fat+'g';
+}
+
+function confirmServing(){
+  if(!modalFood)return;
+  const amt=parseFloat(document.getElementById('servingAmt').value)||1;
+  let multiplier=amt;
+  if(modalUnit==='50g')multiplier=amt*0.5;
+  const kcal=Math.round(modalFood.k*multiplier);
+  const carb=Math.round(modalFood.carb*multiplier);
+  const prot=Math.round(modalFood.prot*multiplier);
+  const fat=Math.round(modalFood.fat*multiplier);
+  const servStr=modalUnit==='serving'?(amt===1?modalFood.s:amt+'x '+modalFood.s):amt+(modalUnit==='100g'?'00g':'0g');
+  tdLog[modalMeal].push({n:modalFood.n,k:kcal,carb,prot,fat,s:servStr,id:Date.now()+Math.random()});
+  updateTotals();
+  closeServingModal();
+  const fl=document.getElementById('adFl');
+  fl.textContent='✓ '+modalFood.n+' added to '+modalMeal+'!';fl.classList.add('on');
+  setTimeout(()=>fl.classList.remove('on'),2000);
+}
+
+function closeServingModal(){document.getElementById('servingModal').classList.add('hidden');modalFood=null}
+function closeModal(e){if(e.target.id==='servingModal')closeServingModal()}
+
+// ── QUICK ADD CALORIES ────────────────────────────────────────────────────────
+let qaMeal='Breakfast';
+function setQaMeal(el,meal){
+  qaMeal=meal;
+  document.querySelectorAll('.qa-pill').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+}
+function quickAddCalories(){
+  const input=document.getElementById('qaInput');
+  const val=input.value.trim();
+  if(!val)return;
+  // Parse: could be "400" or "400 kcal chicken" or just a number
+  const kcal=parseInt(val.replace(/[^0-9]/g,''));
+  if(!kcal||kcal<1||kcal>9999){input.style.borderColor='#EF4444';setTimeout(()=>input.style.borderColor='',1500);return}
+  const name=val.replace(/[0-9]/g,'').replace(/kcal|cal/gi,'').trim()||'Quick add';
+  tdLog[qaMeal].push({
+    n:name||'Quick add',
+    k:kcal,carb:Math.round(kcal*0.5/4),
+    prot:Math.round(kcal*0.2/4),
+    fat:Math.round(kcal*0.3/9),
+    s:kcal+' kcal (estimated)',
+    id:Date.now()+Math.random()
+  });
+  updateTotals();
+  input.value='';
+  const fl=document.getElementById('adFl');
+  fl.textContent='✓ '+kcal+' kcal added to '+qaMeal+'!';fl.classList.add('on');
+  setTimeout(()=>fl.classList.remove('on'),2000);
+}
+
+// ── MONETISATION SYSTEM ───────────────────────────────────────────────────────
+let isPro=false;
+const FREE_DAILY_SCANS=1;         // free users get 1 AI photo scan per day
+const FREE_DAILY_LOGS=1;           // free users get 1 AI log per day
+const REWARDED_BONUS_SCANS=1;     // watching ad gives +1 scan AND +1 log
+
+// ── Scan helpers ──
+function getTodayScans(){
+  const key='bw_scans_'+new Date().toDateString();
+  return parseInt(localStorage.getItem(key)||'0');
+}
+function incrementScans(){
+  const key='bw_scans_'+new Date().toDateString();
+  const n=(parseInt(localStorage.getItem(key)||'0'))+1;
+  localStorage.setItem(key,n);return n;
+}
+function getScansRemaining(){
+  if(isPro)return 999;
+  return Math.max(0,FREE_DAILY_SCANS-getTodayScans());
+}
+
+// ── Log helpers ──
+function getTodayLogs(){
+  const key='bw_logs_'+new Date().toDateString();
+  return parseInt(localStorage.getItem(key)||'0');
+}
+function incrementLogs(){
+  const key='bw_logs_'+new Date().toDateString();
+  const n=(parseInt(localStorage.getItem(key)||'0'))+1;
+  localStorage.setItem(key,n);return n;
+}
+function getLogsRemaining(){
+  if(isPro)return 999;
+  return Math.max(0,FREE_DAILY_LOGS-getTodayLogs());
+}
+
+// ── Bonus credits from rewarded ad ──
+function addBonusScans(n){
+  const key='bw_scans_'+new Date().toDateString();
+  const cur=parseInt(localStorage.getItem(key)||'0');
+  localStorage.setItem(key,Math.max(0,cur-n));
+}
+function addBonusLogs(n){
+  const key='bw_logs_'+new Date().toDateString();
+  const cur=parseInt(localStorage.getItem(key)||'0');
+  localStorage.setItem(key,Math.max(0,cur-n));
+}
+
+// ── Gate checks ──
+function checkScanAllowed(onAllowed){
+  if(isPro){onAllowed();return}
+  const rem=getScansRemaining();
+  if(rem>0){onAllowed();return}
+  showScanPaywall();
+}
+function checkLogAllowed(onAllowed){
+  if(isPro){onAllowed();return}
+  const rem=getLogsRemaining();
+  if(rem>0){onAllowed();return}
+  showLogPaywall();
+}
+
+function showPaywall(type){
+  // type = 'scan' or 'log'
+  const isScan=type==='scan';
+  const icon=isScan?'📸':'🤖';
+  const title=isScan?'Daily scan limit reached':'Daily AI log limit reached';
+  const sub=isScan
+    ?'Free users get 1 AI photo scan per day.'
+    :'Free users get 1 AI description per day.';
+  const altBtn=isScan
+    ?`<button onclick="swTab('tai',document.querySelectorAll('.nb')[1]);retryScan()" style="width:100%;padding:10px;background:transparent;color:rgba(255,255,255,.4);border:none;border-radius:var(--rs);font-size:12px;cursor:pointer;font-family:var(--fn)">Or describe your meal with AI log instead →</button>`
+    :`<button onclick="swTab('tsc',document.querySelectorAll('.nb')[3])" style="width:100%;padding:10px;background:transparent;color:rgba(255,255,255,.4);border:none;border-radius:var(--rs);font-size:12px;cursor:pointer;font-family:var(--fn)">Or scan your food with camera instead →</button>`;
+  const html=`
+    <div style="margin:0;background:var(--dk);border-radius:var(--ra);overflow:hidden;border:1px solid rgba(255,107,53,.25)">
+      <div style="background:rgba(255,107,53,.1);padding:16px;text-align:center;border-bottom:1px solid rgba(255,107,53,.15)">
+        <div style="font-size:32px;margin-bottom:6px">${icon}</div>
+        <div style="font-family:var(--fh);font-size:16px;font-weight:700;color:#fff;margin-bottom:4px">${title}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5)">${sub}<br/>Resets at midnight.</div>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--rs);padding:10px 13px;display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5)">
+          <span>📸 AI Photo Scan</span><span style="color:${getScansRemaining()>0?'#22c55e':'#ef4444'};font-weight:700">${getScansRemaining()}/1 left</span>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--rs);padding:10px 13px;display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5)">
+          <span>🤖 AI Log</span><span style="color:${getLogsRemaining()>0?'#22c55e':'#ef4444'};font-weight:700">${getLogsRemaining()}/1 left</span>
+        </div>
+        <button onclick="watchRewardedAd('${type}')" style="width:100%;padding:13px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--fn)">
+          <i class="ti ti-player-play" style="font-size:16px"></i>Watch a short ad — get +1 scan &amp; +1 log
+        </button>
+        <button onclick="document.getElementById('sc-premium').style.display='flex'${isScan?';retryScan()':''}" style="width:100%;padding:12px;background:linear-gradient(135deg,#2a1200,#1a0d00);color:#fff;border:1px solid rgba(255,107,53,.35);border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--fn)">
+          <span>👑</span> Go Pro — unlimited everything · RM 9.90/mo
+        </button>
+        ${altBtn}
+      </div>
+    </div>`;
+  if(isScan){
+    const area=document.getElementById('rsA');
+    const pvA=document.getElementById('pvA');
+    if(pvA)pvA.style.display='none';
+    document.getElementById('uz').style.display='none';
+    area.innerHTML=html;
+  } else {
+    // Show in AI log tab
+    document.getElementById('aiResWrap').style.display='flex';
+    document.getElementById('aiResCard').innerHTML=html;
+  }
+}
+function showScanPaywall(){showPaywall('scan');}
+function showLogPaywall(){showPaywall('log');}
+
+function watchRewardedAd(type){
+  // type = 'scan' or 'log' — determines where to show the ad player
+  const isScan=type==='scan';
+  const area=isScan?document.getElementById('rsA'):document.getElementById('aiResCard');
+  if(!area)return;
+  let secs=5;
+  area.innerHTML=`
+    <div style="background:var(--dk);border-radius:var(--ra);padding:24px;text-align:center;border:1px solid var(--bo)">
+      <div style="font-size:36px;margin-bottom:10px">📺</div>
+      <div style="font-family:var(--fh);font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">Playing rewarded ad...</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:16px">Watch to earn <strong style="color:var(--br)">+1 AI scan &amp; +1 AI log</strong></div>
+      <div style="width:100%;height:7px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;margin-bottom:12px">
+        <div id="adProgress" style="height:100%;background:var(--br);border-radius:4px;width:0%;transition:width 5s linear"></div>
+      </div>
+      <div style="font-size:24px;font-weight:700;color:var(--br);font-family:var(--fh)" id="adCountdown">5s</div>
+    </div>`;
+
+  setTimeout(()=>{const b=document.getElementById('adProgress');if(b)b.style.width='100%';},50);
+
+  let t=setInterval(()=>{
+    secs--;
+    const cd=document.getElementById('adCountdown');
+    if(cd)cd.textContent=secs+'s';
+    if(secs<=0){
+      clearInterval(t);
+      // Give +1 scan AND +1 log
+      addBonusScans(1);
+      addBonusLogs(1);
+      updateScanCounter();
+      const resumeBtn=isScan
+        ?`<button onclick="retryScan();document.getElementById('uz').style.display='block'" style="width:100%;padding:12px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--fn);display:flex;align-items:center;justify-content:center;gap:7px"><i class="ti ti-camera"></i> Scan your food now</button>`
+        :`<button onclick="document.getElementById('aiResWrap').style.display='none'" style="width:100%;padding:12px;background:var(--br);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--fn);display:flex;align-items:center;justify-content:center;gap:7px"><i class="ti ti-brain"></i> Describe your meal now</button>`;
+      area.innerHTML=`
+        <div style="background:var(--dk);border-radius:var(--ra);padding:24px;text-align:center;border:1px solid rgba(34,197,94,.3)">
+          <div style="font-size:36px;margin-bottom:10px">🎉</div>
+          <div style="font-family:var(--fh);font-size:16px;font-weight:700;color:#fff;margin-bottom:6px">You earned your bonus!</div>
+          <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px">
+            <span style="background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.3);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:var(--br)">+1 AI Scan</span>
+            <span style="background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:#22c55e">+1 AI Log</span>
+          </div>
+          ${resumeBtn}
+        </div>`;
+    }
+  },1000);
+}
+
+function updateScanBadge(){updateScanCounter();}
+
+function updateScanCounter(){
+  const scanBadge=document.getElementById('scanCountBadge');
+  const logBadge=document.getElementById('logCountBadge');
+  if(isPro){
+    const proHtml='<span style="font-size:11px;font-weight:700;color:var(--br);background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);border-radius:20px;padding:3px 10px">👑 Unlimited</span>';
+    if(scanBadge)scanBadge.innerHTML=proHtml;
+    if(logBadge)logBadge.innerHTML=proHtml;
+    return;
+  }
+  const scanRem=getScansRemaining();
+  const scanCol=scanRem===0?'#EF4444':'#F59E0B';
+  if(scanBadge)scanBadge.innerHTML='<span style="font-size:11px;font-weight:700;color:'+scanCol+';background:'+scanCol+'18;border:1px solid '+scanCol+'40;border-radius:20px;padding:3px 10px">'+scanRem+'/1 AI scan left</span>';
+  const logRem=getLogsRemaining();
+  const logCol=logRem===0?'#EF4444':'#F59E0B';
+  if(logBadge)logBadge.innerHTML='<span style="font-size:11px;font-weight:700;color:'+logCol+';background:'+logCol+'18;border:1px solid '+logCol+'40;border-radius:20px;padding:3px 10px">'+logRem+'/1 AI log left</span>';
+}
+
+// Banner ad simulation (shows in free tier at bottom of today screen)
+function renderBannerAd(){
+  if(isPro)return;
+  const existing=document.getElementById('bannerAdWrap');
+  if(existing)return; // already rendered
+  const banner=document.createElement('div');
+  banner.id='bannerAdWrap';
+  banner.style.cssText='flex-shrink:0;background:#111;border-top:1px solid #222;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px';
+  banner.innerHTML=`
+    <div style="display:flex;align-items:center;gap:8px;flex:1">
+      <div style="width:36px;height:36px;background:var(--br);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🥗</div>
+      <div><div style="font-size:11px;font-weight:600;color:#fff">Try HelloFresh</div><div style="font-size:10px;color:#555">Fresh meals delivered to your door</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button onclick="document.getElementById('sc-premium').style.display='flex'" style="font-size:9px;color:var(--br);background:transparent;border:none;cursor:pointer;white-space:nowrap;font-weight:600">Remove ads ✕</button>
+      <div style="font-size:8px;color:#333;border:1px solid #222;padding:1px 4px;border-radius:2px">Ad</div>
+    </div>`;
+  // Insert before bottom nav
+  const bn=document.querySelector('.bn');
+  if(bn)bn.before(banner);
+}
+
+// Apply Pro status
+function activatePro(){
+  isPro=true;
+  const banner=document.getElementById('bannerAdWrap');
+  if(banner)banner.remove();
+  showToast('👑 Pro activated — unlimited scans, no ads!');
+  refreshMeTab();
+}
+function selectPlan(plan){
+  document.getElementById('planFree').classList.toggle('sel',plan==='free');
+  document.getElementById('planPro').classList.toggle('sel',plan==='pro');
+}
+function subscribePro(){
+  // Simulate Pro activation (real: Google Play Billing)
+  activatePro();
+  document.getElementById('sc-premium').style.display='none';
+  updateScanCounter();
+}
+function restorePurchase(){
+  alert('No previous purchase found.\n\nIf you subscribed on another device, please contact support@bitewise.app');
+}
+
+// ── PROFILE STATE ─────────────────────────────────────────────────────────────
+let profileData={name:'',email:'',age:0,weight:0,height:0,sex:'male',activity:1.375,goal:'maintain',avatarUrl:''};
+let newRecalcGoal=0,newRecalcCarb=0,newRecalcProt=0,newRecalcFat=0;
+
+// ── UPDATE Me TAB ─────────────────────────────────────────────────────────────
+function refreshMeTab(){
+  const n=profileData.name||curUser.name||'User';
+  const ini=n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+  // Avatar
+  document.getElementById('acAvTxt').textContent=ini;
+  document.getElementById('editAvTxt').textContent=ini;
+  if(profileData.avatarUrl){
+    const img=document.getElementById('acAvImg');
+    img.src=profileData.avatarUrl;img.style.display='block';
+    document.getElementById('acAvTxt').style.display='none';
+  } else {
+    document.getElementById('acAvImg').style.display='none';
+    document.getElementById('acAvTxt').style.display='';
+  }
+
+  document.getElementById('acNm').textContent=n;
+  document.getElementById('acEm').textContent=profileData.email||curUser.email||'—';
+  document.getElementById('acKcal').textContent=dGoal.toLocaleString();
+  document.getElementById('acGoal').textContent=pGoal==='lose'?'Lose weight':pGoal==='gain'?'Build muscle':'Maintain';
+
+  // BMI
+  const bmi=profileData.weight&&profileData.height
+    ?parseFloat((profileData.weight/((profileData.height/100)**2)).toFixed(1)):null;
+  document.getElementById('acBmi').textContent=bmi||'—';
+  document.getElementById('acWeight').textContent=profileData.weight?(profileData.weight+'kg'):'—';
+
+  const bg=document.getElementById('acBg');
+  if(curUser.method==='google'){bg.textContent='Google account';bg.style.cssText='background:#E8F0FE;color:#1967D2'}
+  else{bg.textContent='Email account';bg.style.cssText='background:var(--brl);color:var(--brd)'}
+
+  // Stats strip
+  const totalMeals=Object.values(tdLog).reduce((s,a)=>s+a.length,0)
+    +Object.values(hist).reduce((s,d)=>s+Object.values(d.meals||{}).reduce((ss,a)=>ss+a.length,0),0);
+  const totalDays=Object.keys(hist).length;
+  const bestStreak=(()=>{let best=0,cur=0,today=new Date();
+    for(let i=0;i<60;i++){const d=new Date(today);d.setDate(d.getDate()-i);const k=dk(d);
+      const has=k===tdKey?Object.values(tdLog).some(a=>a.length>0):(hist[k]&&hist[k].kcal>0);
+      if(has){cur++;best=Math.max(best,cur)}else{if(i>0)break}}return best;})();
+
+  const stats=[
+    {v:totalDays,l:'Days logged'},
+    {v:totalMeals,l:'Meals tracked'},
+    {v:bestStreak+'🔥',l:'Best streak'},
+  ];
+  updateApiKeyBadge();
+  document.getElementById('profileStats').innerHTML=stats.map(s=>
+    `<div class="gs"><div class="gs-v" style="font-size:15px">${s.v}</div><div class="gs-l">${s.l}</div></div>`
+  ).join('');
+}
+
+// ── PROFILE EDIT ──────────────────────────────────────────────────────────────
+function openProfileEdit(){
+  // Pre-fill fields with current values
+  document.getElementById('editName').value=profileData.name||document.getElementById('pName').value||curUser.name||'';
+  document.getElementById('editEmail').value=profileData.email||curUser.email||'';
+  document.getElementById('editAge').value=profileData.age||document.getElementById('pAge').value||'';
+  document.getElementById('editWeight').value=profileData.weight||document.getElementById('pWt').value||'';
+  document.getElementById('editHeight').value=profileData.height||document.getElementById('pHt').value||'';
+  document.getElementById('editSex').value=profileData.sex||pSex||'male';
+  document.getElementById('editActivity').value=profileData.activity||pAct||'1.375';
+  document.getElementById('editGoal').value=profileData.goal||pGoal||'maintain';
+
+  // Avatar preview
+  if(profileData.avatarUrl){
+    document.getElementById('editAvImg').src=profileData.avatarUrl;
+    document.getElementById('editAvImg').style.display='block';
+    document.getElementById('editAvTxt').style.display='none';
+  } else {
+    document.getElementById('editAvImg').style.display='none';
+    document.getElementById('editAvTxt').style.display='';
+    document.getElementById('editAvTxt').textContent=(profileData.name||curUser.name||'U')[0].toUpperCase();
+  }
+  document.getElementById('profileModal').classList.remove('hidden');
+}
+
+function closeProfileModal(){
+  document.getElementById('profileModal').classList.add('hidden');
+}
+
+function handleAvatarUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    profileData.avatarUrl=ev.target.result;
+    document.getElementById('editAvImg').src=ev.target.result;
+    document.getElementById('editAvImg').style.display='block';
+    document.getElementById('editAvTxt').style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveProfile(){
+  const name=document.getElementById('editName').value.trim();
+  const age=parseFloat(document.getElementById('editAge').value);
+  const weight=parseFloat(document.getElementById('editWeight').value);
+  const height=parseFloat(document.getElementById('editHeight').value);
+  const sex=document.getElementById('editSex').value;
+  const activity=parseFloat(document.getElementById('editActivity').value);
+  const goal=document.getElementById('editGoal').value;
+
+  if(!name){document.getElementById('editName').style.borderColor='var(--re)';setTimeout(()=>document.getElementById('editName').style.borderColor='',1500);return}
+
+  // Save to profileData
+  profileData={...profileData,name,age:age||profileData.age,weight:weight||profileData.weight,height:height||profileData.height,sex,activity,goal};
+
+  // Update global state
+  pSex=sex;pAct=activity;pGoal=goal;
+  curUser.name=name;
+
+  // Update hidden onboarding fields so calcShow() still works
+  if(document.getElementById('pName'))document.getElementById('pName').value=name;
+  if(document.getElementById('pAge')&&age)document.getElementById('pAge').value=age;
+  if(document.getElementById('pWt')&&weight)document.getElementById('pWt').value=weight;
+  if(document.getElementById('pHt')&&height)document.getElementById('pHt').value=height;
+
+  // Recalculate goals with new values
+  if(age&&weight&&height){
+    const bmr=sex==='male'?Math.round(10*weight+6.25*height-5*age+5):Math.round(10*weight+6.25*height-5*age-161);
+    const tdee=Math.round(bmr*activity);
+    const adj=goal==='lose'?-500:goal==='gain'?300:0;
+    dGoal=Math.round(tdee+adj);
+    cGoal=Math.round(dGoal*0.5/4);prGoal=Math.round(dGoal*0.25/4);fGoal=Math.round(dGoal*0.25/9);
+  }
+
+  closeProfileModal();
+  refreshMeTab();
+  updateTotals();
+
+  // Flash success
+  showToast('✓ Profile saved & goals updated!');
+}
+
+// ── RECALCULATE ───────────────────────────────────────────────────────────────
+function openRecalcModal(){
+  // Pre-fill with current values
+  document.getElementById('rcWeight').value=profileData.weight||document.getElementById('pWt').value||'';
+  document.getElementById('rcHeight').value=profileData.height||document.getElementById('pHt').value||'';
+  document.getElementById('rcAge').value=profileData.age||document.getElementById('pAge').value||'';
+  document.getElementById('rcGoal').value=pGoal||'maintain';
+  document.getElementById('rcResult').classList.remove('show');
+  document.getElementById('rcBtn').style.display='flex';
+  document.getElementById('rcApplyBtn').style.display='none';
+  document.getElementById('recalcModal').classList.remove('hidden');
+}
+
+function closeRecalcModal(){
+  document.getElementById('recalcModal').classList.add('hidden');
+}
+
+function doRecalc(){
+  const w=parseFloat(document.getElementById('rcWeight').value);
+  const h=parseFloat(document.getElementById('rcHeight').value);
+  const a=parseFloat(document.getElementById('rcAge').value);
+  const goal=document.getElementById('rcGoal').value;
+  const sex=profileData.sex||pSex||'male';
+  const act=profileData.activity||pAct||1.375;
+
+  if(!w||!h||!a){
+    ['rcWeight','rcHeight','rcAge'].forEach(id=>{
+      if(!parseFloat(document.getElementById(id).value)){
+        document.getElementById(id).style.borderColor='var(--re)';
+        setTimeout(()=>document.getElementById(id).style.borderColor='',1500);
+      }
+    });
+    return;
+  }
+
+  const bmr=sex==='male'?Math.round(10*w+6.25*h-5*a+5):Math.round(10*w+6.25*h-5*a-161);
+  const tdee=Math.round(bmr*act);
+  const adj=goal==='lose'?-500:goal==='gain'?300:0;
+  newRecalcGoal=Math.round(tdee+adj);
+  newRecalcCarb=Math.round(newRecalcGoal*0.5/4);
+  newRecalcProt=Math.round(newRecalcGoal*0.25/4);
+  newRecalcFat=Math.round(newRecalcGoal*0.25/9);
+
+  const diff=newRecalcGoal-dGoal;
+  const diffTxt=diff===0?'Same as current goal':(diff>0?'+'+diff+' kcal from current':diff+' kcal from current');
+  const diffCol=diff===0?'var(--tx3)':diff>0?'var(--gn)':'var(--re)';
+
+  document.getElementById('rcNewGoal').textContent=newRecalcGoal.toLocaleString()+' kcal';
+  document.getElementById('rcDiff').innerHTML=`<span style="color:${diffCol};font-weight:600">${diffTxt}</span>`;
+  document.getElementById('rcMacros').innerHTML=[
+    {l:'Carbs',v:newRecalcCarb+'g',c:'#F59E0B'},
+    {l:'Protein',v:newRecalcProt+'g',c:'#22C55E'},
+    {l:'Fat',v:newRecalcFat+'g',c:'#3B82F6'},
+  ].map(m=>`<div class="gs"><div class="gs-v" style="color:${m.c};font-size:14px">${m.v}</div><div class="gs-l">${m.l}</div></div>`).join('');
+
+  document.getElementById('rcResult').classList.add('show');
+  document.getElementById('rcBtn').style.display='none';
+  document.getElementById('rcApplyBtn').style.display='flex';
+
+  // Save body stats
+  profileData.weight=w;profileData.height=h;profileData.age=a;profileData.goal=goal;
+}
+
+function applyRecalc(){
+  if(!newRecalcGoal)return;
+  const oldGoal=dGoal;
+  dGoal=newRecalcGoal;cGoal=newRecalcCarb;prGoal=newRecalcProt;fGoal=newRecalcFat;
+  pGoal=document.getElementById('rcGoal').value;
+  closeRecalcModal();
+  refreshMeTab();
+  updateTotals();
+  showToast('✓ New goal applied: '+dGoal.toLocaleString()+' kcal/day');
+}
+
+// ── TOAST NOTIFICATION ────────────────────────────────────────────────────────
+function showToast(msg){
+  let t=document.getElementById('toastEl');
+  if(!t){
+    t=document.createElement('div');
+    t.id='toastEl';
+    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#0D0D0D;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;font-weight:600;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08);transition:opacity .3s;white-space:nowrap;max-width:90vw';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>{t.style.opacity='0'},2500);
+}
+
+
+</script>
+<!-- API KEY MODAL -->
+<div class="modal-overlay hidden" id="apiKeyModal" onclick="if(event.target.id==='apiKeyModal')document.getElementById('apiKeyModal').classList.add('hidden')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🔑 Set Anthropic API Key</div>
+    <div style="font-size:12px;color:var(--tx2);line-height:1.6;background:var(--gy4);border-radius:var(--rs);padding:11px 13px;border:1px solid var(--bo)">
+      Your API key is stored <strong>only on your device</strong> — never sent to anyone except Anthropic. Get your free key at <strong>console.anthropic.com</strong>
+    </div>
+    <div class="edit-fld">
+      <label>API Key</label>
+      <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." style="font-family:monospace;font-size:12px"/>
+    </div>
+    <div style="font-size:11px;color:var(--tx3);line-height:1.5">
+      💡 Free $5 credits on signup (~500 AI uses). Top up anytime at console.anthropic.com → Billing.
+    </div>
+    <button class="modal-add-btn" onclick="setApiKey(document.getElementById('apiKeyInput').value)">Save API key</button>
+    <div class="modal-cancel" onclick="document.getElementById('apiKeyModal').classList.add('hidden')">Cancel</div>
+  </div>
+</div>
+
+</body>
+</html>
