@@ -1593,7 +1593,7 @@ async function runAiAnalysis(){
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-5',
         max_tokens:800,
         messages:[{role:'user',content:`You are a nutrition coach. Analyse this person's food intake for today and give personalised recommendations.
 
@@ -1777,7 +1777,7 @@ async function parseMeal(){
   let li=0;const lt=setInterval(()=>{li=(li+1)%msgs.length;document.getElementById('aiLoadTxt').textContent=msgs[li]},1100);
   try{
     const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',max_tokens:1500,
+      model:'claude-sonnet-4-5',max_tokens:1500,
       messages:[{role:'user',content:`You are a world-class food nutrition expert. Break this meal description into INDIVIDUAL food components.\n\nMeal: "${input}"\n\nRules:\n- List EACH component separately (rice, chicken curry, carrots = 3 separate items)\n- Include ALL components including drinks, sides, sauces\n- Estimate realistic portions from the description\n- Use local dish names (Malaysian, Indian, Japanese etc.)\n- For fast food use standard menu calories\n\nReturn ONLY a valid JSON array:\n[{"name":"White rice","serving":"1 plate (200g)","kcal":260,"carb":56,"prot":5,"fat":0}]\n\nReturn ONLY the JSON array.`}]
     })});
     const data=await resp.json();
@@ -2010,7 +2010,7 @@ async function analyseFood(dataUrl,mimeType){
   if(!checkApiKey()){retryScan();return;}
   const b64=dataUrl.split(',')[1];
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mimeType,data:b64}},{type:'text',text:`Food nutrition expert. Identify EVERY distinct food item separately.\n\nReturn ONLY JSON:\n[{"name":"Nasi Lemak","serving":"1 plate","kcal":644,"carb":78,"prot":16,"fat":31,"confidence":96}]\n\nList each component separately. Any world cuisine. Return ONLY the array.`}]}]})});
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mimeType,data:b64}},{type:'text',text:`Food nutrition expert. Identify EVERY distinct food item separately.\n\nReturn ONLY JSON:\n[{"name":"Nasi Lemak","serving":"1 plate","kcal":644,"carb":78,"prot":16,"fat":31,"confidence":96}]\n\nList each component separately. Any world cuisine. Return ONLY the array.`}]}]})});
     const data=await resp.json();const txt=data.content.map(item=>item.text||'').join('');
     let det=[];try{det=JSON.parse(txt.replace(/```json|```/g,'').trim())}catch(e){det=[]}
     showScanRes(det);
