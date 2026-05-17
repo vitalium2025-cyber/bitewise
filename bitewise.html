@@ -12,6 +12,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="BiteWise"/>
 <link rel="manifest" href="manifest.json"/>
+<!-- Google AdMob -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-8406242113802309~5026092395" crossorigin="anonymous"></script>
 <link rel="apple-touch-icon" href="icon-192.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
@@ -2329,10 +2331,42 @@ function showScanPaywall(){showPaywall('scan');}
 function showLogPaywall(){showPaywall('log');}
 
 function watchRewardedAd(type){
-  // type = 'scan' or 'log' — determines where to show the ad player
+  // type = 'scan' or 'log'
   const isScan=type==='scan';
   const area=isScan?document.getElementById('rsA'):document.getElementById('aiResCard');
   if(!area)return;
+
+  // Show loading state
+  area.innerHTML=`<div style="background:var(--dk);border-radius:var(--ra);padding:24px;text-align:center;border:1px solid var(--bo)">
+    <div style="font-size:36px;margin-bottom:10px">📺</div>
+    <div style="font-family:var(--fh);font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">Loading ad...</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:16px">Watch to earn <strong style="color:var(--br)">+1 AI Scan &amp; +1 AI Log</strong></div>
+    <div class="spin" style="margin:0 auto;width:24px;height:24px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--br);border-radius:50%;animation:sp .7s linear infinite"></div>
+  </div>`;
+
+  // Try real AdMob rewarded ad
+  try{
+    // AdMob rewarded ad via googletag
+    window.adBreak = window.adBreak || function(o){ (window.adConfig=window.adConfig||[]).push(o) };
+    adBreak({
+      type: 'reward',
+      adBreakDone: function(info){
+        if(info.breakStatus==='viewed'){
+          // Ad watched successfully
+          giveReward(type,area,isScan);
+        } else {
+          // Ad not available - fall back to timer
+          simulateAd(type,area,isScan);
+        }
+      }
+    });
+  } catch(e){
+    // AdMob not available - fall back to simulated
+    simulateAd(type,area,isScan);
+  }
+}
+
+function simulateAd(type,area,isScan){
   let secs=5;
   area.innerHTML=`
     <div style="background:var(--dk);border-radius:var(--ra);padding:24px;text-align:center;border:1px solid var(--bo)">
@@ -2397,20 +2431,24 @@ function updateScanCounter(){
 function renderBannerAd(){
   if(isPro)return;
   const existing=document.getElementById('bannerAdWrap');
-  if(existing)return; // already rendered
+  if(existing)return;
   const banner=document.createElement('div');
   banner.id='bannerAdWrap';
-  banner.style.cssText='flex-shrink:0;background:#111;border-top:1px solid #222;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px';
-  banner.innerHTML=`
-    <div style="display:flex;align-items:center;gap:8px;flex:1">
-      <div style="width:36px;height:36px;background:var(--br);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🥗</div>
-      <div><div style="font-size:11px;font-weight:600;color:#fff">Try HelloFresh</div><div style="font-size:10px;color:#555">Fresh meals delivered to your door</div></div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <button onclick="document.getElementById('sc-premium').style.display='flex'" style="font-size:9px;color:var(--br);background:transparent;border:none;cursor:pointer;white-space:nowrap;font-weight:600">Remove ads ✕</button>
-      <div style="font-size:8px;color:#333;border:1px solid #222;padding:1px 4px;border-radius:2px">Ad</div>
-    </div>`;
-  // Insert before bottom nav
+  banner.style.cssText='flex-shrink:0;background:#000;border-top:1px solid #222;padding:4px 0;text-align:center;position:relative';
+  // Real AdMob banner
+  const removeBtn=document.createElement('div');
+  removeBtn.style.cssText='display:flex;justify-content:flex-end;padding:2px 8px';
+  removeBtn.innerHTML='<button onclick="document.getElementById(\'sc-premium\').style.display=\'flex\'" style="font-size:9px;color:var(--br);background:transparent;border:none;cursor:pointer;font-weight:600">Remove ads ✕</button>';
+  const ins=document.createElement('ins');
+  ins.className='adsbygoogle';
+  ins.style.cssText='display:block;width:100%;height:50px';
+  ins.setAttribute('data-ad-client','ca-app-pub-8406242113802309~5026092395');
+  ins.setAttribute('data-ad-slot','9282014719');
+  ins.setAttribute('data-ad-format','banner');
+  ins.setAttribute('data-full-width-responsive','false');
+  banner.appendChild(removeBtn);
+  banner.appendChild(ins);
+  try{(adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){}
   const bn=document.querySelector('.bn');
   if(bn)bn.before(banner);
 }
