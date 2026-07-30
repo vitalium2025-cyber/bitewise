@@ -827,7 +827,7 @@ input,select,button,textarea{font-family:var(--fn)}
       </div>
       <div onclick="document.getElementById('sc-premium').style.display='flex'" style="background:linear-gradient(135deg,#2a1200,#1a0d00);border-radius:var(--ra);padding:16px;display:flex;align-items:center;gap:13px;cursor:pointer;border:1px solid rgba(255,107,53,.3)">
         <div style="width:42px;height:42px;background:rgba(255,107,53,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">👑</div>
-        <div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff;font-family:var(--fh)">Upgrade to Pro</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">Unlimited AI · RM 9.90/mo</div></div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff;font-family:var(--fh)">Upgrade to Pro</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">8x more AI daily · RM 9.90/mo</div></div>
         <i class="ti ti-chevron-right" style="color:var(--br);font-size:18px"></i>
       </div>
       <button class="btn-dn" onclick="logout()"><i class="ti ti-logout" style="font-size:16px"></i>Log out</button>
@@ -932,11 +932,11 @@ input,select,button,textarea{font-family:var(--fn)}
   <div class="pm-body">
     <div class="pm-plan-row">
       <div class="pm-plan free" id="planFree" onclick="selectPlan('free')"><div class="pm-badge" style="background:var(--bo);color:var(--tx3)">FREE</div><div class="pm-price" style="color:var(--tx)">RM 0</div><div class="pm-period">forever</div><div style="margin-top:10px;font-size:11px;color:var(--tx3);line-height:1.6">1 AI scan/day<br/>1 AI log/day<br/>7-day history<br/>Ads shown</div></div>
-      <div class="pm-plan pro sel" id="planPro" onclick="selectPlan('pro')"><div class="pm-badge" style="background:rgba(255,107,53,.2);color:var(--br)">⭐ PRO</div><div class="pm-price">RM 9.90</div><div class="pm-period">per month</div><div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.6);line-height:1.6">Unlimited AI scans<br/>Unlimited AI logs<br/>Full history<br/>No ads</div></div>
+      <div class="pm-plan pro sel" id="planPro" onclick="selectPlan('pro')"><div class="pm-badge" style="background:rgba(255,107,53,.2);color:var(--br)">⭐ PRO</div><div class="pm-price">RM 9.90</div><div class="pm-period">per month</div><div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.6);line-height:1.6">8 AI scans/day<br/>8 AI logs/day<br/>Full history<br/>No ads</div></div>
     </div>
     <div class="pm-feats">
-      <div class="pm-fr"><div class="pm-fi" style="background:rgba(255,107,53,.15)"><i class="ti ti-camera" style="color:var(--br);font-size:17px"></i></div><div><div class="pm-fn">Unlimited AI photo scans</div><div class="pm-fd">Snap any meal, AI tracks instantly</div></div><div class="pm-ftag" style="background:rgba(255,107,53,.15);color:var(--br)">PRO</div></div>
-      <div class="pm-fr"><div class="pm-fi" style="background:rgba(34,197,94,.15)"><i class="ti ti-brain" style="color:#22c55e;font-size:17px"></i></div><div><div class="pm-fn">Unlimited AI meal logs</div><div class="pm-fd">Describe any meal, no daily limit</div></div><div class="pm-ftag" style="background:rgba(34,197,94,.15);color:#22c55e">PRO</div></div>
+      <div class="pm-fr"><div class="pm-fi" style="background:rgba(255,107,53,.15)"><i class="ti ti-camera" style="color:var(--br);font-size:17px"></i></div><div><div class="pm-fn">8x more AI photo scans</div><div class="pm-fd">Snap up to 8 meals a day</div></div><div class="pm-ftag" style="background:rgba(255,107,53,.15);color:var(--br)">PRO</div></div>
+      <div class="pm-fr"><div class="pm-fi" style="background:rgba(34,197,94,.15)"><i class="ti ti-brain" style="color:#22c55e;font-size:17px"></i></div><div><div class="pm-fn">8x more AI meal logs</div><div class="pm-fd">Describe up to 8 meals a day</div></div><div class="pm-ftag" style="background:rgba(34,197,94,.15);color:#22c55e">PRO</div></div>
       <div class="pm-fr"><div class="pm-fi" style="background:rgba(59,130,246,.15)"><i class="ti ti-chart-bar" style="color:#3b82f6;font-size:17px"></i></div><div><div class="pm-fn">Advanced analytics</div><div class="pm-fd">Trends, insights, weekly reports</div></div><div class="pm-ftag" style="background:rgba(59,130,246,.15);color:#3b82f6">PRO</div></div>
       <div class="pm-fr"><div class="pm-fi" style="background:rgba(139,92,246,.15)"><i class="ti ti-ad-off" style="color:#8b5cf6;font-size:17px"></i></div><div><div class="pm-fn">Ad-free experience</div><div class="pm-fd">Clean distraction-free tracking</div></div><div class="pm-ftag" style="background:rgba(139,92,246,.15);color:#8b5cf6">PRO</div></div>
     </div>
@@ -956,14 +956,15 @@ function getUserId(){
   return uid;
 }
 
-async function callProxy(body){
+async function callProxy(body,reqType){
   const tier = (typeof isPro !== 'undefined' && isPro) ? 'pro' : 'free';
   const resp = await fetch(PROXY_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'X-User-ID': getUserId(),
-      'X-User-Tier': tier
+      'X-User-Tier': tier,
+      'X-Request-Type': reqType||'log'
     },
     body: JSON.stringify(body)
   });
@@ -1640,7 +1641,7 @@ Return ONLY this JSON, no markdown:
   ]
 }`}]
 
-    });
+    },'log');
 
     const txt=resp.content.map(item=>item.text||'').join('');
     let result;
@@ -1800,7 +1801,7 @@ async function parseMeal(){
   try{
     const resp=await callProxy({model:'claude-sonnet-4-6',max_tokens:1500,
       messages:[{role:'user',content:`You are a world-class food nutrition expert. Break this meal description into INDIVIDUAL food components.\n\nMeal: "${input}"\n\nRules:\n- List EACH component separately (rice, chicken curry, carrots = 3 separate items)\n- Include ALL components including drinks, sides, sauces\n- Estimate realistic portions from the description\n- Use local dish names (Malaysian, Indian, Japanese etc.)\n- For fast food use standard menu calories\n\nReturn ONLY a valid JSON array:\n[{"name":"White rice","serving":"1 plate (200g)","kcal":260,"carb":56,"prot":5,"fat":0}]\n\nReturn ONLY the JSON array.`}]
-        });
+        },'log');
     
     clearInterval(lt);ld.style.display='none';document.getElementById('aiBtn').disabled=false;
     // Handle API errors
@@ -1912,7 +1913,7 @@ async function searchOpenFoodFacts(q,localResults){
     const url=`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=20&fields=product_name,nutriments,serving_size,serving_quantity,categories_tags`;
     const resp=await fetch(url);
     if(!resp.ok)throw new Error('API error');
-    const data=await resp.json();
+    
     sal('offSrMsg',false);
 
     // Parse and filter OFF results — only include items with valid calorie data
@@ -2028,7 +2029,7 @@ async function analyseFood(dataUrl,mimeType){
   if(!checkApiKey()){retryScan();return;}
   const b64=dataUrl.split(',')[1];
   try{
-    const resp=await callProxy({model:'claude-sonnet-4-6',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mimeType,data:b64}},{type:'text',text:`Food nutrition expert. Identify EVERY distinct food item separately.\n\nReturn ONLY JSON:\n[{"name":"Nasi Lemak","serving":"1 plate","kcal":644,"carb":78,"prot":16,"fat":31,"confidence":96}]\n\nList each component separately. Any world cuisine. Return ONLY the array.`}]}]});
+    const resp=await callProxy({model:'claude-sonnet-4-6',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mimeType,data:b64}},{type:'text',text:`Food nutrition expert. Identify EVERY distinct food item separately.\n\nReturn ONLY JSON:\n[{"name":"Nasi Lemak","serving":"1 plate","kcal":644,"carb":78,"prot":16,"fat":31,"confidence":96}]\n\nList each component separately. Any world cuisine. Return ONLY the array.`}]}]},'scan');
     const txt=resp.content.map(item=>item.text||'').join('');
     let det=[];try{det=JSON.parse(txt.replace(/```json|```/g,'').trim())}catch(e){det=[]}
     showScanRes(det);
@@ -2231,6 +2232,8 @@ function quickAddCalories(){
 let isPro=false;
 const FREE_DAILY_SCANS=1;         // free users get 1 AI photo scan per day
 const FREE_DAILY_LOGS=1;           // free users get 1 AI log per day
+const PRO_DAILY_SCANS=8;          // pro users get 8 AI photo scans per day
+const PRO_DAILY_LOGS=8;           // pro users get 8 AI logs per day
 const REWARDED_BONUS_SCANS=1;     // watching ad gives +1 scan AND +1 log
 
 // ── Scan helpers ──
@@ -2244,7 +2247,7 @@ function incrementScans(){
   localStorage.setItem(key,n);return n;
 }
 function getScansRemaining(){
-  if(isPro)return 999;
+  if(isPro)return Math.max(0,PRO_DAILY_SCANS-getTodayScans());
   return Math.max(0,FREE_DAILY_SCANS-getTodayScans());
 }
 
@@ -2259,7 +2262,7 @@ function incrementLogs(){
   localStorage.setItem(key,n);return n;
 }
 function getLogsRemaining(){
-  if(isPro)return 999;
+  if(isPro)return Math.max(0,PRO_DAILY_LOGS-getTodayLogs());
   return Math.max(0,FREE_DAILY_LOGS-getTodayLogs());
 }
 
@@ -2421,18 +2424,14 @@ function updateScanBadge(){updateScanCounter();}
 function updateScanCounter(){
   const scanBadge=document.getElementById('scanCountBadge');
   const logBadge=document.getElementById('logCountBadge');
-  if(isPro){
-    const proHtml='<span style="font-size:11px;font-weight:700;color:var(--br);background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);border-radius:20px;padding:3px 10px">👑 Unlimited</span>';
-    if(scanBadge)scanBadge.innerHTML=proHtml;
-    if(logBadge)logBadge.innerHTML=proHtml;
-    return;
-  }
+  const scanMax=isPro?PRO_DAILY_SCANS:FREE_DAILY_SCANS;
+  const logMax=isPro?PRO_DAILY_LOGS:FREE_DAILY_LOGS;
   const scanRem=getScansRemaining();
-  const scanCol=scanRem===0?'#EF4444':'#F59E0B';
-  if(scanBadge)scanBadge.innerHTML='<span style="font-size:11px;font-weight:700;color:'+scanCol+';background:'+scanCol+'18;border:1px solid '+scanCol+'40;border-radius:20px;padding:3px 10px">'+scanRem+'/1 AI scan left</span>';
+  const scanCol=scanRem===0?'#EF4444':(isPro?'var(--br)':'#F59E0B');
+  if(scanBadge)scanBadge.innerHTML='<span style="font-size:11px;font-weight:700;color:'+scanCol+';background:'+scanCol+'18;border:1px solid '+scanCol+'40;border-radius:20px;padding:3px 10px">'+(isPro?'👑 ':'')+scanRem+'/'+scanMax+' AI scan'+(scanMax>1?'s':'')+' left</span>';
   const logRem=getLogsRemaining();
-  const logCol=logRem===0?'#EF4444':'#F59E0B';
-  if(logBadge)logBadge.innerHTML='<span style="font-size:11px;font-weight:700;color:'+logCol+';background:'+logCol+'18;border:1px solid '+logCol+'40;border-radius:20px;padding:3px 10px">'+logRem+'/1 AI log left</span>';
+  const logCol=logRem===0?'#EF4444':(isPro?'var(--br)':'#F59E0B');
+  if(logBadge)logBadge.innerHTML='<span style="font-size:11px;font-weight:700;color:'+logCol+';background:'+logCol+'18;border:1px solid '+logCol+'40;border-radius:20px;padding:3px 10px">'+(isPro?'👑 ':'')+logRem+'/'+logMax+' AI log'+(logMax>1?'s':'')+' left</span>';
 }
 
 // Banner ad simulation (shows in free tier at bottom of today screen)
@@ -2466,7 +2465,7 @@ function activatePro(){
   isPro=true;
   const banner=document.getElementById('bannerAdWrap');
   if(banner)banner.remove();
-  showToast('👑 Pro activated — unlimited scans, no ads!');
+  showToast('👑 Pro activated — 8 AI scans + 8 logs/day, no ads!');
   refreshMeTab();
 }
 function selectPlan(plan){
