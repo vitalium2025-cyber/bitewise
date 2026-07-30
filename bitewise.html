@@ -1642,7 +1642,7 @@ Return ONLY this JSON, no markdown:
 
     });
 
-    const txt=data.content.map(item=>item.text||'').join('');
+    const txt=resp.content.map(item=>item.text||'').join('');
     let result;
     try{result=JSON.parse(txt.replace(/```json|```/g,'').trim())}
     catch(e){throw new Error('Parse error')}
@@ -1912,7 +1912,7 @@ async function searchOpenFoodFacts(q,localResults){
     const url=`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=20&fields=product_name,nutriments,serving_size,serving_quantity,categories_tags`;
     const resp=await fetch(url);
     if(!resp.ok)throw new Error('API error');
-    
+    const data=await resp.json();
     sal('offSrMsg',false);
 
     // Parse and filter OFF results — only include items with valid calorie data
@@ -2028,7 +2028,7 @@ async function analyseFood(dataUrl,mimeType){
   if(!checkApiKey()){retryScan();return;}
   const b64=dataUrl.split(',')[1];
   try{
-    const resp=await callProxy({model:'claude-sonnet-4-6',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mimeType,data:b64}},{type:'text',text:`Food nutrition expert. Identify EVERY distinct food item separately.\n\nReturn ONLY JSON:\n[{"name":"Nasi Lemak","serving":"1 plate","kcal":644,"carb":78,"prot":16,"fat":31,"confidence":96}]\n\nList each component separately. Any world cuisine. Return ONLY the array.`}]}]})});
+    const resp=await callProxy({model:'claude-sonnet-4-6',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mimeType,data:b64}},{type:'text',text:`Food nutrition expert. Identify EVERY distinct food item separately.\n\nReturn ONLY JSON:\n[{"name":"Nasi Lemak","serving":"1 plate","kcal":644,"carb":78,"prot":16,"fat":31,"confidence":96}]\n\nList each component separately. Any world cuisine. Return ONLY the array.`}]}]});
     const txt=resp.content.map(item=>item.text||'').join('');
     let det=[];try{det=JSON.parse(txt.replace(/```json|```/g,'').trim())}catch(e){det=[]}
     showScanRes(det);
