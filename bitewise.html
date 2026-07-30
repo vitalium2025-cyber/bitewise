@@ -2032,10 +2032,10 @@ async function analyseFood(dataUrl,mimeType){
   const b64=dataUrl.split(',')[1];
   try{
     const resp=await callProxy({model:'claude-sonnet-4-6',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mimeType,data:b64}},{type:'text',text:`Food nutrition expert. Identify EVERY distinct food item separately.\n\nReturn ONLY JSON:\n[{"name":"Nasi Lemak","serving":"1 plate","kcal":644,"carb":78,"prot":16,"fat":31,"confidence":96}]\n\nList each component separately. Any world cuisine. Return ONLY the array.`}]}]})});
-    const txt=data.content.map(item=>item.text||'').join('');
+    const txt=resp.content.map(item=>item.text||'').join('');
     let det=[];try{det=JSON.parse(txt.replace(/```json|```/g,'').trim())}catch(e){det=[]}
     showScanRes(det);
-  }catch(err){showScanErr()}
+  }catch(err){showScanErr();}
 }
 function showScanRes(det){
   const ov=document.getElementById('scOv');if(ov)ov.style.display='none';
