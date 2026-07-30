@@ -1804,11 +1804,8 @@ async function parseMeal(){
     
     clearInterval(lt);ld.style.display='none';document.getElementById('aiBtn').disabled=false;
     // Handle API errors
-    if(resp.error){document.getElementById('aiErrMsg').textContent='API error: '+data.error.message;sal('aiErr',true);return;}
-if(!resp.content||!resp.content.length){
-  console.error('API response missing content:',JSON.stringify(data));
-      document.getElementById('aiErrMsg').textContent='No response. Check your API key in Me tab.';sal('aiErr',true);return;}
-    console.log('API raw response:',JSON.stringify(resp).slice(0,300));
+ if(resp.error){document.getElementById('aiErrMsg').textContent='API error: '+(resp.error.message||resp.error);sal('aiErr',true);return;}
+    if(!resp.content||!resp.content.length){document.getElementById('aiErrMsg').textContent='No response. Try again.';sal('aiErr',true);return;}
     const txt=resp.content.map(item=>item.text||'').join('');
     console.log('AI text response:',txt.slice(0,200));
     let items=[];
