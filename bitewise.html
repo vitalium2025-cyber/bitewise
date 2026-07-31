@@ -49,9 +49,8 @@
   window.fbUpdateProfile = updateProfile;
   window.fbReady = true;
 
-  // Store the redirect result as a Promise immediately - main script checks this whenever it's ready,
-  // avoiding any race condition with event listener timing
-  window.fbRedirectResultPromise = getRedirectResult(fbAuth);
+  // Redirect result is intentionally NOT used here - onAuthStateChanged below is the
+  // single reliable source of truth for detecting sign-in (works for redirect, popup, and persisted sessions)
 </script>
 
 <style>
@@ -1468,27 +1467,28 @@ async function startGoogle(){
   await window.fbSignInWithRedirect(window.fbAuth, window.fbGoogleProvider);
 }
 
-// Checks if we just came back from a Google redirect sign-in and completes the login
-async function checkGoogleRedirectResult(){
-  if(!window.fbRedirectResultPromise)return;
-  try{
-    const result = await window.fbRedirectResultPromise;
-    if(result && result.user){
-      const user = result.user;
-      const nm = user.displayName || user.email.split('@')[0];
-      const em = user.email;
+// Watches Firebase's actual auth state - this is the reliable way to detect sign-in
+// completion after a redirect (avoids all timing/storage race conditions).
+// Runs once fbReady is confirmed true.
+(function waitForFirebaseThenWatchAuth(){
+  if(!window.fbReady){setTimeout(waitForFirebaseThenWatchAuth,100);return;}
+  window.fbOnAuthStateChanged(window.fbAuth, (user)=>{
+    if(user && !curUser.uid){
+      const nm = user.displayName || (user.email?user.email.split('@')[0]:'User');
+      const em = user.email||'';
       const ini = nm.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      curUser={name:nm,email:em,method:'google',ini,uid:user.uid,photoURL:user.photoURL||''};
+      const isGoogle = user.providerData && user.providerData[0] && user.providerData[0].providerId==='google.com';
+      curUser={name:nm,email:em,method:isGoogle?'google':'email',ini,uid:user.uid,photoURL:user.photoURL||''};
       const pNameEl=document.getElementById('pName');
       if(pNameEl)pNameEl.value=nm;
-      go('sc-onb1');
+      // Only auto-navigate if we're still on an auth screen (not already using the app)
+      const onAuthScreen = document.getElementById('sc-splash').classList.contains('on')
+        || document.getElementById('sc-login').classList.contains('on')
+        || document.getElementById('sc-signup').classList.contains('on');
+      if(onAuthScreen) go('sc-onb1');
     }
-  }catch(err){
-    console.error('Redirect result error:',err);
-    showToast('Google sign-in failed. Please try again.');
-  }
-}
-checkGoogleRedirectResult();
+  });
+})();
 
 
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
