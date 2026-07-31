@@ -649,8 +649,6 @@ input,select,button,textarea{font-family:var(--fn)}
   </div>
 </div>
 
-</div>
-
 <!-- ONB 1 -->
 <div class="sc" id="sc-onb1">
   <div class="oh"><div class="o-lr"><div class="o-li"><i class="ti ti-salad"></i></div><div class="o-ln">BiteWise</div></div><div class="o-sl">STEP 1 OF 4</div><div class="o-pg"><div class="o-pd dn"></div><div class="o-pd"></div><div class="o-pd"></div><div class="o-pd"></div></div></div>
@@ -959,6 +957,8 @@ input,select,button,textarea{font-family:var(--fn)}
     <button class="prof-save-btn" onclick="applyRecalc()" id="rcApplyBtn" style="display:none;background:var(--gn)"><i class="ti ti-check" style="font-size:16px"></i>Apply new goal</button>
     <div class="modal-cancel" onclick="closeRecalcModal()">Cancel</div>
   </div>
+</div>
+
 </div>
 
 <!-- PREMIUM SCREEN -->
@@ -1487,16 +1487,20 @@ async function startGoogle(){
       const ini = nm.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
       const isGoogle = user.providerData && user.providerData[0] && user.providerData[0].providerId==='google.com';
       curUser={name:nm,email:em,method:isGoogle?'google':'email',ini,uid:user.uid,photoURL:user.photoURL||''};
+      console.log('[BW-DEBUG] auth fired. uid=',user.uid,'email=',em);
       const pNameEl=document.getElementById('pName');
       if(pNameEl)pNameEl.value=nm;
       // Only auto-navigate if we're still on an auth screen (not already using the app)
       const onAuthScreen = document.getElementById('sc-splash').classList.contains('on')
         || document.getElementById('sc-login').classList.contains('on')
         || document.getElementById('sc-signup').classList.contains('on');
+      console.log('[BW-DEBUG] onAuthScreen=',onAuthScreen);
       if(!onAuthScreen) return;
       // Check Firestore for an existing profile before deciding where to route.
       try{
+        console.log('[BW-DEBUG] looking up profiles/'+user.uid);
         const snap = await window.fbGetDoc(window.fbDoc(window.fbDb,'profiles',user.uid));
+        console.log('[BW-DEBUG] snap.exists()=',snap.exists());
         if(snap.exists()){
           const p = snap.data();
           profileData={...profileData,...p};
