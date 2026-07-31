@@ -20,7 +20,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
   import {
-    getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult,
+    getAuth, GoogleAuthProvider, signInWithRedirect, signInWithPopup, getRedirectResult,
     createUserWithEmailAndPassword, signInWithEmailAndPassword,
     sendEmailVerification, onAuthStateChanged, signOut,
     updateProfile
@@ -49,6 +49,7 @@
   window.fbGetDoc = getDoc;
   window.fbGoogleProvider = new GoogleAuthProvider();
   window.fbSignInWithRedirect = signInWithRedirect;
+  window.fbSignInWithPopup = signInWithPopup;
   window.fbGetRedirectResult = getRedirectResult;
   window.fbCreateUser = createUserWithEmailAndPassword;
   window.fbSignInUser = signInWithEmailAndPassword;
@@ -1472,8 +1473,22 @@ function resend(){
 }
 async function startGoogle(){
   if(!window.fbReady){showToast('Loading, please try again in a moment');return;}
-  showToast('Redirecting to Google...');
-  await window.fbSignInWithRedirect(window.fbAuth, window.fbGoogleProvider);
+  showToast('Opening Google sign-in...');
+  try{
+    const result = await window.fbSignInWithPopup(window.fbAuth, window.fbGoogleProvider);
+    console.log('[BW-DEBUG] popup sign-in success, uid=', result.user.uid);
+    // onAuthStateChanged (registered below) will fire automatically and handle
+    // routing to onboarding or the dashboard based on whether a profile exists.
+  }catch(err){
+    console.error('[BW-DEBUG] popup sign-in ERROR:', err.code, err.message);
+    if(err.code === 'auth/popup-closed-by-user'){
+      showToast('Sign-in cancelled');
+    }else if(err.code === 'auth/popup-blocked'){
+      showToast('Popup blocked — please allow popups for this site');
+    }else{
+      showToast('Sign-in error: '+err.code);
+    }
+  }
 }
 
 // Watches Firebase's actual auth state - this is the reliable way to detect sign-in
