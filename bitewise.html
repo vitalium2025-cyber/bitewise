@@ -25,6 +25,9 @@
     sendEmailVerification, onAuthStateChanged, signOut,
     updateProfile
   } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+  import {
+    getFirestore, doc, setDoc, getDoc
+  } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyANtj8AbFwyVvOSrK43HdFfsZSvRvkhjx0",
@@ -37,8 +40,13 @@
 
   const fbApp = initializeApp(firebaseConfig);
   const fbAuth = getAuth(fbApp);
+  const fbDb = getFirestore(fbApp);
 
   window.fbAuth = fbAuth;
+  window.fbDb = fbDb;
+  window.fbDoc = doc;
+  window.fbSetDoc = setDoc;
+  window.fbGetDoc = getDoc;
   window.fbGoogleProvider = new GoogleAuthProvider();
   window.fbSignInWithRedirect = signInWithRedirect;
   window.fbCreateUser = createUserWithEmailAndPassword;
@@ -1472,7 +1480,7 @@ async function startGoogle(){
 // Runs once fbReady is confirmed true.
 (function waitForFirebaseThenWatchAuth(){
   if(!window.fbReady){setTimeout(waitForFirebaseThenWatchAuth,100);return;}
-  window.fbOnAuthStateChanged(window.fbAuth, (user)=>{
+  window.fbOnAuthStateChanged(window.fbAuth, async (user)=>{
     if(user && !curUser.uid){
       const nm = user.displayName || (user.email?user.email.split('@')[0]:'User');
       const em = user.email||'';
@@ -1485,7 +1493,28 @@ async function startGoogle(){
       const onAuthScreen = document.getElementById('sc-splash').classList.contains('on')
         || document.getElementById('sc-login').classList.contains('on')
         || document.getElementById('sc-signup').classList.contains('on');
-      if(onAuthScreen) go('sc-onb1');
+      if(!onAuthScreen) return;
+      // Check Firestore for an existing profile before deciding where to route.
+      try{
+        const snap = await window.fbGetDoc(window.fbDoc(window.fbDb,'profiles',user.uid));
+        if(snap.exists()){
+          const p = snap.data();
+          profileData={...profileData,...p};
+          pSex=p.sex||'male';pAct=p.activity||1.375;pGoal=p.goal||'maintain';
+          dGoal=p.dGoal||dGoal;cGoal=p.cGoal||cGoal;prGoal=p.prGoal||prGoal;fGoal=p.fGoal||fGoal;
+          if(pNameEl)pNameEl.value=p.name||nm;
+          const pAgeEl=document.getElementById('pAge'),pWtEl=document.getElementById('pWt'),pHtEl=document.getElementById('pHt');
+          if(pAgeEl)pAgeEl.value=p.age||'';
+          if(pWtEl)pWtEl.value=p.weight||'';
+          if(pHtEl)pHtEl.value=p.height||'';
+          startApp();
+        } else {
+          go('sc-onb1');
+        }
+      }catch(e){
+        console.error('Profile lookup failed:',e);
+        go('sc-onb1');
+      }
     }
   });
 })();
@@ -1546,6 +1575,15 @@ function startApp(){
   renderBannerAd();
   updateScanCounter();
   updateApiKeyBadge();
+  saveProfileToCloud();
+}
+// Persists profileData to Firestore under profiles/{uid} so the app can skip
+// onboarding next time this user signs in (see waitForFirebaseThenWatchAuth).
+function saveProfileToCloud(){
+  if(!window.fbReady || !curUser.uid) return;
+  const payload={...profileData,dGoal,cGoal,prGoal,fGoal,updatedAt:Date.now()};
+  window.fbSetDoc(window.fbDoc(window.fbDb,'profiles',curUser.uid),payload,{merge:true})
+    .catch(e=>console.error('Save profile failed:',e));
 }
 function logout(){
   if(window.fbReady && window.fbAuth.currentUser){
@@ -2690,6 +2728,7 @@ function saveProfile(){
   closeProfileModal();
   refreshMeTab();
   updateTotals();
+  saveProfileToCloud();
 
   // Flash success
   showToast('✓ Profile saved & goals updated!');
@@ -2766,6 +2805,7 @@ function applyRecalc(){
   closeRecalcModal();
   refreshMeTab();
   updateTotals();
+  saveProfileToCloud();
   showToast('✓ New goal applied: '+dGoal.toLocaleString()+' kcal/day');
 }
 
