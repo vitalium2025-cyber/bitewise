@@ -20,7 +20,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
   import {
-    getAuth, GoogleAuthProvider, signInWithPopup,
+    getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult,
     createUserWithEmailAndPassword, signInWithEmailAndPassword,
     sendEmailVerification, onAuthStateChanged, signOut,
     updateProfile
@@ -40,7 +40,7 @@
 
   window.fbAuth = fbAuth;
   window.fbGoogleProvider = new GoogleAuthProvider();
-  window.fbSignInWithPopup = signInWithPopup;
+  window.fbSignInWithRedirect = signInWithRedirect;
   window.fbCreateUser = createUserWithEmailAndPassword;
   window.fbSignInUser = signInWithEmailAndPassword;
   window.fbSendVerification = sendEmailVerification;
@@ -48,6 +48,16 @@
   window.fbSignOut = signOut;
   window.fbUpdateProfile = updateProfile;
   window.fbReady = true;
+
+  // Handle the result after returning from Google's redirect sign-in
+  getRedirectResult(fbAuth).then((result) => {
+    if(result && result.user){
+      window.dispatchEvent(new CustomEvent('googleRedirectSignedIn', {detail: result.user}));
+    }
+  }).catch(err => {
+    console.error('Redirect result error:', err);
+    window.dispatchEvent(new CustomEvent('googleRedirectError', {detail: err}));
+  });
 </script>
 
 <style>
@@ -1460,21 +1470,26 @@ function resend(){
 }
 async function startGoogle(){
   if(!window.fbReady){showToast('Loading, please try again in a moment');return;}
-  try{
-    const result = await window.fbSignInWithPopup(window.fbAuth, window.fbGoogleProvider);
-    const user = result.user;
-    const nm = user.displayName || user.email.split('@')[0];
-    const em = user.email;
-    const ini = nm.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    curUser={name:nm,email:em,method:'google',ini,uid:user.uid,photoURL:user.photoURL||''};
-    document.getElementById('pName').value=nm;
-    go('sc-onb1');
-  }catch(err){
-    console.error('Google sign-in error:',err);
-    if(err.code==='auth/popup-closed-by-user')return;
-    showToast('Google sign-in failed. Please try again.');
-  }
+  showToast('Redirecting to Google...');
+  await window.fbSignInWithRedirect(window.fbAuth, window.fbGoogleProvider);
 }
+
+// Fires automatically when the page reloads after Google redirect sign-in completes
+window.addEventListener('googleRedirectSignedIn', (e)=>{
+  const user = e.detail;
+  const nm = user.displayName || user.email.split('@')[0];
+  const em = user.email;
+  const ini = nm.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  curUser={name:nm,email:em,method:'google',ini,uid:user.uid,photoURL:user.photoURL||''};
+  const pNameEl=document.getElementById('pName');
+  if(pNameEl)pNameEl.value=nm;
+  go('sc-onb1');
+});
+window.addEventListener('googleRedirectError', (e)=>{
+  const err=e.detail;
+  if(err && err.code==='auth/popup-closed-by-user')return;
+  showToast('Google sign-in failed. Please try again.');
+});
 
 
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
