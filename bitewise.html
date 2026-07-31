@@ -1389,7 +1389,7 @@ SLIDES.forEach(s=>{const i=new Image();i.src=s.url;});
 slideTimer=setInterval(()=>goSlide((curSlide+1)%SLIDES.length),5000);
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
-function go(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on')}
+function go(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0);document.querySelector('.app').scrollTop=0;}
 function sal(id,on){document.getElementById(id).classList.toggle('on',on)}
 function tpw(id,btn){const el=document.getElementById(id);const s=el.type==='password';el.type=s?'text':'password';btn.querySelector('i').className='ti ti-'+(s?'eye-off':'eye')}
 
