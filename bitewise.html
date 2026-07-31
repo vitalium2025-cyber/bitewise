@@ -17,6 +17,39 @@
 <link rel="apple-touch-icon" href="icon-192.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+  import {
+    getAuth, GoogleAuthProvider, signInWithPopup,
+    createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    sendEmailVerification, onAuthStateChanged, signOut,
+    updateProfile
+  } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyANtj8AbFwyVvOSrK43HdFfsZSvRvkhjx0",
+    authDomain: "bitewise-49274.firebaseapp.com",
+    projectId: "bitewise-49274",
+    storageBucket: "bitewise-49274.firebasestorage.app",
+    messagingSenderId: "505434943313",
+    appId: "1:505434943313:web:e7a309275afb9deae92d70"
+  };
+
+  const fbApp = initializeApp(firebaseConfig);
+  const fbAuth = getAuth(fbApp);
+
+  window.fbAuth = fbAuth;
+  window.fbGoogleProvider = new GoogleAuthProvider();
+  window.fbSignInWithPopup = signInWithPopup;
+  window.fbCreateUser = createUserWithEmailAndPassword;
+  window.fbSignInUser = signInWithEmailAndPassword;
+  window.fbSendVerification = sendEmailVerification;
+  window.fbOnAuthStateChanged = onAuthStateChanged;
+  window.fbSignOut = signOut;
+  window.fbUpdateProfile = updateProfile;
+  window.fbReady = true;
+</script>
+
 <style>
 :root{
   --br:#FF6B35;--brd:#D94F1A;--brl:#FFF0EB;--brm:#FFB899;
@@ -605,9 +638,7 @@ input,select,button,textarea{font-family:var(--fn)}
   </div>
 </div>
 
-<!-- GOOGLE CONFIRM -->
-<div class="sc" id="sc-google">
-  <div class="ah"><button class="a-bk" onclick="go('sc-splash')"><i class="ti ti-arrow-left"></i></button><div><div class="ah-ttl">Google sign-in</div><div class="ah-sub">Confirm your account</div></div></div>
+</div>
   <div class="ab" style="justify-content:center">
     <div class="g-card"><div class="g-av" id="gAv">A</div><div class="g-nm" id="gNm">—</div><div class="g-em" id="gEm">—</div><div class="g-tg"><i class="ti ti-brand-google" style="font-size:13px"></i>Verified by Google</div></div>
     <button class="btn-pr" onclick="confGoogle()"><i class="ti ti-check" style="font-size:16px"></i>Continue as <span id="gFirst" style="margin-left:3px">—</span></button>
@@ -1368,25 +1399,51 @@ function go(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('
 function sal(id,on){document.getElementById(id).classList.toggle('on',on)}
 function tpw(id,btn){const el=document.getElementById(id);const s=el.type==='password';el.type=s?'text':'password';btn.querySelector('i').className='ti ti-'+(s?'eye-off':'eye')}
 
-function doLogin(){
+async function doLogin(){
   sal('loginErr',false);
   const em=document.getElementById('loginEmail').value.trim(),pw=document.getElementById('loginPw').value;
   if(!em||!pw){document.getElementById('loginErrMsg').textContent='Please fill in all fields.';sal('loginErr',true);return}
   if(!em.includes('@')){document.getElementById('loginErrMsg').textContent='Invalid email address.';sal('loginErr',true);return}
-  curUser={name:em.split('@')[0],email:em,method:'email',ini:em[0].toUpperCase()};go('sc-onb1');
+  if(!window.fbReady){document.getElementById('loginErrMsg').textContent='Loading, please try again.';sal('loginErr',true);return}
+  try{
+    const cred = await window.fbSignInUser(window.fbAuth, em, pw);
+    const nm = cred.user.displayName || em.split('@')[0];
+    curUser={name:nm,email:em,method:'email',ini:nm[0].toUpperCase(),uid:cred.user.uid};
+    document.getElementById('pName').value=nm;
+    go('sc-onb1');
+  }catch(err){
+    console.error('Login error:',err);
+    let msg='Login failed. Please check your email and password.';
+    if(err.code==='auth/invalid-credential'||err.code==='auth/wrong-password')msg='Incorrect email or password.';
+    if(err.code==='auth/user-not-found')msg='No account found with this email.';
+    if(err.code==='auth/too-many-requests')msg='Too many attempts. Try again later.';
+    document.getElementById('loginErrMsg').textContent=msg;sal('loginErr',true);
+  }
 }
-function doSignup(){
+async function doSignup(){
   sal('signupErr',false);
   const nm=document.getElementById('suName').value.trim(),em=document.getElementById('suEmail').value.trim(),pw=document.getElementById('suPw').value,pw2=document.getElementById('suPw2').value;
   if(!nm||!em||!pw||!pw2){document.getElementById('signupErrMsg').textContent='Please fill in all fields.';sal('signupErr',true);return}
   if(!em.includes('@')){document.getElementById('signupErrMsg').textContent='Invalid email address.';sal('signupErr',true);return}
   if(pw.length<8){document.getElementById('signupErrMsg').textContent='Password must be at least 8 characters.';sal('signupErr',true);return}
   if(pw!==pw2){document.getElementById('signupErrMsg').textContent='Passwords do not match.';sal('signupErr',true);return}
-  pSU={name:nm,email:em};genOtp=String(Math.floor(100000+Math.random()*900000));
-  document.getElementById('otpBadge').textContent=em;
-  document.getElementById('otpDisplay').textContent=genOtp.split('').join(' ');
-  for(let i=0;i<6;i++)document.getElementById('o'+i).value='';
-  sal('otpErr',false);sal('otpOk',false);go('sc-otp');setTimeout(()=>document.getElementById('o0').focus(),400);
+  if(!window.fbReady){document.getElementById('signupErrMsg').textContent='Loading, please try again.';sal('signupErr',true);return}
+  try{
+    const cred = await window.fbCreateUser(window.fbAuth, em, pw);
+    await window.fbUpdateProfile(cred.user, {displayName: nm});
+    await window.fbSendVerification(cred.user);
+    curUser={name:nm,email:em,method:'email',ini:nm[0].toUpperCase(),uid:cred.user.uid};
+    document.getElementById('pName').value=nm;
+    showToast('✓ Account created! Check your email to verify.');
+    go('sc-onb1');
+  }catch(err){
+    console.error('Signup error:',err);
+    let msg='Signup failed. Please try again.';
+    if(err.code==='auth/email-already-in-use')msg='An account with this email already exists.';
+    if(err.code==='auth/weak-password')msg='Password is too weak.';
+    if(err.code==='auth/invalid-email')msg='Invalid email address.';
+    document.getElementById('signupErrMsg').textContent=msg;sal('signupErr',true);
+  }
 }
 function oin(el,i){el.value=el.value.replace(/[^0-9]/g,'');if(el.value&&i<5)document.getElementById('o'+(i+1)).focus();autoV()}
 function okey(e,i){if(e.key==='Backspace'&&!document.getElementById('o'+i).value&&i>0)document.getElementById('o'+(i-1)).focus()}
@@ -1407,19 +1464,24 @@ function resend(){
   sal('otpErr',false);sal('otpOk',false);document.getElementById('o0').focus();
   alert('New code sent!\n(Demo: check preview above. Real app emails '+pSU.email+')');
 }
-function startGoogle(){
-  const nms=["Alex Chen","Sarah Johnson","Mohammed Al-Rashid","Priya Patel","Lucas Silva","Yuki Tanaka"];
-  const i=Math.floor(Math.random()*nms.length),nm=nms[i];
-  const em=nm.toLowerCase().replace(/ /g,'.')+Math.floor(Math.random()*99)+'@gmail.com';
-  const ini=nm.split(' ').map(w=>w[0]).join('').slice(0,2);
-  document.getElementById('gAv').textContent=ini;document.getElementById('gNm').textContent=nm;
-  document.getElementById('gEm').textContent=em;document.getElementById('gFirst').textContent=nm.split(' ')[0];
-  pSU={name:nm,email:em,ini};go('sc-google');
+async function startGoogle(){
+  if(!window.fbReady){showToast('Loading, please try again in a moment');return;}
+  try{
+    const result = await window.fbSignInWithPopup(window.fbAuth, window.fbGoogleProvider);
+    const user = result.user;
+    const nm = user.displayName || user.email.split('@')[0];
+    const em = user.email;
+    const ini = nm.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    curUser={name:nm,email:em,method:'google',ini,uid:user.uid,photoURL:user.photoURL||''};
+    document.getElementById('pName').value=nm;
+    go('sc-onb1');
+  }catch(err){
+    console.error('Google sign-in error:',err);
+    if(err.code==='auth/popup-closed-by-user')return;
+    showToast('Google sign-in failed. Please try again.');
+  }
 }
-function confGoogle(){
-  curUser={name:pSU.name,email:pSU.email,method:'google',ini:pSU.ini||pSU.name[0].toUpperCase()};
-  document.getElementById('pName').value=pSU.name;go('sc-onb1');
-}
+
 
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
 function setSex(s){pSex=s;document.getElementById('sx-m').classList.toggle('on',s==='male');document.getElementById('sx-f').classList.toggle('on',s==='female')}
@@ -1477,7 +1539,12 @@ function startApp(){
   updateScanCounter();
   updateApiKeyBadge();
 }
-function logout(){tdLog={Breakfast:[],Lunch:[],Dinner:[],Snack:[]};hist={};curUser={};go('sc-splash')}
+function logout(){
+  if(window.fbReady && window.fbAuth.currentUser){
+    window.fbSignOut(window.fbAuth).catch(e=>console.error('Sign out error:',e));
+  }
+  tdLog={Breakfast:[],Lunch:[],Dinner:[],Snack:[]};hist={};curUser={};go('sc-splash');
+}
 function dk(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function seedHist(){
   const t=new Date();
