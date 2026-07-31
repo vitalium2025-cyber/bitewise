@@ -1603,6 +1603,19 @@ function startApp(){
   updateScanCounter();
   updateApiKeyBadge();
   saveProfileToCloud();
+  checkExistingProSubscription();
+}
+// Silently checks (no toast/UI) whether this user already has an active Pro
+// subscription via Play Billing, so isPro persists correctly across sessions.
+async function checkExistingProSubscription(){
+  const service = await getDigitalGoodsService();
+  if(!service) return;
+  try{
+    const purchases = await service.listPurchases();
+    if(purchases.some(p=>p.itemId===PRO_PRODUCT_ID)) activatePro();
+  }catch(e){
+    console.error('[BW-DEBUG] checkExistingProSubscription ERROR:', e);
+  }
 }
 // Persists profileData to Firestore under profiles/{uid} so the app can skip
 // onboarding next time this user signs in (see waitForFirebaseThenWatchAuth).
@@ -2370,6 +2383,9 @@ function quickAddCalories(){
 
 // ── MONETISATION SYSTEM ───────────────────────────────────────────────────────
 let isPro=false;
+// Google Play Console subscription product ID — update this once created in Play Console.
+const PRO_PRODUCT_ID='bitewise_pro_monthly';
+const PLAY_BILLING_METHOD='https://play.google.com/billing';
 const FREE_DAILY_SCANS=1;         // free users get 1 AI photo scan per day
 const FREE_DAILY_LOGS=1;           // free users get 1 AI log per day
 const PRO_DAILY_SCANS=8;          // pro users get 8 AI photo scans per day
@@ -2612,14 +2628,80 @@ function selectPlan(plan){
   document.getElementById('planFree').classList.toggle('sel',plan==='free');
   document.getElementById('planPro').classList.toggle('sel',plan==='pro');
 }
-function subscribePro(){
-  // Simulate Pro activation (real: Google Play Billing)
-  activatePro();
-  document.getElementById('sc-premium').style.display='none';
-  updateScanCounter();
+
+// Returns the Digital Goods Service if we're running inside the Play-Billing-capable
+// TWA context, or null if not available (e.g. regular browser tab, iOS, desktop).
+async function getDigitalGoodsService(){
+  if(!('getDigitalGoodsService' in window)) return null;
+  try{
+    return await window.getDigitalGoodsService(PLAY_BILLING_METHOD);
+  }catch(e){
+    console.error('[BW-DEBUG] getDigitalGoodsService failed:', e);
+    return null;
+  }
 }
-function restorePurchase(){
-  alert('No previous purchase found.\n\nIf you subscribed on another device, please contact support@bitewise.app');
+
+async function subscribePro(){
+  const service = await getDigitalGoodsService();
+  if(!service){
+    showToast('Pro purchases are only available in the BiteWise Play Store app');
+    return;
+  }
+  const btn=document.querySelector('.pm-cta');
+  if(btn){btn.disabled=true;btn.style.opacity='.6';}
+  try{
+    // Confirm the SKU actually exists in Play Console before attempting payment.
+    const details = await service.getDetails([PRO_PRODUCT_ID]);
+    if(!details || details.length===0){
+      showToast('Subscription not available yet — please try again later');
+      return;
+    }
+    const request = new PaymentRequest(
+      [{supportedMethods: PLAY_BILLING_METHOD, data: {sku: PRO_PRODUCT_ID}}],
+      {total: {label: 'BiteWise Pro', amount: {currency: 'MYR', value: '9.90'}}}
+    );
+    const paymentResponse = await request.show();
+    const {purchaseToken} = paymentResponse.details;
+    await paymentResponse.complete('success');
+    // Acknowledge the subscription purchase — required within 3 days or Play auto-refunds it.
+    await service.acknowledge(purchaseToken, 'repeatable');
+    activatePro();
+    document.getElementById('sc-premium').style.display='none';
+    updateScanCounter();
+    showToast('👑 Welcome to BiteWise Pro!');
+  }catch(err){
+    console.error('[BW-DEBUG] subscribePro ERROR:', err);
+    if(err.name==='AbortError'){
+      showToast('Purchase cancelled');
+    }else{
+      showToast('Purchase failed — please try again');
+    }
+  }finally{
+    if(btn){btn.disabled=false;btn.style.opacity='1';}
+  }
+}
+
+async function restorePurchase(){
+  const service = await getDigitalGoodsService();
+  if(!service){
+    showToast('Open the Play Store app to restore a purchase');
+    return;
+  }
+  try{
+    const purchases = await service.listPurchases();
+    const proPurchase = purchases.find(p=>p.itemId===PRO_PRODUCT_ID);
+    if(proPurchase){
+      activatePro();
+      document.getElementById('sc-premium').style.display='none';
+      updateScanCounter();
+      showToast('👑 Pro subscription restored!');
+    }else{
+      showToast('No active Pro subscription found for this account');
+    }
+  }catch(err){
+    console.error('[BW-DEBUG] restorePurchase ERROR:', err);
+    showToast('Could not check purchase history — please try again');
+  }
 }
 
 // ── PROFILE STATE ─────────────────────────────────────────────────────────────
