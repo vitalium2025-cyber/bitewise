@@ -49,6 +49,7 @@
   window.fbGetDoc = getDoc;
   window.fbGoogleProvider = new GoogleAuthProvider();
   window.fbSignInWithRedirect = signInWithRedirect;
+  window.fbGetRedirectResult = getRedirectResult;
   window.fbCreateUser = createUserWithEmailAndPassword;
   window.fbSignInUser = signInWithEmailAndPassword;
   window.fbSendVerification = sendEmailVerification;
@@ -1480,6 +1481,13 @@ async function startGoogle(){
 // Runs once fbReady is confirmed true.
 (function waitForFirebaseThenWatchAuth(){
   if(!window.fbReady){setTimeout(waitForFirebaseThenWatchAuth,100);return;}
+  // Complete any pending Google redirect sign-in and surface errors instead of failing silently.
+  window.fbGetRedirectResult(window.fbAuth).then(result=>{
+    console.log('[BW-DEBUG] getRedirectResult result:', result ? result.user.uid : 'null (no pending redirect)');
+  }).catch(err=>{
+    console.error('[BW-DEBUG] getRedirectResult ERROR:', err.code, err.message);
+    showToast && showToast('Sign-in error: '+err.code);
+  });
   window.fbOnAuthStateChanged(window.fbAuth, async (user)=>{
     if(user && !curUser.uid){
       const nm = user.displayName || (user.email?user.email.split('@')[0]:'User');
