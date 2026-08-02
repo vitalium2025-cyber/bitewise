@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,7 +32,7 @@ jobs:
       - name: Install Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Configure Bubblewrap (accept JDK/SDK auto-install)
+      - name: Configure Bubblewrap
         run: |
           mkdir -p ~/.bubblewrap
           cat > ~/.bubblewrap/config.json << EOF
@@ -42,27 +43,21 @@ jobs:
           EOF
           echo "Using JAVA_HOME=${JAVA_HOME}"
           echo "Using ANDROID_HOME=${ANDROID_HOME}"
-          cat ~/.bubblewrap/config.json
 
       - name: Fetch and display manifest.json for debugging
         run: |
           curl -sL "https://vitalium2025-cyber.github.io/bitewise/manifest.json" -o /tmp/manifest.json
-          echo "--- manifest.json content ---"
           cat /tmp/manifest.json
-          echo "--- end manifest.json ---"
 
       - name: Initialize Bubblewrap project from live PWA manifest
         run: |
-          timeout 180 bash -c 'yes "" | bubblewrap init \
+          timeout 150 bash -c 'yes "" | bubblewrap init \
             --manifest="https://vitalium2025-cyber.github.io/bitewise/manifest.json" \
             --directory="./twa-project" \
-            --skipPwaValidation' || echo "init step exited with code $? (may have timed out)"
-          echo "--- twa-project contents ---"
-          ls -la ./twa-project || echo "twa-project directory was not created"
-          echo "--- twa-manifest.json (if present) ---"
-          cat ./twa-project/twa-manifest.json 2>/dev/null || echo "twa-manifest.json not found"
+            --skipPwaValidation' || echo "init exited $? (continuing — project files are likely already written)"
+          test -f ./twa-project/twa-manifest.json && echo "twa-manifest.json exists, continuing" || (echo "FATAL: twa-manifest.json missing, cannot continue" && exit 1)
 
-      - name: Patch twa-manifest.json (package id, signing key, Play Billing, version bump)
+      - name: Patch twa-manifest.json (package id, signing key, Play Billing, version)
         run: |
           cd twa-project
           node -e "
@@ -84,11 +79,13 @@ jobs:
       - name: Regenerate Android project from patched manifest
         run: |
           cd twa-project
-          yes "" | bubblewrap update --skipPwaValidation || echo "update step exited with code $?"
-          echo "--- Verify applicationId in build.gradle ---"
-          grep -r "applicationId" app/build.gradle || echo "applicationId not found in build.gradle"
-          echo "--- Verify versionCode in build.gradle ---"
-          grep -r "versionCode" app/build.gradle || echo "versionCode not found in build.gradle"
+          timeout 150 bash -c 'yes "" | bubblewrap update --skipPwaValidation' || echo "update exited $? (continuing — checking if project files were regenerated)"
+          echo "--- Verify applicationId ---"
+          grep -r "applicationId" app/build.gradle || echo "applicationId not found"
+          echo "--- Verify versionCode ---"
+          grep -r "versionCode" app/build.gradle || echo "versionCode not found"
+          echo "--- Verify Play Billing dependency ---"
+          grep -r "billing" app/build.gradle || echo "billing dependency not found"
 
       - name: Build signed AAB
         env:
@@ -96,9 +93,8 @@ jobs:
           BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           cd twa-project
-          bubblewrap build \
-            --skipPwaValidation \
-            <<< $'${{ secrets.KEYSTORE_PASSWORD }}\n${{ secrets.KEY_PASSWORD }}\n'
+          timeout 300 bash -c 'bubblewrap build --skipPwaValidation <<< $"${{ secrets.KEYSTORE_PASSWORD }}\n${{ secrets.KEY_PASSWORD }}\n"'
+          find . -name "*.aab" -exec ls -la {} \;
 
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v4
