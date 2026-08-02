@@ -79,7 +79,7 @@ jobs:
       - name: Regenerate Android project from patched manifest
         run: |
           cd twa-project
-          timeout 150 bash -c 'yes "" | bubblewrap update --skipPwaValidation' || echo "update exited $? (continuing — checking if project files were regenerated)"
+          timeout 150 bash -c '{ echo "1.5.0.0"; yes ""; } | bubblewrap update --skipPwaValidation' || echo "update exited $? (continuing — checking if project files were regenerated)"
           echo "--- Verify applicationId ---"
           grep -r "applicationId" app/build.gradle || echo "applicationId not found"
           echo "--- Verify versionCode ---"
