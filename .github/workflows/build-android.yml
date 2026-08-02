@@ -48,12 +48,19 @@ jobs:
           yes | /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null || true
           /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" > /dev/null
 
+      - name: Fetch and display manifest.json for debugging
+        run: |
+          curl -sL "https://vitalium2025-cyber.github.io/bitewise/manifest.json" -o /tmp/manifest.json
+          echo "--- manifest.json content ---"
+          cat /tmp/manifest.json
+          echo "--- end manifest.json ---"
+
       - name: Initialize Bubblewrap project from live PWA manifest
         run: |
-          yes "" | bubblewrap init \
+          timeout 180 bash -c 'yes "" | bubblewrap init \
             --manifest="https://vitalium2025-cyber.github.io/bitewise/manifest.json" \
             --directory="./twa-project" \
-            --skipPwaValidation || true
+            --skipPwaValidation' || echo "init step exited with code $? (may have timed out)"
           echo "--- twa-project contents ---"
           ls -la ./twa-project || echo "twa-project directory was not created"
           echo "--- twa-manifest.json (if present) ---"
