@@ -2658,9 +2658,15 @@ async function subscribePro(){
   try{
     // Fetch real offer/pricing details from Play Billing — this also tells us
     // whether the user is eligible for the free trial offer.
-    const details = await service.getDetails([PRO_PRODUCT_ID]);
+    let details;
+    try{
+      details = await service.getDetails([PRO_PRODUCT_ID]);
+    }catch(e){
+      alert('DIAGNOSTIC INFO (getDetails threw):\n\n'+(e && e.message ? e.message : String(e))+'\n\nProduct ID used: '+PRO_PRODUCT_ID+'\n\nPlease screenshot this and send to support.');
+      return;
+    }
     if(!details || details.length===0){
-      showToast('Subscription not available yet — please try again later');
+      alert('DIAGNOSTIC INFO:\n\nGETDETAILS_EMPTY — Play Billing returned zero products for ID:\n'+PRO_PRODUCT_ID+'\n\nThis usually means the product ID does not match Play Console, or the subscription is not yet active/rolled out there.\n\nPlease screenshot this and send to support.');
       return;
     }
     const item = details[0];
@@ -2671,16 +2677,26 @@ async function subscribePro(){
     const basePlanOnly = offers.find(o => !o.offerId);
     const chosenOffer = trialOffer || basePlanOnly || offers[0];
     if(!chosenOffer){
-      showToast('Subscription pricing not available yet — please try again later');
+      alert('DIAGNOSTIC INFO:\n\nPRODUCT_FOUND_NO_OFFERS — item was found but subscriptionOfferDetails is empty.\n\nRaw item: '+JSON.stringify(item)+'\n\nPlease screenshot this and send to support.');
       return;
     }
     const paymentData = {sku: PRO_PRODUCT_ID};
     if(chosenOffer.offerToken) paymentData.offerToken = chosenOffer.offerToken;
-    const request = new PaymentRequest(
-      [{supportedMethods: PLAY_BILLING_METHOD, data: paymentData}],
-      {total: {label: 'BiteWise Pro', amount: {currency: 'MYR', value: '9.90'}}}
-    );
-    const paymentResponse = await request.show();
+    let paymentResponse;
+    try{
+      const request = new PaymentRequest(
+        [{supportedMethods: PLAY_BILLING_METHOD, data: paymentData}],
+        {total: {label: 'BiteWise Pro', amount: {currency: 'MYR', value: '9.90'}}}
+      );
+      paymentResponse = await request.show();
+    }catch(e){
+      if(e && e.name==='AbortError'){
+        showToast('Purchase cancelled');
+        return;
+      }
+      alert('DIAGNOSTIC INFO (PaymentRequest threw):\n\n'+(e && e.name ? e.name+': ' : '')+(e && e.message ? e.message : String(e))+'\n\nOffer used: '+JSON.stringify(chosenOffer)+'\n\nPlease screenshot this and send to support.');
+      return;
+    }
     const {purchaseToken} = paymentResponse.details;
     await paymentResponse.complete('success');
     // Acknowledge the subscription purchase — required within 3 days or Play auto-refunds it.
@@ -2691,11 +2707,7 @@ async function subscribePro(){
     showToast(trialOffer ? '👑 Your 7-day free trial has started!' : '👑 Welcome to BiteWise Pro!');
   }catch(err){
     console.error('[BW-DEBUG] subscribePro ERROR:', err);
-    if(err.name==='AbortError'){
-      showToast('Purchase cancelled');
-    }else{
-      showToast('Purchase failed — please try again');
-    }
+    alert('DIAGNOSTIC INFO (unexpected):\n\n'+(err && err.name ? err.name+': ' : '')+(err && err.message ? err.message : String(err))+'\n\nPlease screenshot this and send to support.');
   }finally{
     if(btn){btn.disabled=false;btn.style.opacity='1';}
   }
