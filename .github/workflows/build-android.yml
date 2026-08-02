@@ -72,12 +72,23 @@ jobs:
             m.host = 'vitalium2025-cyber.github.io';
             m.startUrl = '/bitewise/bitewise.html';
             m.signingKey = { path: '../android.keystore', alias: '${{ secrets.KEY_ALIAS }}' };
-            m.appVersionCode = (m.appVersionCode || 5) + 1;
+            m.appVersionCode = 10;
+            m.appVersionName = '1.5.0.0';
             m.features = m.features || {};
             m.features.playBilling = { enabled: true };
             fs.writeFileSync('twa-manifest.json', JSON.stringify(m, null, 2));
-            console.log('Patched twa-manifest.json:', JSON.stringify(m, null, 2));
           "
+          echo "--- Patched twa-manifest.json ---"
+          cat twa-manifest.json
+
+      - name: Regenerate Android project from patched manifest
+        run: |
+          cd twa-project
+          yes "" | bubblewrap update --skipPwaValidation || echo "update step exited with code $?"
+          echo "--- Verify applicationId in build.gradle ---"
+          grep -r "applicationId" app/build.gradle || echo "applicationId not found in build.gradle"
+          echo "--- Verify versionCode in build.gradle ---"
+          grep -r "versionCode" app/build.gradle || echo "versionCode not found in build.gradle"
 
       - name: Build signed AAB
         env:
