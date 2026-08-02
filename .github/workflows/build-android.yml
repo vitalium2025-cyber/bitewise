@@ -50,11 +50,14 @@ jobs:
 
       - name: Initialize Bubblewrap project from live PWA manifest
         run: |
-          bubblewrap init \
+          yes "" | bubblewrap init \
             --manifest="https://vitalium2025-cyber.github.io/bitewise/manifest.json" \
             --directory="./twa-project" \
-            --skipPwaValidation \
-            <<< $'\n\n\n\n\n\n\n\n\n\n'
+            --skipPwaValidation || true
+          echo "--- twa-project contents ---"
+          ls -la ./twa-project || echo "twa-project directory was not created"
+          echo "--- twa-manifest.json (if present) ---"
+          cat ./twa-project/twa-manifest.json 2>/dev/null || echo "twa-manifest.json not found"
 
       - name: Patch twa-manifest.json (package id, signing key, Play Billing, version bump)
         run: |
