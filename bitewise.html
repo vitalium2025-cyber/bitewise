@@ -2638,6 +2638,10 @@ async function getDigitalGoodsService(){
   }
   try{
     const svc = await window.getDigitalGoodsService(PLAY_BILLING_METHOD);
+    if(!svc){
+      window.__bwDiag = 'SERVICE_NULL: API exists and resolved without error, but returned null/undefined — Play Billing says this method is unavailable in this context (not installed via Play Store, or running in a plain browser tab instead of the installed TWA)';
+      return null;
+    }
     window.__bwDiag = 'SERVICE_OK';
     return svc;
   }catch(e){
