@@ -2632,10 +2632,16 @@ function selectPlan(plan){
 // Returns the Digital Goods Service if we're running inside the Play-Billing-capable
 // TWA context, or null if not available (e.g. regular browser tab, iOS, desktop).
 async function getDigitalGoodsService(){
-  if(!('getDigitalGoodsService' in window)) return null;
+  if(!('getDigitalGoodsService' in window)){
+    window.__bwDiag = 'API_MISSING: window.getDigitalGoodsService does not exist';
+    return null;
+  }
   try{
-    return await window.getDigitalGoodsService(PLAY_BILLING_METHOD);
+    const svc = await window.getDigitalGoodsService(PLAY_BILLING_METHOD);
+    window.__bwDiag = 'SERVICE_OK';
+    return svc;
   }catch(e){
+    window.__bwDiag = 'API_EXISTS_BUT_THREW: '+(e && e.message ? e.message : String(e));
     console.error('[BW-DEBUG] getDigitalGoodsService failed:', e);
     return null;
   }
@@ -2644,7 +2650,7 @@ async function getDigitalGoodsService(){
 async function subscribePro(){
   const service = await getDigitalGoodsService();
   if(!service){
-    showToast('Pro purchases are only available in the BiteWise Play Store app');
+    alert('DIAGNOSTIC INFO:\n\n'+window.__bwDiag+'\n\nPlease screenshot this and send to support.');
     return;
   }
   const btn=document.querySelector('.pm-cta');
