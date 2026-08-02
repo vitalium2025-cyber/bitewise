@@ -87,6 +87,14 @@ jobs:
           echo "--- Verify Play Billing dependency ---"
           grep -r "billing" app/build.gradle || echo "billing dependency not found"
 
+      - name: Bump minSdkVersion to 23 (required by Play Billing library)
+        run: |
+          cd twa-project
+          sed -i 's/minSdkVersion [0-9]*/minSdkVersion 23/' app/build.gradle
+          sed -i 's/minSdk [0-9]*/minSdk 23/' app/build.gradle
+          echo "--- minSdk after patch ---"
+          grep -rE "minSdk(Version)? " app/build.gradle || echo "no minSdk line found"
+
       - name: Build signed AAB
         env:
           BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
