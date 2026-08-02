@@ -2650,14 +2650,28 @@ async function subscribePro(){
   const btn=document.querySelector('.pm-cta');
   if(btn){btn.disabled=true;btn.style.opacity='.6';}
   try{
-    // Confirm the SKU actually exists in Play Console before attempting payment.
+    // Fetch real offer/pricing details from Play Billing — this also tells us
+    // whether the user is eligible for the free trial offer.
     const details = await service.getDetails([PRO_PRODUCT_ID]);
     if(!details || details.length===0){
       showToast('Subscription not available yet — please try again later');
       return;
     }
+    const item = details[0];
+    const offers = item.subscriptionOfferDetails || [];
+    // Prefer the free trial offer if the user is eligible for it; otherwise fall
+    // back to the plain monthly base plan (no offerId means it's the base plan itself).
+    const trialOffer = offers.find(o => o.offerId === 'free-trial-7day');
+    const basePlanOnly = offers.find(o => !o.offerId);
+    const chosenOffer = trialOffer || basePlanOnly || offers[0];
+    if(!chosenOffer){
+      showToast('Subscription pricing not available yet — please try again later');
+      return;
+    }
+    const paymentData = {sku: PRO_PRODUCT_ID};
+    if(chosenOffer.offerToken) paymentData.offerToken = chosenOffer.offerToken;
     const request = new PaymentRequest(
-      [{supportedMethods: PLAY_BILLING_METHOD, data: {sku: PRO_PRODUCT_ID}}],
+      [{supportedMethods: PLAY_BILLING_METHOD, data: paymentData}],
       {total: {label: 'BiteWise Pro', amount: {currency: 'MYR', value: '9.90'}}}
     );
     const paymentResponse = await request.show();
@@ -2668,7 +2682,7 @@ async function subscribePro(){
     activatePro();
     document.getElementById('sc-premium').style.display='none';
     updateScanCounter();
-    showToast('👑 Welcome to BiteWise Pro!');
+    showToast(trialOffer ? '👑 Your 7-day free trial has started!' : '👑 Welcome to BiteWise Pro!');
   }catch(err){
     console.error('[BW-DEBUG] subscribePro ERROR:', err);
     if(err.name==='AbortError'){
