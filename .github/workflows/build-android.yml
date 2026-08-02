@@ -1,0 +1,90 @@
+name: Build Android AAB (Play Billing enabled)
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Bubblewrap CLI
+        run: npm install -g @bubblewrap/cli
+
+      - name: Decode signing keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android.keystore
+
+      - name: Configure Bubblewrap (accept JDK/SDK auto-install)
+        run: |
+          mkdir -p ~/.bubblewrap
+          cat > ~/.bubblewrap/config.json << 'EOF'
+          {
+            "jdkPath": "${{ env.JAVA_HOME }}",
+            "androidSdkPath": "/home/runner/android-sdk"
+          }
+          EOF
+
+      - name: Install Android SDK command-line tools
+        run: |
+          mkdir -p /home/runner/android-sdk/cmdline-tools
+          cd /home/runner/android-sdk/cmdline-tools
+          curl -o cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q cmdline-tools.zip
+          mv cmdline-tools latest
+          yes | /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null || true
+          /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" > /dev/null
+
+      - name: Initialize Bubblewrap project from live PWA manifest
+        run: |
+          bubblewrap init \
+            --manifest="https://vitalium2025-cyber.github.io/bitewise/manifest.json" \
+            --directory="./twa-project" \
+            --skipPwaValidation \
+            <<< $'\n\n\n\n\n\n\n\n\n\n'
+
+      - name: Patch twa-manifest.json (package id, signing key, Play Billing, version bump)
+        run: |
+          cd twa-project
+          node -e "
+            const fs = require('fs');
+            const m = JSON.parse(fs.readFileSync('twa-manifest.json', 'utf8'));
+            m.packageId = 'app.bitewise.calorietracker';
+            m.host = 'vitalium2025-cyber.github.io';
+            m.startUrl = '/bitewise/bitewise.html';
+            m.signingKey = { path: '../android.keystore', alias: '${{ secrets.KEY_ALIAS }}' };
+            m.appVersionCode = (m.appVersionCode || 5) + 1;
+            m.features = m.features || {};
+            m.features.playBilling = { enabled: true };
+            fs.writeFileSync('twa-manifest.json', JSON.stringify(m, null, 2));
+            console.log('Patched twa-manifest.json:', JSON.stringify(m, null, 2));
+          "
+
+      - name: Build signed AAB
+        env:
+          BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          cd twa-project
+          bubblewrap build \
+            --skipPwaValidation \
+            <<< $'${{ secrets.KEYSTORE_PASSWORD }}\n${{ secrets.KEY_PASSWORD }}\n'
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bitewise-release-aab
+          path: twa-project/app-release-bundle.aab
