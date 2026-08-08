@@ -2636,19 +2636,25 @@ async function getDigitalGoodsService(){
     window.__bwDiag = 'API_MISSING: window.getDigitalGoodsService does not exist';
     return null;
   }
-  try{
-    const svc = await window.getDigitalGoodsService(PLAY_BILLING_METHOD);
-    if(!svc){
-      window.__bwDiag = 'SERVICE_NULL: API exists and resolved without error, but returned null/undefined — Play Billing says this method is unavailable in this context (not installed via Play Store, or running in a plain browser tab instead of the installed TWA)';
-      return null;
+  const context = 'URL: '+location.href+' | UA: '+navigator.userAgent+' | standalone: '+(window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches);
+  const delays = [0, 500, 1500, 3000];
+  let lastErr = null;
+  for(let i=0;i<delays.length;i++){
+    if(delays[i]>0) await new Promise(r=>setTimeout(r, delays[i]));
+    try{
+      const svc = await window.getDigitalGoodsService(PLAY_BILLING_METHOD);
+      if(svc){
+        window.__bwDiag = 'SERVICE_OK (attempt '+(i+1)+' at +'+delays[i]+'ms)';
+        return svc;
+      }
+      lastErr = 'null on attempt '+(i+1)+' at +'+delays[i]+'ms';
+    }catch(e){
+      lastErr = 'threw on attempt '+(i+1)+' at +'+delays[i]+'ms: '+(e && e.message ? e.message : String(e));
+      console.error('[BW-DEBUG] getDigitalGoodsService failed:', e);
     }
-    window.__bwDiag = 'SERVICE_OK';
-    return svc;
-  }catch(e){
-    window.__bwDiag = 'API_EXISTS_BUT_THREW: '+(e && e.message ? e.message : String(e));
-    console.error('[BW-DEBUG] getDigitalGoodsService failed:', e);
-    return null;
   }
+  window.__bwDiag = 'SERVICE_NULL_AFTER_RETRIES: '+lastErr+' || '+context;
+  return null;
 }
 
 async function subscribePro(){
